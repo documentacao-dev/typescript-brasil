@@ -9,6 +9,10 @@ Para cada .md em packages/documentation/copy/en/ com `ia-translate: true`:
 - mesmo número de títulos; título traduzido com `{#id}` em inglês;
 - pouca prosa sobrando em inglês.
 
+Sempre confere também que o rastreamento do upstream (banner de cookies WCP
+da Microsoft, Google Tag Manager/gtag, Application Insights) não voltou em
+packages/typescriptlang-org/src nem em packages/typescriptlang-org/gatsby-*.js.
+
 O inglês vem do commit em tool/traducao/ultimo-sync-upstream.txt.
 Uso: python3 tool/traducao/verificar.py [caminhos...]   (código 1 se houver erro)
 """
@@ -26,6 +30,9 @@ CHAVE = re.compile(r'^([A-Za-z_][\w-]*):', re.M)
 CERCA = re.compile(r'^```.*?^```', re.S | re.M)
 LINK = re.compile(r'\]\(([^)\s]+)|href=["\']([^"\']+)')
 TITULO = re.compile(r'^#{1,6}\s+(.*)$', re.M)
+SITE = ROOT / 'packages' / 'typescriptlang-org'
+RASTREAMENTO = ('wcp-consent', 'consentdeliveryfd', 'CookieBanner',
+                'googletagmanager', 'gtag(', 'appInsights')
 EN = set('the and of to is are you your this that with for in it be can when '
          'will from have which an by on as at or'.split())
 
@@ -82,10 +89,28 @@ def conferir(caminho):
     return [f'{caminho}: {e}' for e in erros]
 
 
+def conferir_rastreamento():
+    """O fork removeu o banner de cookies e a telemetria da Microsoft; um sync pode trazê-los de volta."""
+    arquivos = [p for p in (SITE / 'src').rglob('*')
+                if p.is_file() and '__generated__' not in p.parts] + sorted(SITE.glob('gatsby-*.js'))
+    erros = []
+    for p in arquivos:
+        try:
+            texto = p.read_text()
+        except UnicodeDecodeError:
+            continue
+        for n, linha in enumerate(texto.splitlines(), 1):
+            for termo in RASTREAMENTO:
+                if termo in linha:
+                    erros.append(f'{p.relative_to(ROOT)}:{n}: "{termo}" é rastreamento do upstream '
+                                 '(Microsoft) e deve ser removido no sync (ver CLAUDE.md, seção Sync)')
+    return erros
+
+
 def main():
     arquivos = sys.argv[1:] or sorted(
         str(p.relative_to(ROOT)) for p in CONTEUDO.rglob('*.md') if FLAG.search(p.read_text()))
-    erros = [e for a in arquivos for e in conferir(a)]
+    erros = [e for a in arquivos for e in conferir(a)] + conferir_rastreamento()
     for e in erros:
         print('ERRO', e)
     print(f'{len(arquivos)} arquivo(s) traduzido(s), {len(erros)} erro(s)')

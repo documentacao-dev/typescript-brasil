@@ -5,6 +5,7 @@ Tradução PT-BR da documentação de **TypeScript (typescriptlang.org)**, fork 
 - Conteúdo traduzível: `packages/documentation/copy/en/**/*.md`, traduzido no lugar (primeiro o `handbook-v2/`). A localização oficial em português (microsoft/TypeScript-Website-Localizations, `docs/documentation/pt/`) não tem o Handbook atual
 - Site: Gatsby (monorepo pnpm): `pnpm install && pnpm bootstrap && pnpm start`
 - Sync: branch `sync/upstream-AAAA-MM` com merge de `upstream/v2`, retradução só do que mudou, atualização de `tool/traducao/ultimo-sync-upstream.txt`.
+  - O fork removeu o banner de cookies da Microsoft (`CookieBanner`, script WCP `wcp-consent.js` em `consentdeliveryfd.azurefd.net`) e não aceita analytics/telemetria do upstream. Se o merge trouxer de volta algo disso (ou `googletagmanager`, `gtag(`, `appInsights`) em `packages/typescriptlang-org/src` ou `gatsby-*.js`, remova no próprio sync. `python3 tool/traducao/verificar.py` dá ERRO nesses termos.
 
 ## Modelo da tradução: sempre Haiku
 
