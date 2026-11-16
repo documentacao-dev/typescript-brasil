@@ -19,3 +19,18 @@ Toda tradução e retradução de página (tradução nova, sync com o upstream,
 - Front matter YAML: traduza `title`, `oneline` e o texto de `preamble` (mantendo o HTML); `layout`, `permalink`, `translatable` e demais chaves ficam iguais. Acrescente `ia-translate: true`.
 - Blocos ` ```ts twoslash ` são compilados no build: o código, inclusive os comentários e as diretivas `// @errors`, `// ^?`, `// @noErrors`, fica idêntico ao inglês.
 - Títulos traduzidos levam a âncora original: rode `python3 tool/traducao/ancorar_titulos.py <arquivos>` depois de traduzir (acrescenta `{#slug-do-inglês}`; o `gatsby-config.js` do fork liga `enableCustomId`). Links `#...` ficam como estão.
+
+## Publicação: typescript.documentacao.dev
+
+- Firebase Hosting, projeto `transliteradu`, site `typescript-documentacao` (https://typescript-documentacao.web.app; o domínio `typescript.documentacao.dev` é apontado à parte). Config em `firebase.json` + `.firebaserc`, servindo `packages/typescriptlang-org/public` com `cleanUrls: false` (as URLs do site terminam em `.html`).
+- CI: `.github/workflows/deploy-firebase.yml` faz build + deploy em cada push em `v2` que mexa em `packages/documentation/**` (ou no próprio `firebase.json`/workflow) e publica um canal de preview (7 dias) em cada PR. Usa o secret `FIREBASE_SERVICE_ACCOUNT`. Também roda manualmente (`workflow_dispatch`).
+- Os workflows do upstream (CI, Pages, preview no Azure, publicação de pacotes, CodeQL, keepalive) só rodam em `microsoft/TypeScript-Website`.
+- Build local (Node 20, pnpm 10.30.3 via corepack, ~22 min no Mac; o `build-site` leva ~16 min porque compila os blocos twoslash):
+  ```bash
+  nvm use 20 && corepack enable
+  pnpm install && pnpm bootstrap && pnpm build && pnpm build-site
+  firebase deploy --only hosting --project transliteradu
+  ```
+  Não rode `pnpm docs-sync pull ...` (localizações oficiais): o site publicado é só o conteúdo de `copy/en`, que aqui está em pt-BR.
+- Erro de twoslash no build aponta o `.md`: o código do bloco tem que ser idêntico ao inglês (`git show $(cat tool/traducao/ultimo-sync-upstream.txt):<arquivo>`).
+- O build regrava `packages/typescriptlang-org/src/__generated__/gatsby-types.ts`; descarte essa mudança antes de commitar.

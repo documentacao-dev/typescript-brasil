@@ -1,0 +1,72 @@
+name: Deploy Firebase (typescript.documentacao.dev)
+
+on:
+  push:
+    branches:
+      - v2
+    paths:
+      - "packages/documentation/**"
+      - "firebase.json"
+      - ".github/workflows/deploy-firebase.yml"
+  pull_request:
+    branches:
+      - v2
+    paths:
+      - "packages/documentation/**"
+      - "firebase.json"
+      - ".github/workflows/deploy-firebase.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: firebase-${{ github.event_name }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    if: github.repository == 'documentacao-dev/typescript-brasil'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+
+      # Versão do pnpm vem de "packageManager" no package.json
+      - uses: pnpm/action-setup@v4
+
+      - name: Instalar e montar os pacotes
+        run: |
+          pnpm install
+          pnpm bootstrap
+          pnpm build
+
+      - name: Gerar o site (Gatsby)
+        run: pnpm build-site
+
+      - name: Deploy de produção
+        if: github.event_name != 'pull_request'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: transliteradu
+          channelId: live
+
+      - name: Preview do PR
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
+          projectId: transliteradu
+          expires: 7d
