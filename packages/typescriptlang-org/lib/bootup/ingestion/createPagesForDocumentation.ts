@@ -106,6 +106,16 @@ export const createDocumentationPages = async (
     const repoRoot = path.join(process.cwd(), "..", "..")
     const repoPath = post.absolutePath.replace(repoRoot, "")
 
+    // Fork pt-BR: página de copy/en sem "ia-translate: true" no frontmatter
+    // ainda está em inglês e ganha um aviso (ver documentation.tsx).
+    let untranslatedPath: string | null = null
+    if (lang === "en" && post.absolutePath.includes(`${path.sep}copy${path.sep}en${path.sep}`)) {
+      const raw = fs.readFileSync(post.absolutePath, "utf8")
+      const fm = raw.match(/^---\r?\n([\s\S]*?)\r?\n---/)
+      const translated = !!fm && /^ia-translate:\s*true\s*$/m.test(fm[1])
+      if (!translated) untranslatedPath = repoPath.split(path.sep).join("/").replace(/^\//, "")
+    }
+
     if (post.childMarkdownRemark) {
       const path = post.childMarkdownRemark.frontmatter.permalink
       addPathToSite(path)
@@ -121,6 +131,7 @@ export const createDocumentationPages = async (
           nextID,
           lang,
           modifiedTime: post.modifiedTime,
+          untranslatedPath,
         },
       })
     } else {

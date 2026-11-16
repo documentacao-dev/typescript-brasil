@@ -32,6 +32,8 @@ type Props = {
     slug: string
     lang: string
     modifiedTime: string
+    /** Caminho do .md no repo quando a página ainda não foi traduzida (fork pt-BR) */
+    untranslatedPath?: string | null
   }
   data: GatsbyTypes.GetDocumentBySlugQuery
   path: string
@@ -144,6 +146,18 @@ const HandbookTemplate: React.FC<Props> = (props) => {
                   <p>{i("handb_experimental_subtitle")}</p>
                 </div>
               </div>
+            </div>
+          }
+
+          {props.pageContext.untranslatedPath &&
+            <div id="untranslated-notice" role="note" aria-label="Aviso de tradução" lang="pt-BR">
+              <p>
+                <strong>Esta página ainda está em inglês.</strong> A tradução para o português ainda não chegou aqui.{" "}
+                Quer ajudar?{" "}
+                <a href={`https://github.com/documentacao-dev/typescript-brasil/blob/v2/${encodeURI(props.pageContext.untranslatedPath)}`} target="_blank" rel="noopener noreferrer">
+                  Traduza no GitHub <span aria-hidden="true">→</span><span className="sr-only"> (abre em nova aba)</span>
+                </a>
+              </p>
             </div>
           }
 

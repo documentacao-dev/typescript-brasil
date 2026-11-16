@@ -291,6 +291,44 @@
     }
   }
 
+  #untranslated-notice {
+    color: black;
+    background-color: #fff4cf;
+    border-left: 4px solid #e0b400;
+    margin: 1rem 0;
+    padding: 0.75rem 1rem;
+    overflow-wrap: anywhere;
+
+    p {
+      margin: 0;
+      line-height: 1.5;
+    }
+
+    a {
+      color: #1a4d8f;
+      text-decoration: underline;
+      font-weight: 600;
+    }
+
+    a:focus-visible {
+      outline: 2px solid #1a4d8f;
+      outline-offset: 2px;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+
+    @media (max-width: $screen-sm) {
+      font-size: 0.9rem;
+    }
+  }
+
   #deprecated-header {
     color: black;
     background-color: #fff4cf;
