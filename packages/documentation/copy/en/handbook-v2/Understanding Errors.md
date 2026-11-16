@@ -1,42 +1,43 @@
 ---
-title: Understanding Errors
+title: Entendendo erros
 layout: docs
 permalink: /docs/handbook/2/understanding-errors.html
-oneline: "How to read TypeScript errors."
+oneline: "Como ler os erros do TypeScript."
+ia-translate: true
 ---
 
-# Understanding Errors
+# Entendendo erros {#understanding-errors}
 
-Whenever TypeScript finds an error, it tries to explain what went wrong in as much detail as possible.
-Because its type system is structural, this often means providing somewhat lengthy descriptions of where it found a problem.
+Sempre que o TypeScript encontra um erro, ele tenta explicar o que deu errado com o máximo de detalhes possível.
+Como o sistema de tipos dele é estrutural, isso muitas vezes significa fornecer descrições um tanto longas sobre onde o problema foi encontrado.
 
-## Terminology
+## Terminologia {#terminology}
 
-There is some terminology you'll frequently see in error messages that is helpful to understand.
+Há alguma terminologia que você vai ver com frequência nas mensagens de erro, e vale a pena entendê-la.
 
-#### _assignable to_
+#### _atribuível a_ {#_assignable-to_}
 
-TypeScript considers a type _assignable to_ another type if one is an acceptable substitute for the other.
-In other words, a `Cat` is _assignable to_ an `Animal` because a `Cat` is an acceptable substitute for an `Animal`.
+O TypeScript considera que um tipo é _atribuível a_ outro tipo quando um deles é um substituto aceitável para o outro.
+Em outras palavras, um `Cat` é _atribuível a_ um `Animal` porque um `Cat` é um substituto aceitável para um `Animal`.
 
-As its name implies, this relationship is used to check the validity of an assignment `t = s;` by examining the types of `t` and `s`.
-It's also used to check most other places where two types interact.
-For example, when calling a function, each argument's type must be _assignable to_ parameter's declared type.
+Como o nome sugere, essa relação é usada para verificar a validade de uma atribuição `t = s;` examinando os tipos de `t` e `s`.
+Ela também é usada para verificar a maioria dos outros pontos em que dois tipos interagem.
+Por exemplo, ao chamar uma função, o tipo de cada argumento precisa ser _atribuível ao_ tipo declarado do parâmetro.
 
-Informally, if you see `T is not assignable to S`, you can think of that as TypeScript saying "_`T` and `S` are not compatible"_.
-However, note that this is a _directional_ relationship: `S` being assignable to `T` does not imply that `T` is assignable to `S`.
+Informalmente, se você vir `T is not assignable to S`, pode entender isso como o TypeScript dizendo "_`T` e `S` não são compatíveis_".
+No entanto, repare que essa é uma relação _direcional_: `S` ser atribuível a `T` não implica que `T` seja atribuível a `S`.
 
-## Examples
+## Exemplos {#examples}
 
-Let's look at some example error messages and understand what's going on.
+Vamos ver alguns exemplos de mensagens de erro e entender o que está acontecendo.
 
-### Error Elaborations
+### Detalhamento de erros {#error-elaborations}
 
-Each error starts with a leading message, sometimes followed by more sub-messages.
-You can think of each sub-message as answering a "why?" question about the message above it.
-Let's work through some examples to see how they work in practice.
+Cada erro começa com uma mensagem principal, às vezes seguida de submensagens.
+Você pode pensar em cada submensagem como uma resposta à pergunta "por quê?" sobre a mensagem acima dela.
+Vamos ver alguns exemplos para entender como isso funciona na prática.
 
-Here's an example that produces an error message longer than the example itself:
+Aqui está um exemplo que gera uma mensagem de erro maior que o próprio exemplo:
 
 ```ts twoslash
 // @errors: 2322
@@ -45,15 +46,15 @@ let b = { m: [""] };
 a = b;
 ```
 
-TypeScript found an error when checking the last line.
-Its logic for issuing an error follows from its logic for determining if the assignment is OK:
+O TypeScript encontrou um erro ao verificar a última linha.
+A lógica para emitir o erro decorre da lógica que ele usa para determinar se a atribuição está correta:
 
-1. Is `b`'s type assignable to `a`'s? No. Why?
-2. Because the type of the `m` property is incompatible. Why?
-3. Because `b`'s `m` property (`string[]`) is not assignable to `a`'s `m` property (`number[]`). Why?
-4. Because one array's element type (`string`) is not assignable to the other (`number`)
+1. O tipo de `b` é atribuível ao de `a`? Não. Por quê?
+2. Porque o tipo da propriedade `m` é incompatível. Por quê?
+3. Porque a propriedade `m` de `b` (`string[]`) não é atribuível à propriedade `m` de `a` (`number[]`). Por quê?
+4. Porque o tipo dos elementos de um array (`string`) não é atribuível ao do outro (`number`)
 
-### Extra Properties
+### Propriedades extras {#extra-properties}
 
 ```ts twoslash
 // @errors: 2322
@@ -61,7 +62,7 @@ type A = { m: number };
 const a: A = { m: 10, n: "" };
 ```
 
-### Union Assignments
+### Atribuições de união {#union-assignments}
 
 ```ts twoslash
 // @errors: 2322

@@ -150,7 +150,11 @@ module.exports = {
               wrapperStyle: `margin-bottom: 1.0725rem`,
             },
           },
-          "gatsby-remark-autolink-headers",
+          {
+            // Fork PT-BR: títulos traduzidos levam {#id-em-ingles} para manter os links.
+            resolve: "gatsby-remark-autolink-headers",
+            options: { enableCustomId: true },
+          },
           {
             resolve: "gatsby-remark-shiki-twoslash",
             options: {

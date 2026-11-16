@@ -2,10 +2,11 @@
 title: Narrowing
 layout: docs
 permalink: /docs/handbook/2/narrowing.html
-oneline: "Understand how TypeScript uses JavaScript knowledge to reduce the amount of type syntax in your projects."
+oneline: "Entenda como o TypeScript usa o conhecimento do JavaScript para reduzir a quantidade de sintaxe de tipos nos seus projetos."
+ia-translate: true
 ---
 
-Imagine we have a function called `padLeft`.
+Imagine que temos uma função chamada `padLeft`.
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string): string {
@@ -13,9 +14,9 @@ function padLeft(padding: number | string, input: string): string {
 }
 ```
 
-If `padding` is a `number`, it will treat that as the number of spaces we want to prepend to `input`.
-If `padding` is a `string`, it should just prepend `padding` to `input`.
-Let's try to implement the logic for when `padLeft` is passed a `number` for `padding`.
+Se `padding` for um `number`, ele será tratado como a quantidade de espaços que queremos adicionar no início de `input`.
+Se `padding` for uma `string`, basta adicionar `padding` no início de `input`.
+Vamos tentar implementar a lógica para quando `padLeft` recebe um `number` em `padding`.
 
 ```ts twoslash
 // @errors: 2345
@@ -24,9 +25,9 @@ function padLeft(padding: number | string, input: string): string {
 }
 ```
 
-Uh-oh, we're getting an error on `padding`.
-TypeScript is warning us that we're passing a value with type `number | string` to the `repeat` function, which only accepts a `number`, and it's right.
-In other words, we haven't explicitly checked if `padding` is a `number` first, nor are we handling the case where it's a `string`, so let's do exactly that.
+Opa, estamos recebendo um erro em `padding`.
+O TypeScript está avisando que estamos passando um valor do tipo `number | string` para a função `repeat`, que só aceita um `number`, e ele tem razão.
+Em outras palavras, não verificamos explicitamente se `padding` é um `number` antes, nem tratamos o caso em que ele é uma `string`. Então vamos fazer exatamente isso.
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string): string {
@@ -37,17 +38,17 @@ function padLeft(padding: number | string, input: string): string {
 }
 ```
 
-If this mostly looks like uninteresting JavaScript code, that's sort of the point.
-Apart from the annotations we put in place, this TypeScript code looks like JavaScript.
-The idea is that TypeScript's type system aims to make it as easy as possible to write typical JavaScript code without bending over backwards to get type safety.
+Se isso parece, na maior parte, um código JavaScript sem graça, esse é meio que o ponto.
+Fora as anotações que colocamos, este código TypeScript parece JavaScript.
+A ideia é que o sistema de tipos do TypeScript procura tornar o mais fácil possível escrever código JavaScript típico, sem precisar fazer malabarismos para ter segurança de tipos.
 
-While it might not look like much, there's actually a lot going on under the covers here.
-Much like how TypeScript analyzes runtime values using static types, it overlays type analysis on JavaScript's runtime control flow constructs like `if/else`, conditional ternaries, loops, truthiness checks, etc., which can all affect those types.
+Pode não parecer muita coisa, mas há bastante coisa acontecendo por trás.
+Assim como o TypeScript analisa valores em tempo de execução usando tipos estáticos, ele sobrepõe uma análise de tipos às estruturas de controle de fluxo do JavaScript, como `if/else`, ternários condicionais, laços, verificações de truthiness etc., que podem todas afetar esses tipos.
 
-Within our `if` check, TypeScript sees `typeof padding === "number"` and understands that as a special form of code called a _type guard_.
-TypeScript follows possible paths of execution that our programs can take to analyze the most specific possible type of a value at a given position.
-It looks at these special checks (called _type guards_) and assignments, and the process of refining types to more specific types than declared is called _narrowing_.
-In many editors we can observe these types as they change, and we'll even do so in our examples.
+Dentro do nosso `if`, o TypeScript vê `typeof padding === "number"` e entende isso como uma forma especial de código chamada _type guard_.
+O TypeScript segue os possíveis caminhos de execução que o programa pode seguir para analisar o tipo mais específico possível de um valor em uma dada posição.
+Ele observa essas verificações especiais (chamadas de _type guards_) e atribuições, e o processo de refinar os tipos para tipos mais específicos do que os declarados é chamado de _narrowing_.
+Em muitos editores podemos observar esses tipos mudando, e faremos isso nos nossos exemplos.
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string): string {
@@ -60,12 +61,12 @@ function padLeft(padding: number | string, input: string): string {
 }
 ```
 
-There are a couple of different constructs TypeScript understands for narrowing.
+Existem algumas construções diferentes que o TypeScript entende para fazer narrowing.
 
-## `typeof` type guards
+## Type guards com `typeof` {#typeof-type-guards}
 
-As we've seen, JavaScript supports a `typeof` operator which can give very basic information about the type of values we have at runtime.
-TypeScript expects this to return a certain set of strings:
+Como vimos, o JavaScript tem um operador `typeof` que pode dar informações bem básicas sobre o tipo dos valores que temos em tempo de execução.
+O TypeScript espera que ele retorne um conjunto específico de strings:
 
 - `"string"`
 - `"number"`
@@ -76,12 +77,12 @@ TypeScript expects this to return a certain set of strings:
 - `"object"`
 - `"function"`
 
-Like we saw with `padLeft`, this operator comes up pretty often in a number of JavaScript libraries, and TypeScript can understand it to narrow types in different branches.
+Assim como vimos com `padLeft`, esse operador aparece com bastante frequência em várias bibliotecas JavaScript, e o TypeScript consegue entendê-lo para fazer narrowing de tipos em diferentes ramos.
 
-In TypeScript, checking against the value returned by `typeof` is a type guard.
-Because TypeScript encodes how `typeof` operates on different values, it knows about some of its quirks in JavaScript.
-For example, notice that in the list above, `typeof` doesn't return the string `null`.
-Check out the following example:
+No TypeScript, comparar com o valor retornado por `typeof` é um type guard.
+Como o TypeScript codifica como `typeof` opera sobre diferentes valores, ele conhece algumas das peculiaridades dessa operação no JavaScript.
+Por exemplo, repare que, na lista acima, `typeof` não retorna a string `null`.
+Veja o exemplo a seguir:
 
 ```ts twoslash
 // @errors: 2531 18047
@@ -98,20 +99,20 @@ function printAll(strs: string | string[] | null) {
 }
 ```
 
-In the `printAll` function, we try to check if `strs` is an object to see if it's an array type (now might be a good time to reinforce that arrays are object types in JavaScript).
-But it turns out that in JavaScript, `typeof null` is actually `"object"`!
-This is one of those unfortunate accidents of history.
+Na função `printAll`, tentamos verificar se `strs` é um objeto para saber se ele é um tipo de array (agora pode ser um bom momento para reforçar que arrays são tipos de objeto em JavaScript).
+Mas acontece que, em JavaScript, `typeof null` é, na verdade, `"object"`!
+Esse é um daqueles acidentes infelizes da história.
 
-Users with enough experience might not be surprised, but not everyone has run into this in JavaScript; luckily, TypeScript lets us know that `strs` was only narrowed down to `string[] | null` instead of just `string[]`.
+Quem tem bastante experiência talvez não se surpreenda, mas nem todo mundo já esbarrou nisso em JavaScript. Felizmente, o TypeScript nos avisa que `strs` foi restringido apenas a `string[] | null`, e não só a `string[]`.
 
-This might be a good segue into what we'll call "truthiness" checking.
+Isso pode ser uma boa transição para o que vamos chamar de verificação de "truthiness".
 
-## Truthiness narrowing
+## Narrowing por truthiness {#truthiness-narrowing}
 
-Truthiness might not be a word you'll find in the dictionary, but it's very much something you'll hear about in JavaScript.
+Truthiness talvez não seja uma palavra que você encontre no dicionário, mas é algo sobre o qual você vai ouvir muito em JavaScript.
 
-In JavaScript, we can use any expression in conditionals, `&&`s, `||`s, `if` statements, Boolean negations (`!`), and more.
-As an example, `if` statements don't expect their condition to always have the type `boolean`.
+Em JavaScript, podemos usar qualquer expressão em condicionais, `&&`, `||`, instruções `if`, negações booleanas (`!`) e mais.
+Como exemplo, instruções `if` não esperam que a condição tenha sempre o tipo `boolean`.
 
 ```ts twoslash
 function getUsersOnlineMessage(numUsersOnline: number) {
@@ -122,18 +123,18 @@ function getUsersOnlineMessage(numUsersOnline: number) {
 }
 ```
 
-In JavaScript, constructs like `if` first "coerce" their conditions to `boolean`s to make sense of them, and then choose their branches depending on whether the result is `true` or `false`.
-Values like
+Em JavaScript, construções como `if` primeiro "convertem" suas condições para `boolean` para interpretá-las, e então escolhem o ramo dependendo de o resultado ser `true` ou `false`.
+Valores como
 
 - `0`
 - `NaN`
-- `""` (the empty string)
-- `0n` (the `bigint` version of zero)
+- `""` (a string vazia)
+- `0n` (a versão `bigint` do zero)
 - `null`
 - `undefined`
 
-all coerce to `false`, and other values get coerced to `true`.
-You can always coerce values to `boolean`s by running them through the `Boolean` function, or by using the shorter double-Boolean negation. (The latter has the advantage that TypeScript infers a narrow literal boolean type `true`, while inferring the first as type `boolean`.)
+são todos convertidos para `false`, e os demais valores são convertidos para `true`.
+Você sempre pode converter valores para `boolean` passando-os pela função `Boolean`, ou usando a dupla negação booleana, que é mais curta. (Esta última tem a vantagem de o TypeScript inferir o literal booleano `true`, enquanto a primeira é inferida como `boolean`.)
 
 ```ts twoslash
 // both of these result in 'true'
@@ -141,8 +142,8 @@ Boolean("hello"); // type: boolean, value: true
 !!"world"; // type: true,    value: true
 ```
 
-It's fairly popular to leverage this behavior, especially for guarding against values like `null` or `undefined`.
-As an example, let's try using it for our `printAll` function.
+É bastante comum aproveitar esse comportamento, especialmente para proteger contra valores como `null` ou `undefined`.
+Como exemplo, vamos tentar usá-lo na nossa função `printAll`.
 
 ```ts twoslash
 function printAll(strs: string | string[] | null) {
@@ -156,15 +157,15 @@ function printAll(strs: string | string[] | null) {
 }
 ```
 
-You'll notice that we've gotten rid of the error above by checking if `strs` is truthy.
-This at least prevents us from dreaded errors when we run our code like:
+Você vai notar que eliminamos o erro de antes ao verificar se `strs` é truthy.
+Isso pelo menos evita os temidos erros quando rodamos o código, como:
 
 ```txt
 TypeError: null is not iterable
 ```
 
-Keep in mind though that truthiness checking on primitives can often be error prone.
-As an example, consider a different attempt at writing `printAll`
+Tenha em mente, porém, que verificar truthiness em primitivos pode ser propenso a erros.
+Como exemplo, considere outra tentativa de escrever `printAll`
 
 ```ts twoslash {class: "do-not-do-this"}
 function printAll(strs: string | string[] | null) {
@@ -184,13 +185,13 @@ function printAll(strs: string | string[] | null) {
 }
 ```
 
-We wrapped the entire body of the function in a truthy check, but this has a subtle downside: we may no longer be handling the empty string case correctly.
+Envolvemos todo o corpo da função em uma verificação de truthy, mas isso tem uma desvantagem sutil: podemos deixar de tratar corretamente o caso da string vazia.
 
-TypeScript doesn't hurt us here at all, but this behavior is worth noting if you're less familiar with JavaScript.
-TypeScript can often help you catch bugs early on, but if you choose to do _nothing_ with a value, there's only so much that it can do without being overly prescriptive.
-If you want, you can make sure you handle situations like these with a linter.
+O TypeScript não nos prejudica em nada aqui, mas vale a pena notar esse comportamento se você não está tão familiarizado com JavaScript.
+O TypeScript pode frequentemente ajudar a pegar bugs cedo, mas, se você escolher não fazer _nada_ com um valor, há só até onde ele consegue ir sem ser excessivamente prescritivo.
+Se quiser, você pode garantir que trate situações como essas com um linter.
 
-One last word on narrowing by truthiness is that Boolean negations with `!` filter out from negated branches.
+Uma última observação sobre narrowing por truthiness é que negações booleanas com `!` filtram os valores nos ramos negados.
 
 ```ts twoslash
 function multiplyAll(
@@ -205,10 +206,10 @@ function multiplyAll(
 }
 ```
 
-## Equality narrowing
+## Narrowing por igualdade {#equality-narrowing}
 
-TypeScript also uses `switch` statements and equality checks like `===`, `!==`, `==`, and `!=` to narrow types.
-For example:
+O TypeScript também usa instruções `switch` e verificações de igualdade como `===`, `!==`, `==` e `!=` para fazer narrowing de tipos.
+Por exemplo:
 
 ```ts twoslash
 function example(x: string | number, y: string | boolean) {
@@ -227,12 +228,12 @@ function example(x: string | number, y: string | boolean) {
 }
 ```
 
-When we checked that `x` and `y` are both equal in the above example, TypeScript knew their types also had to be equal.
-Since `string` is the only common type that both `x` and `y` could take on, TypeScript knows that `x` and `y` must be `string`s in the first branch.
+Quando verificamos que `x` e `y` são iguais no exemplo acima, o TypeScript sabe que os tipos deles também precisam ser iguais.
+Como `string` é o único tipo comum que `x` e `y` podem assumir, o TypeScript sabe que `x` e `y` precisam ser `string`s no primeiro ramo.
 
-Checking against specific literal values (as opposed to variables) works also.
-In our section about truthiness narrowing, we wrote a `printAll` function which was error-prone because it accidentally didn't handle empty strings properly.
-Instead we could have done a specific check to block out `null`s, and TypeScript still correctly removes `null` from the type of `strs`.
+Comparar com valores literais específicos (em vez de variáveis) também funciona.
+Na seção sobre narrowing por truthiness, escrevemos uma função `printAll` que era propensa a erros porque, sem querer, não tratava corretamente as strings vazias.
+Em vez disso, poderíamos ter feito uma verificação específica para barrar os `null`, e o TypeScript ainda assim remove corretamente o `null` do tipo de `strs`.
 
 ```ts twoslash
 function printAll(strs: string | string[] | null) {
@@ -250,9 +251,9 @@ function printAll(strs: string | string[] | null) {
 }
 ```
 
-JavaScript's looser equality checks with `==` and `!=` also get narrowed correctly.
-If you're unfamiliar, checking whether something `== null` actually not only checks whether it is specifically the value `null` - it also checks whether it's potentially `undefined`.
-The same applies to `== undefined`: it checks whether a value is either `null` or `undefined`.
+As verificações de igualdade mais frouxas do JavaScript, com `==` e `!=`, também são corretamente tratadas no narrowing.
+Se você não está familiarizado, verificar se algo `== null` não checa apenas se o valor é exatamente `null`: também checa se ele pode ser `undefined`.
+O mesmo vale para `== undefined`: ele verifica se o valor é `null` ou `undefined`.
 
 ```ts twoslash
 interface Container {
@@ -271,13 +272,12 @@ function multiplyValue(container: Container, factor: number) {
 }
 ```
 
-## The `in` operator narrowing
+## Narrowing com o operador `in` {#the-in-operator-narrowing}
 
-JavaScript has an operator for determining if an object or its prototype chain has a property with a name: the `in` operator.
-TypeScript takes this into account as a way to narrow down potential types.
+O JavaScript tem um operador para determinar se um objeto, ou sua cadeia de protótipos, possui uma propriedade com determinado nome: o operador `in`.
+O TypeScript leva isso em conta como uma forma de restringir os tipos possíveis.
 
-For example, with the code: `"value" in x` where `"value"` is a string literal and `x` is a union type.
-The "true" branch narrows `x`'s types which have either an optional or required property `value`, and the "false" branch narrows to types which have an optional or missing property `value`.
+Por exemplo, com o código `"value" in x`, em que `"value"` é um literal de string e `x` é um tipo union. O ramo "verdadeiro" restringe os tipos de `x` que têm a propriedade `value`, seja ela opcional ou obrigatória, e o ramo "falso" restringe para os tipos que têm a propriedade `value` opcional ou ausente.
 
 ```ts twoslash
 type Fish = { swim: () => void };
@@ -292,7 +292,7 @@ function move(animal: Fish | Bird) {
 }
 ```
 
-To reiterate, optional properties will exist in both sides for narrowing. For example, a human could both swim and fly (with the right equipment) and thus should show up in both sides of the `in` check:
+Reforçando: propriedades opcionais existirão nos dois lados para o narrowing. Por exemplo, um ser humano pode nadar e voar (com o equipamento certo), então deve aparecer nos dois lados da verificação `in`:
 
 <!-- prettier-ignore -->
 ```ts twoslash
@@ -311,12 +311,12 @@ function move(animal: Fish | Bird | Human) {
 }
 ```
 
-## `instanceof` narrowing
+## Narrowing com `instanceof` {#instanceof-narrowing}
 
-JavaScript has an operator for checking whether or not a value is an "instance" of another value.
-More specifically, in JavaScript `x instanceof Foo` checks whether the _prototype chain_ of `x` contains `Foo.prototype`.
-While we won't dive deep here, and you'll see more of this when we get into classes, they can still be useful for most values that can be constructed with `new`.
-As you might have guessed, `instanceof` is also a type guard, and TypeScript narrows in branches guarded by `instanceof`s.
+O JavaScript tem um operador para verificar se um valor é uma "instância" de outro valor.
+Mais especificamente, em JavaScript, `x instanceof Foo` verifica se a _cadeia de protótipos_ de `x` contém `Foo.prototype`.
+Não vamos nos aprofundar aqui, e você verá mais sobre isso quando chegarmos a classes, mas eles ainda são úteis para a maioria dos valores que podem ser construídos com `new`.
+Como você deve ter imaginado, `instanceof` também é um type guard, e o TypeScript faz narrowing nos ramos protegidos por `instanceof`.
 
 ```ts twoslash
 function logValue(x: Date | string) {
@@ -330,9 +330,9 @@ function logValue(x: Date | string) {
 }
 ```
 
-## Assignments
+## Atribuições {#assignments}
 
-As we mentioned earlier, when we assign to any variable, TypeScript looks at the right side of the assignment and narrows the left side appropriately.
+Como mencionamos antes, quando atribuímos a qualquer variável, o TypeScript analisa o lado direito da atribuição e faz o narrowing do lado esquerdo de forma apropriada.
 
 ```ts twoslash
 let x = Math.random() < 0.5 ? 10 : "hello world!";
@@ -347,11 +347,11 @@ console.log(x);
 //          ^?
 ```
 
-Notice that each of these assignments is valid.
-Even though the observed type of `x` changed to `number` after our first assignment, we were still able to assign a `string` to `x`.
-This is because the _declared type_ of `x` - the type that `x` started with - is `string | number`, and assignability is always checked against the declared type.
+Repare que cada uma dessas atribuições é válida.
+Mesmo que o tipo observado de `x` tenha mudado para `number` depois da primeira atribuição, ainda conseguimos atribuir uma `string` a `x`.
+Isso acontece porque o _tipo declarado_ de `x` (o tipo com que `x` começou) é `string | number`, e a atribuibilidade é sempre verificada contra o tipo declarado.
 
-If we'd assigned a `boolean` to `x`, we'd have seen an error since that wasn't part of the declared type.
+Se tivéssemos atribuído um `boolean` a `x`, veríamos um erro, já que ele não fazia parte do tipo declarado.
 
 ```ts twoslash
 // @errors: 2322
@@ -367,11 +367,11 @@ console.log(x);
 //          ^?
 ```
 
-## Control flow analysis
+## Análise de fluxo de controle {#control-flow-analysis}
 
-Up until this point, we've gone through some basic examples of how TypeScript narrows within specific branches.
-But there's a bit more going on than just walking up from every variable and looking for type guards in `if`s, `while`s, conditionals, etc.
-For example
+Até aqui, passamos por alguns exemplos básicos de como o TypeScript faz narrowing dentro de ramos específicos.
+Mas há um pouco mais acontecendo do que simplesmente subir a partir de cada variável procurando type guards em `if`s, `while`s, condicionais etc.
+Por exemplo:
 
 ```ts twoslash
 function padLeft(padding: number | string, input: string) {
@@ -382,12 +382,12 @@ function padLeft(padding: number | string, input: string) {
 }
 ```
 
-`padLeft` returns from within its first `if` block.
-TypeScript was able to analyze this code and see that the rest of the body (`return padding + input;`) is _unreachable_ in the case where `padding` is a `number`.
-As a result, it was able to remove `number` from the type of `padding` (narrowing from `string | number` to `string`) for the rest of the function.
+`padLeft` retorna de dentro do primeiro bloco `if`.
+O TypeScript conseguiu analisar esse código e ver que o restante do corpo (`return padding + input;`) é _inalcançável_ no caso em que `padding` é um `number`.
+Como resultado, ele conseguiu remover `number` do tipo de `padding` (fazendo o narrowing de `string | number` para `string`) pelo resto da função.
 
-This analysis of code based on reachability is called _control flow analysis_, and TypeScript uses this flow analysis to narrow types as it encounters type guards and assignments.
-When a variable is analyzed, control flow can split off and re-merge over and over again, and that variable can be observed to have a different type at each point.
+Essa análise do código com base em alcançabilidade é chamada de _análise de fluxo de controle_, e o TypeScript usa essa análise de fluxo para restringir tipos conforme encontra type guards e atribuições.
+Quando uma variável é analisada, o fluxo de controle pode se dividir e se juntar de novo várias vezes, e a variável pode ser observada com um tipo diferente em cada ponto.
 
 ```ts twoslash
 function example() {
@@ -413,11 +413,11 @@ function example() {
 }
 ```
 
-## Using type predicates
+## Usando type predicates {#using-type-predicates}
 
-We've worked with existing JavaScript constructs to handle narrowing so far, however sometimes you want more direct control over how types change throughout your code.
+Até agora trabalhamos com construções existentes do JavaScript para lidar com o narrowing, mas às vezes você quer um controle mais direto sobre como os tipos mudam ao longo do seu código.
 
-To define a user-defined type guard, we simply need to define a function whose return type is a _type predicate_:
+Para definir um type guard definido pelo usuário, basta definir uma função cujo tipo de retorno seja um _type predicate_:
 
 ```ts twoslash
 type Fish = { swim: () => void };
@@ -429,10 +429,10 @@ function isFish(pet: Fish | Bird): pet is Fish {
 }
 ```
 
-`pet is Fish` is our type predicate in this example.
-A predicate takes the form `parameterName is Type`, where `parameterName` must be the name of a parameter from the current function signature.
+`pet is Fish` é o type predicate neste exemplo.
+Um predicate tem a forma `parameterName is Type`, onde `parameterName` precisa ser o nome de um parâmetro da assinatura atual da função.
 
-Any time `isFish` is called with some variable, TypeScript will _narrow_ that variable to that specific type if the original type is compatible.
+Sempre que `isFish` é chamada com alguma variável, o TypeScript vai _restringir_ essa variável para aquele tipo específico, se o tipo original for compatível.
 
 ```ts twoslash
 type Fish = { swim: () => void };
@@ -452,10 +452,10 @@ if (isFish(pet)) {
 }
 ```
 
-Notice that TypeScript not only knows that `pet` is a `Fish` in the `if` branch;
-it also knows that in the `else` branch, you _don't_ have a `Fish`, so you must have a `Bird`.
+Repare que o TypeScript não sabe apenas que `pet` é um `Fish` no ramo `if`;
+ele também sabe que, no ramo `else`, você _não_ tem um `Fish`, então precisa ter um `Bird`.
 
-You may use the type guard `isFish` to filter an array of `Fish | Bird` and obtain an array of `Fish`:
+Você pode usar o type guard `isFish` para filtrar um array de `Fish | Bird` e obter um array de `Fish`:
 
 ```ts twoslash
 type Fish = { swim: () => void; name: string };
@@ -477,21 +477,21 @@ const underWater3: Fish[] = zoo.filter((pet): pet is Fish => {
 });
 ```
 
-In addition, classes can [use `this is Type`](/docs/handbook/2/classes.html#this-based-type-guards) to narrow their type.
+Além disso, classes podem [usar `this is Type`](/docs/handbook/2/classes.html#this-based-type-guards) para restringir o próprio tipo.
 
-## Assertion functions
+## Funções de asserção {#assertion-functions}
 
-Types can also be narrowed using [Assertion functions](/docs/handbook/release-notes/typescript-3-7.html#assertion-functions).
+Os tipos também podem ser restringidos usando [funções de asserção](/docs/handbook/release-notes/typescript-3-7.html#assertion-functions).
 
-## Discriminated unions
+## Unions discriminadas {#discriminated-unions}
 
-Most of the examples we've looked at so far have focused around narrowing single variables with simple types like `string`, `boolean`, and `number`.
-While this is common, most of the time in JavaScript we'll be dealing with slightly more complex structures.
+A maioria dos exemplos que vimos até agora se concentrou em restringir variáveis únicas com tipos simples como `string`, `boolean` e `number`.
+Embora isso seja comum, na maior parte do tempo em JavaScript vamos lidar com estruturas um pouco mais complexas.
 
-For some motivation, let's imagine we're trying to encode shapes like circles and squares.
-Circles keep track of their radiuses and squares keep track of their side lengths.
-We'll use a field called `kind` to tell which shape we're dealing with.
-Here's a first attempt at defining `Shape`.
+Como motivação, imagine que estamos tentando codificar formas como círculos e quadrados.
+Círculos guardam seus raios, e quadrados guardam o comprimento dos lados.
+Vamos usar um campo chamado `kind` para saber com qual forma estamos lidando.
+Aqui está uma primeira tentativa de definir `Shape`.
 
 ```ts twoslash
 interface Shape {
@@ -501,8 +501,8 @@ interface Shape {
 }
 ```
 
-Notice we're using a union of string literal types: `"circle"` and `"square"` to tell us whether we should treat the shape as a circle or square respectively.
-By using `"circle" | "square"` instead of `string`, we can avoid misspelling issues.
+Repare que estamos usando uma union de tipos literais de string: `"circle"` e `"square"`, para dizer se devemos tratar a forma como um círculo ou um quadrado, respectivamente.
+Ao usar `"circle" | "square"` em vez de `string`, evitamos erros de digitação.
 
 ```ts twoslash
 // @errors: 2367
@@ -521,8 +521,8 @@ function handleShape(shape: Shape) {
 }
 ```
 
-We can write a `getArea` function that applies the right logic based on if it's dealing with a circle or square.
-We'll first try dealing with circles.
+Podemos escrever uma função `getArea` que aplica a lógica certa dependendo de estarmos lidando com um círculo ou um quadrado.
+Vamos começar tratando os círculos.
 
 ```ts twoslash
 // @errors: 2532 18048
@@ -540,8 +540,8 @@ function getArea(shape: Shape) {
 
 <!-- TODO -->
 
-Under [`strictNullChecks`](/tsconfig#strictNullChecks) that gives us an error - which is appropriate since `radius` might not be defined.
-But what if we perform the appropriate checks on the `kind` property?
+Com [`strictNullChecks`](/tsconfig#strictNullChecks) isso gera um erro, o que é apropriado, já que `radius` pode não estar definido.
+Mas e se fizermos a verificação apropriada na propriedade `kind`?
 
 ```ts twoslash
 // @errors: 2532 18048
@@ -559,9 +559,8 @@ function getArea(shape: Shape) {
 }
 ```
 
-Hmm, TypeScript still doesn't know what to do here.
-We've hit a point where we know more about our values than the type checker does.
-We could try to use a non-null assertion (a `!` after `shape.radius`) to say that `radius` is definitely present.
+Hmm, o TypeScript continua sem saber o que fazer aqui.
+Chegamos a um ponto em que sabemos mais sobre os nossos valores do que o verificador de tipos. Poderíamos tentar usar uma asserção de não nulo (um `!` depois de `shape.radius`) para dizer que `radius` com certeza está presente.
 
 ```ts twoslash
 interface Shape {
@@ -578,14 +577,14 @@ function getArea(shape: Shape) {
 }
 ```
 
-But this doesn't feel ideal.
-We had to shout a bit at the type-checker with those non-null assertions (`!`) to convince it that `shape.radius` was defined, but those assertions are error-prone if we start to move code around.
-Additionally, outside of [`strictNullChecks`](/tsconfig#strictNullChecks) we're able to accidentally access any of those fields anyway (since optional properties are just assumed to always be present when reading them).
-We can definitely do better.
+Mas isso não parece ideal.
+Tivemos que falar um pouco alto com o verificador de tipos, com essas asserções de não nulo (`!`), para convencê-lo de que `shape.radius` estava definido, mas essas asserções são propensas a erros se começarmos a mover o código de lugar.
+Além disso, fora do [`strictNullChecks`](/tsconfig#strictNullChecks), ainda podemos acessar acidentalmente qualquer um desses campos (já que propriedades opcionais são simplesmente assumidas como sempre presentes na leitura).
+Podemos fazer muito melhor.
 
-The problem with this encoding of `Shape` is that the type-checker doesn't have any way to know whether or not `radius` or `sideLength` are present based on the `kind` property.
-We need to communicate what _we_ know to the type checker.
-With that in mind, let's take another swing at defining `Shape`.
+O problema dessa codificação de `Shape` é que o verificador de tipos não tem como saber se `radius` ou `sideLength` estão presentes com base na propriedade `kind`.
+Precisamos comunicar ao verificador de tipos o que _nós_ sabemos.
+Com isso em mente, vamos dar outra tentativa para definir `Shape`.
 
 ```ts twoslash
 interface Circle {
@@ -601,9 +600,9 @@ interface Square {
 type Shape = Circle | Square;
 ```
 
-Here, we've properly separated `Shape` out into two types with different values for the `kind` property, but `radius` and `sideLength` are declared as required properties in their respective types.
+Aqui, separamos corretamente `Shape` em dois tipos com valores diferentes para a propriedade `kind`, mas `radius` e `sideLength` são declarados como propriedades obrigatórias nos respectivos tipos.
 
-Let's see what happens here when we try to access the `radius` of a `Shape`.
+Vamos ver o que acontece quando tentamos acessar o `radius` de um `Shape`.
 
 ```ts twoslash
 // @errors: 2339
@@ -625,12 +624,12 @@ function getArea(shape: Shape) {
 }
 ```
 
-Like with our first definition of `Shape`, this is still an error.
-When `radius` was optional, we got an error (with [`strictNullChecks`](/tsconfig#strictNullChecks) enabled) because TypeScript couldn't tell whether the property was present.
-Now that `Shape` is a union, TypeScript is telling us that `shape` might be a `Square`, and `Square`s don't have `radius` defined on them!
-Both interpretations are correct, but only the union encoding of `Shape` will cause an error regardless of how [`strictNullChecks`](/tsconfig#strictNullChecks) is configured.
+Assim como na nossa primeira definição de `Shape`, isso ainda é um erro.
+Quando `radius` era opcional, recebíamos um erro (com [`strictNullChecks`](/tsconfig#strictNullChecks) ativado) porque o TypeScript não conseguia saber se a propriedade estava presente.
+Agora que `Shape` é uma union, o TypeScript está nos dizendo que `shape` pode ser um `Square`, e `Square`s não têm `radius` definido!
+As duas interpretações estão corretas, mas só a codificação de `Shape` como union vai gerar um erro independentemente de como o [`strictNullChecks`](/tsconfig#strictNullChecks) estiver configurado.
 
-But what if we tried checking the `kind` property again?
+Mas e se tentarmos verificar a propriedade `kind` de novo?
 
 ```ts twoslash
 interface Circle {
@@ -654,15 +653,15 @@ function getArea(shape: Shape) {
 }
 ```
 
-That got rid of the error!
-When every type in a union contains a common property with literal types, TypeScript considers that to be a _discriminated union_, and can narrow out the members of the union.
+Isso eliminou o erro!
+Quando todo tipo em uma union contém uma propriedade em comum com tipos literais, o TypeScript considera que é uma _union discriminada_, e pode fazer o narrowing removendo os membros da union.
 
-In this case, `kind` was that common property (which is what's considered a _discriminant_ property of `Shape`).
-Checking whether the `kind` property was `"circle"` got rid of every type in `Shape` that didn't have a `kind` property with the type `"circle"`.
-That narrowed `shape` down to the type `Circle`.
+Neste caso, `kind` era essa propriedade em comum (que é o que se considera uma propriedade _discriminante_ de `Shape`).
+Verificar se a propriedade `kind` é `"circle"` eliminou todos os tipos em `Shape` que não tinham uma propriedade `kind` com o tipo `"circle"`.
+Isso restringiu `shape` ao tipo `Circle`.
 
-The same checking works with `switch` statements as well.
-Now we can try to write our complete `getArea` without any pesky `!` non-null assertions.
+A mesma verificação funciona com instruções `switch`.
+Agora podemos tentar escrever nossa `getArea` completa, sem nenhuma asserção de não nulo incômoda (`!`).
 
 ```ts twoslash
 interface Circle {
@@ -690,27 +689,27 @@ function getArea(shape: Shape) {
 }
 ```
 
-The important thing here was the encoding of `Shape`.
-Communicating the right information to TypeScript - that `Circle` and `Square` were really two separate types with specific `kind` fields - was crucial.
-Doing that lets us write type-safe TypeScript code that looks no different than the JavaScript we would've written otherwise.
-From there, the type system was able to do the "right" thing and figure out the types in each branch of our `switch` statement.
+O ponto importante aqui foi a codificação de `Shape`.
+Comunicar a informação certa ao TypeScript (que `Circle` e `Square` eram realmente dois tipos separados, com campos `kind` específicos) foi crucial.
+Fazendo isso, conseguimos escrever código TypeScript com segurança de tipos que não é diferente do JavaScript que escreveríamos de qualquer forma.
+A partir daí, o sistema de tipos conseguiu fazer a coisa "certa" e descobrir os tipos em cada ramo da nossa instrução `switch`.
 
-> As an aside, try playing around with the above example and remove some of the return keywords.
-> You'll see that type-checking can help avoid bugs when accidentally falling through different clauses in a `switch` statement.
+> Como um aparte, experimente mexer no exemplo acima e remover algumas das palavras-chave return.
+> Você verá que a verificação de tipos ajuda a evitar bugs ao cair acidentalmente de uma cláusula para outra em uma instrução `switch`.
 
-Discriminated unions are useful for more than just talking about circles and squares.
-They're good for representing any sort of messaging scheme in JavaScript, like when sending messages over the network (client/server communication), or encoding mutations in a state management framework.
+Unions discriminadas são úteis para mais do que falar sobre círculos e quadrados.
+Elas são boas para representar qualquer tipo de esquema de mensagens em JavaScript, como quando enviamos mensagens pela rede (comunicação cliente/servidor), ou para codificar mutações em um framework de gerenciamento de estado.
 
-## The `never` type
+## O tipo `never` {#the-never-type}
 
-When narrowing, you can reduce the options of a union to a point where you have removed all possibilities and have nothing left.
-In those cases, TypeScript will use a `never` type to represent a state which shouldn't exist.
+Ao fazer narrowing, você pode reduzir as opções de uma union a um ponto em que removeu todas as possibilidades e não sobrou nada.
+Nesses casos, o TypeScript usará o tipo `never` para representar um estado que não deveria existir.
 
-## Exhaustiveness checking
+## Verificação de exaustividade {#exhaustiveness-checking}
 
-The `never` type is assignable to every type; however, no type is assignable to `never` (except `never` itself). This means you can use narrowing and rely on `never` turning up to do exhaustive checking in a `switch` statement.
+O tipo `never` é atribuível a todos os tipos; porém, nenhum tipo é atribuível a `never` (exceto o próprio `never`). Isso significa que você pode usar narrowing e contar com o `never` aparecendo para fazer uma verificação de exaustividade em uma instrução `switch`.
 
-For example, adding a `default` to our `getArea` function which tries to assign the shape to `never` will not raise an error when every possible case has been handled.
+Por exemplo, adicionar um `default` à nossa função `getArea` que tenta atribuir a forma a `never` não gera erro quando todos os casos possíveis foram tratados.
 
 ```ts twoslash
 interface Circle {
@@ -738,7 +737,7 @@ function getArea(shape: Shape) {
 }
 ```
 
-Adding a new member to the `Shape` union, will cause a TypeScript error:
+Adicionar um novo membro à union `Shape` vai causar um erro de TypeScript:
 
 ```ts twoslash
 // @errors: 2322

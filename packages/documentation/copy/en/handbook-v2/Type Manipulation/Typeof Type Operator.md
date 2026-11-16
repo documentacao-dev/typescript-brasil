@@ -1,20 +1,21 @@
 ---
-title: Typeof Type Operator
+title: Operador de tipo typeof
 layout: docs
 permalink: /docs/handbook/2/typeof-types.html
-oneline: "Using the typeof operator in type contexts."
+oneline: "Usando o operador typeof em contextos de tipo."
+ia-translate: true
 ---
 
-## The `typeof` type operator
+## O operador de tipo `typeof` {#the-typeof-type-operator}
 
-JavaScript already has a `typeof` operator you can use in an _expression_ context:
+O JavaScript já tem um operador `typeof` que você pode usar em um contexto de _expressão_:
 
 ```ts twoslash
 // Prints "string"
 console.log(typeof "Hello world");
 ```
 
-TypeScript adds a `typeof` operator you can use in a _type_ context to refer to the _type_ of a variable or property:
+O TypeScript adiciona um operador `typeof` que você pode usar em um contexto de _tipo_ para se referir ao _tipo_ de uma variável ou propriedade:
 
 ```ts twoslash
 let s = "hello";
@@ -22,9 +23,9 @@ let n: typeof s;
 //  ^?
 ```
 
-This isn't very useful for basic types, but combined with other type operators, you can use `typeof` to conveniently express many patterns.
-For an example, let's start by looking at the predefined type `ReturnType<T>`.
-It takes a _function type_ and produces its return type:
+Isso não é muito útil para tipos básicos, mas combinado com outros operadores de tipo, você pode usar `typeof` para expressar muitos padrões de forma prática.
+Como exemplo, vamos começar olhando para o tipo predefinido `ReturnType<T>`.
+Ele recebe um _tipo de função_ e produz o tipo de retorno dela:
 
 ```ts twoslash
 type Predicate = (x: unknown) => boolean;
@@ -32,7 +33,7 @@ type K = ReturnType<Predicate>;
 //   ^?
 ```
 
-If we try to use `ReturnType` on a function name, we see an instructive error:
+Se tentarmos usar `ReturnType` em um nome de função, vemos um erro instrutivo:
 
 ```ts twoslash
 // @errors: 2749
@@ -42,8 +43,8 @@ function f() {
 type P = ReturnType<f>;
 ```
 
-Remember that _values_ and _types_ aren't the same thing.
-To refer to the _type_ that the _value `f`_ has, we use `typeof`:
+Lembre-se de que _valores_ e _tipos_ não são a mesma coisa.
+Para se referir ao _tipo_ que o _valor `f`_ tem, usamos `typeof`:
 
 ```ts twoslash
 function f() {
@@ -53,12 +54,12 @@ type P = ReturnType<typeof f>;
 //   ^?
 ```
 
-### Limitations
+### Limitações {#limitations}
 
-TypeScript intentionally limits the sorts of expressions you can use `typeof` on.
+O TypeScript limita intencionalmente os tipos de expressão em que você pode usar `typeof`.
 
-Specifically, it's only legal to use `typeof` on identifiers (i.e. variable names) or their properties.
-This helps avoid the confusing trap of writing code you think is executing, but isn't:
+Mais especificamente, só é válido usar `typeof` em identificadores (ou seja, nomes de variáveis) ou nas propriedades deles.
+Isso evita a armadilha confusa de escrever código que você acha que está sendo executado, mas não está:
 
 ```ts twoslash
 // @errors: 1005
