@@ -40,7 +40,7 @@ def titulos(texto):
 
 
 def conferir(caminho):
-    erros = []
+    erros, avisos = [], []
     pt = (ROOT / caminho).read_text()
     r = subprocess.run(['git', 'show', f'{BASE}:{caminho}'], cwd=ROOT, capture_output=True, text=True)
     if r.returncode:
@@ -67,11 +67,18 @@ def conferir(caminho):
         sem = [t for a, t in zip(t_en, t_pt) if a != t and '{#' not in t]
         if sem:
             erros.append(f'{len(sem)} título(s) traduzido(s) sem {{#id}} (rode ancorar_titulos.py)')
+        # Título idêntico ao inglês com palavra comum (fora de código): quase sempre esquecido.
+        iguais = [t for a, t in zip(t_en, t_pt)
+                  if a == t and re.search(r'[A-Za-z]{3,}', re.sub(r'`[^`]*`', '', t))]
+        for t in iguais:
+            avisos.append(f'título igual ao inglês: "{t}" (confira se devia ser traduzido)')
     prosa = re.sub(r'`[^`]*`|<[^>]+>|\]\([^)]*\)', ' ', CERCA.sub('', c_pt)).lower()
     palavras = re.findall(r'[a-zà-ú]+', prosa)
     taxa = sum(p in EN for p in palavras) / max(len(palavras), 1)
     if taxa > 0.08:
         erros.append(f'prosa ainda parece inglês ({taxa:.0%} de palavras comuns em inglês)')
+    for a in avisos:
+        print(f'AVISO {caminho}: {a}')
     return [f'{caminho}: {e}' for e in erros]
 
 

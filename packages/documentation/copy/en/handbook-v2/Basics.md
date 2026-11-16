@@ -114,7 +114,7 @@ const user = {
 user.location; // returns undefined
 ```
 
-No fim das contas, um sistema de tipos estático precisa decidir quais códigos devem ser sinalizados como erro no seu sistema, mesmo que sejam JavaScript "válido" que não vai lançar erro imediatamente.
+No fim das contas, um sistema de tipos estático precisa decidir quais códigos devem ser sinalizados como erro no próprio sistema, mesmo que sejam JavaScript "válido" que não vai lançar erro imediatamente.
 No TypeScript, o código a seguir produz um erro dizendo que `location` não está definido:
 
 ```ts twoslash

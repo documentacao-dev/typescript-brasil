@@ -577,7 +577,7 @@ const user = {
 };
 ```
 
-O TypeScript entende que a função `user.becomeAdmin` tem um `this` correspondente, que é o objeto externo `user`. `this`, _ah, sim_, pode ser suficiente para muitos casos, mas há muitas situações em que você precisa de mais controle sobre qual objeto o `this` representa. A especificação do JavaScript diz que você não pode ter um parâmetro chamado `this`, então o TypeScript usa essa posição de sintaxe para permitir que você declare o tipo de `this` no corpo da função.
+O TypeScript entende que a função `user.becomeAdmin` tem um `this` correspondente, que é o objeto externo `user`. `this`, _he, he_, pode ser suficiente para muitos casos, mas há muitas situações em que você precisa de mais controle sobre qual objeto o `this` representa. A especificação do JavaScript diz que você não pode ter um parâmetro chamado `this`, então o TypeScript usa essa posição de sintaxe para permitir que você declare o tipo de `this` no corpo da função.
 
 ```ts twoslash
 interface User {
@@ -816,7 +816,7 @@ function sum({ a, b, c }: ABC) {
 }
 ```
 
-## Atribuição de Funções {#assignability-of-functions}
+## Compatibilidade de atribuição de funções {#assignability-of-functions}
 
 ### Tipo de retorno `void` {#return-type-void}
 

@@ -188,7 +188,7 @@ function printAll(strs: string | string[] | null) {
 Envolvemos todo o corpo da função em uma verificação de truthy, mas isso tem uma desvantagem sutil: podemos deixar de tratar corretamente o caso da string vazia.
 
 O TypeScript não nos prejudica em nada aqui, mas vale a pena notar esse comportamento se você não está tão familiarizado com JavaScript.
-O TypeScript pode frequentemente ajudar a pegar bugs cedo, mas, se você escolher não fazer _nada_ com um valor, há só até onde ele consegue ir sem ser excessivamente prescritivo.
+O TypeScript pode frequentemente ajudar a pegar bugs cedo, mas, se você escolher não fazer _nada_ com um valor, há um limite para o que ele consegue fazer sem ser excessivamente prescritivo.
 Se quiser, você pode garantir que trate situações como essas com um linter.
 
 Uma última observação sobre narrowing por truthiness é que negações booleanas com `!` filtram os valores nos ramos negados.
@@ -315,7 +315,7 @@ function move(animal: Fish | Bird | Human) {
 
 O JavaScript tem um operador para verificar se um valor é uma "instância" de outro valor.
 Mais especificamente, em JavaScript, `x instanceof Foo` verifica se a _cadeia de protótipos_ de `x` contém `Foo.prototype`.
-Não vamos nos aprofundar aqui, e você verá mais sobre isso quando chegarmos a classes, mas eles ainda são úteis para a maioria dos valores que podem ser construídos com `new`.
+Não vamos nos aprofundar aqui, e você verá mais sobre isso quando chegarmos a classes, mas o `instanceof` ainda é útil para a maioria dos valores que podem ser construídos com `new`.
 Como você deve ter imaginado, `instanceof` também é um type guard, e o TypeScript faz narrowing nos ramos protegidos por `instanceof`.
 
 ```ts twoslash
@@ -578,7 +578,7 @@ function getArea(shape: Shape) {
 ```
 
 Mas isso não parece ideal.
-Tivemos que falar um pouco alto com o verificador de tipos, com essas asserções de não nulo (`!`), para convencê-lo de que `shape.radius` estava definido, mas essas asserções são propensas a erros se começarmos a mover o código de lugar.
+Tivemos que gritar um pouco com o verificador de tipos, com essas asserções de não nulo (`!`), para convencê-lo de que `shape.radius` estava definido, mas essas asserções são propensas a erros se começarmos a mover o código de lugar.
 Além disso, fora do [`strictNullChecks`](/tsconfig#strictNullChecks), ainda podemos acessar acidentalmente qualquer um desses campos (já que propriedades opcionais são simplesmente assumidas como sempre presentes na leitura).
 Podemos fazer muito melhor.
 

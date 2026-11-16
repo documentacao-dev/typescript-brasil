@@ -125,7 +125,7 @@ const g = new Greeter();
 g.name = "also not ok";
 ```
 
-### Constructors
+### Construtores {#constructors}
 
 <blockquote class='bg-reading'>
    <p>Leitura de apoio:<br />
@@ -409,7 +409,7 @@ d.woof(3);
 
 Uma classe derivada também pode sobrescrever um campo ou propriedade da classe base.
 Você pode usar a sintaxe `super.` para acessar métodos da classe base.
-Observe que, como classes em JavaScript são um simples objeto de busca, não existe o conceito de "campo super".
+Observe que, como as classes do JavaScript são apenas um objeto de consulta simples, não existe o conceito de "campo super".
 
 O TypeScript garante que uma classe derivada seja sempre um subtipo da sua classe base.
 
@@ -773,7 +773,7 @@ const s = new MySafe();
 console.log(s.secretKey);
 ```
 
-`private` também permite acesso por notação de colchetes durante a verificação de tipos. Isso torna os campos declarados como `private` potencialmente mais fáceis de acessar para coisas como testes unitários, com a desvantagem de que esses campos são _privados flexíveis_ e não impõem privacidade de forma estrita.
+`private` também permite acesso por notação de colchetes durante a verificação de tipos. Isso torna os campos declarados como `private` potencialmente mais fáceis de acessar para coisas como testes unitários, com a desvantagem de que esses campos são _soft private_ (privado flexível) e não impõem privacidade de forma estrita.
 
 ```ts twoslash
 // @errors: 2341
@@ -790,7 +790,7 @@ console.log(s.secretKey);
 console.log(s["secretKey"]);
 ```
 
-Diferentemente do `private` do TypeScript, os [campos privados](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields) do JavaScript (`#`) continuam privados após a compilação e não oferecem as saídas mencionadas anteriormente, como o acesso por notação de colchetes, por isso são _privados rígidos_.
+Diferentemente do `private` do TypeScript, os [campos privados](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields) do JavaScript (`#`) continuam privados após a compilação e não oferecem as saídas mencionadas anteriormente, como o acesso por notação de colchetes, por isso são _hard private_ (privado rígido).
 
 ```ts twoslash
 class Dog {

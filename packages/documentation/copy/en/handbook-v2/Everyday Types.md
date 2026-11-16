@@ -19,7 +19,7 @@ Eles depois formarão os blocos de construção centrais dos tipos mais complexo
 
 O JavaScript tem três [primitivos](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) muito usados: `string`, `number` e `boolean`.
 Cada um tem um tipo correspondente em TypeScript.
-Como você deve esperar, esses são os mesmos nomes que você veria se usasse o operador `typeof` do JavaScript em um valor desses tipos:
+Como seria de se esperar, esses são os mesmos nomes que você veria se usasse o operador `typeof` do JavaScript em um valor desses tipos:
 
 - `string` representa valores de texto como `"Hello, world"`
 - `number` é para números como `42`. O JavaScript não tem um valor especial em tempo de execução para inteiros, então não existe equivalente a `int` ou `float` - tudo é simplesmente `number`
@@ -174,7 +174,7 @@ Mais adiante, veremos mais exemplos de como o contexto em que um valor aparece p
 ## Tipos de objeto {#object-types}
 
 Além dos primitivos, o tipo mais comum que você vai encontrar é um _tipo de objeto_.
-Isso se refere a qualquer valor do JavaScript com propriedades, o que é quase todos eles!
+Isso se refere a qualquer valor do JavaScript com propriedades, o que vale para quase todos!
 Para definir um tipo de objeto, basta listar suas propriedades e os tipos delas.
 
 Por exemplo, aqui está uma função que recebe um objeto no formato de um ponto:
@@ -235,7 +235,7 @@ Agora que sabemos escrever alguns tipos, é hora de começar a _combiná-los_ de
 ### Definindo um tipo union {#defining-a-union-type}
 
 A primeira forma de combinar tipos que você pode ver é um tipo _union_.
-Um tipo union é um tipo formado a partir de dois ou mais outros tipos, representando valores que podem ser _um qualquer_ desses tipos.
+Um tipo union é um tipo formado a partir de dois ou mais outros tipos, representando valores que podem ser _qualquer um_ desses tipos.
 Chamamos cada um desses tipos de _membros_ da union.
 
 Vamos escrever uma função que pode operar sobre strings ou números:
@@ -401,7 +401,7 @@ printCoord({ x: 100, y: 100 });
 
 Assim como quando usamos um alias de tipo acima, o exemplo funciona como se tivéssemos usado um tipo de objeto anônimo.
 O TypeScript só se preocupa com a _estrutura_ do valor que passamos para `printCoord` - ele só se importa que o valor tenha as propriedades esperadas.
-Ser concernido apenas com a estrutura e as capacidades dos tipos é o motivo pelo qual chamamos o TypeScript de um sistema de tipos _estruturalmente tipado_.
+Preocupar-se apenas com a estrutura e as capacidades dos tipos é o motivo pelo qual chamamos o TypeScript de um sistema de tipos _estruturalmente tipado_.
 
 ### Diferenças entre aliases de tipo e interfaces {#differences-between-type-aliases-and-interfaces}
 
@@ -625,7 +625,7 @@ const req = { url: "https://example.com", method: "GET" };
 handleRequest(req.url, req.method);
 ```
 
-No exemplo acima, `req.method` é inferido como `string`, e não como `"GET"`. Como pode haver código executado entre a criação de `req` e a chamada de `handleRequest`, que poderia atribuir uma nova string como `"GUESS"` a `req.method`, o TypeScript considera que esse código tem um erro.
+No exemplo acima, `req.method` é inferido como `string`, e não como `"GET"`. Como pode haver código executado entre a criação de `req` e a chamada de `handleRequest` — código que poderia atribuir uma nova string como `"GUESS"` a `req.method` —, o TypeScript considera que esse código tem um erro.
 
 Há duas formas de contornar isso.
 
