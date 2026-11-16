@@ -1,14 +1,15 @@
 ---
-title: Template Literal Types
+title: Tipos de template literal
 layout: docs
 permalink: /docs/handbook/2/template-literal-types.html
-oneline: "Generating mapping types which change properties via template literal strings."
+oneline: "Gerando tipos de mapeamento que alteram propriedades por meio de strings de template literal."
+ia-translate: true
 ---
 
-Template literal types build on [string literal types](/docs/handbook/2/everyday-types.html#literal-types), and have the ability to expand into many strings via unions.
+Tipos de template literal são construídos sobre [tipos de string literal](/docs/handbook/2/everyday-types.html#literal-types) e têm a capacidade de se expandir em muitas strings por meio de uniões.
 
-They have the same syntax as [template literal strings in JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), but are used in type positions.
-When used with concrete literal types, a template literal produces a new string literal type by concatenating the contents.
+Eles têm a mesma sintaxe dos [template literals de strings em JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Template_literals), mas são usados em posições de tipo.
+Quando usado com tipos literais concretos, um template literal produz um novo tipo de string literal, concatenando o conteúdo.
 
 ```ts twoslash
 type World = "world";
@@ -17,7 +18,7 @@ type Greeting = `hello ${World}`;
 //   ^?
 ```
 
-When a union is used in the interpolated position, the type is the set of every possible string literal that could be represented by each union member:
+Quando uma união é usada na posição interpolada, o tipo é o conjunto de todos os string literals possíveis que cada membro da união pode representar:
 
 ```ts twoslash
 type EmailLocaleIDs = "welcome_email" | "email_heading";
@@ -27,7 +28,7 @@ type AllLocaleIDs = `${EmailLocaleIDs | FooterLocaleIDs}_id`;
 //   ^?
 ```
 
-For each interpolated position in the template literal, the unions are cross multiplied:
+Para cada posição interpolada no template literal, as uniões são multiplicadas em produto cartesiano:
 
 ```ts twoslash
 type EmailLocaleIDs = "welcome_email" | "email_heading";
@@ -40,16 +41,15 @@ type LocaleMessageIDs = `${Lang}_${AllLocaleIDs}`;
 //   ^?
 ```
 
-We generally recommend that people use ahead-of-time generation for large string unions, but this is useful in smaller cases.
+Em geral, recomendamos gerar com antecedência as uniões de strings grandes, mas isso é útil em casos menores.
 
-## String Unions in Types
+## Uniões de strings em tipos {#string-unions-in-types}
 
-The power in template literals comes when defining a new string based on information inside a type.
+O poder dos template literals aparece quando você define uma nova string com base em informações dentro de um tipo.
 
-Consider the case where a function (`makeWatchedObject`) adds a new function
-called `on()` to a passed object.  In JavaScript, its call might look like:
-`makeWatchedObject(baseObject)`. We can imagine the base object as looking
-like:
+Considere o caso em que uma função (`makeWatchedObject`) adiciona uma nova função chamada `on()` a um objeto passado para ela.
+Em JavaScript, a chamada poderia ser assim:
+`makeWatchedObject(baseObject)`. Podemos imaginar que o objeto base seja assim:
 
 ```ts twoslash
 // @noErrors
@@ -60,15 +60,15 @@ const passedObject = {
 };
 ```
 
-The `on` function that will be added to the base object expects two arguments, an `eventName` (a `string`) and a `callback` (a `function`).
+A função `on` que será adicionada ao objeto base espera dois argumentos: um `eventName` (uma `string`) e um `callback` (uma `function`).
 
-The `eventName` should be of the form `attributeInThePassedObject + "Changed"`; thus, `firstNameChanged` as derived from the attribute `firstName` in the base object.
+O `eventName` deve ter a forma `propriedadeDoObjetoPassado + "Changed"`; assim, `firstNameChanged` é derivado da propriedade `firstName` do objeto base.
 
-The `callback` function, when called:
-  * Should be passed a value of the type associated with the name `attributeInThePassedObject`; thus, since `firstName` is typed as `string`, the callback for the `firstNameChanged` event expects a `string` to be passed to it at call time. Similarly events associated with `age` should expect to be called with a `number` argument
-  * Should have `void` return type (for simplicity of demonstration)
+A função `callback`, quando chamada:
+  * Deve receber um valor do tipo associado ao nome `propriedadeDoObjetoPassado`; assim, como `firstName` é tipada como `string`, o callback do evento `firstNameChanged` espera receber uma `string` no momento da chamada. Da mesma forma, eventos associados a `age` devem esperar ser chamados com um argumento `number`
+  * Deve ter tipo de retorno `void` (por simplicidade da demonstração)
 
-The naive function signature of `on()` might thus be: `on(eventName: string, callback: (newValue: any) => void)`. However, in the preceding description, we identified important type constraints that we'd like to document in our code. Template Literal types let us bring these constraints into our code.
+A assinatura ingênua da função `on()` poderia então ser: `on(eventName: string, callback: (newValue: any) => void)`. No entanto, na descrição anterior, identificamos restrições de tipo importantes que gostaríamos de documentar no nosso código. Tipos de template literal nos permitem trazer essas restrições para o código.
 
 ```ts twoslash
 // @noErrors
@@ -87,7 +87,7 @@ person.on("firstNameChanged", (newValue) => {
 });
 ```
 
-Notice that `on` listens on the event `"firstNameChanged"`, not just `"firstName"`. Our naive specification of `on()` could be made more robust if we were to ensure that the set of eligible event names was constrained by the union of attribute names in the watched object with "Changed" added at the end. While we are comfortable with doing such a calculation in JavaScript i.e. ``Object.keys(passedObject).map(x => `${x}Changed`)``, template literals _inside the type system_ provide a similar approach to string manipulation:
+Repare que `on` escuta o evento `"firstNameChanged"`, e não apenas `"firstName"`. Nossa especificação ingênua de `on()` poderia ser mais robusta se garantíssemos que o conjunto de nomes de evento elegíveis fosse restrito à união dos nomes de atributos do objeto observado com "Changed" no final. Embora estejamos à vontade para fazer esse cálculo em JavaScript, isto é, ``Object.keys(passedObject).map(x => `${x}Changed`)``, template literals _dentro do sistema de tipos_ oferecem uma abordagem semelhante para manipulação de strings:
 
 ```ts twoslash
 type PropEventSource<Type> = {
@@ -99,7 +99,7 @@ type PropEventSource<Type> = {
 declare function makeWatchedObject<Type>(obj: Type): Type & PropEventSource<Type>;
 ```
 
-With this, we can build something that errors when given the wrong property:
+Com isso, podemos construir algo que gera erro quando recebe a propriedade errada:
 
 ```ts twoslash
 // @errors: 2345
@@ -124,18 +124,17 @@ person.on("firstName", () => {});
 person.on("frstNameChanged", () => {});
 ```
 
-## Inference with Template Literals
+## Inferência com template literals {#inference-with-template-literals}
 
-Notice that we did not benefit from all the information provided in the original passed object. Given change of a `firstName` (i.e. a `firstNameChanged` event),  we should expect that the callback will receive an argument of type `string`. Similarly, the callback for a change to `age` should receive a `number` argument. We're naively using `any` to type the `callback`'s argument. Again, template literal types make it possible to ensure an attribute's data type will be the same type as that attribute's callback's first argument.
+Repare que não aproveitamos todas as informações fornecidas no objeto original passado. Dada a mudança de um `firstName` (ou seja, um evento `firstNameChanged`), devemos esperar que o callback receba um argumento do tipo `string`. Da mesma forma, o callback para a mudança de `age` deve receber um argumento `number`. Estamos usando `any` de forma ingênua para tipar o argumento do `callback`. Mais uma vez, tipos de template literal tornam possível garantir que o tipo de dado de um atributo seja o mesmo tipo do primeiro argumento do callback desse atributo.
 
-The key insight that makes this possible is this: we can use a function with a generic such that:
+A ideia-chave que torna isso possível é: podemos usar uma função com um genérico de modo que:
 
-1. The literal used in the first argument is captured as a literal type
-2. That literal type can be validated as being in the union of valid attributes in the generic
-3. The type of the validated attribute can be looked up in the generic's structure using Indexed Access
-4. This typing information can _then_ be applied to ensure the argument to the
-   callback function is of the same type
-
+1. O literal usado no primeiro argumento seja capturado como um tipo literal
+2. Esse tipo literal possa ser validado como pertencente à união dos atributos válidos no genérico
+3. O tipo do atributo validado possa ser buscado na estrutura do genérico usando Indexed Access
+4. Essa informação de tipo _então_ possa ser aplicada para garantir que o argumento da
+   função callback seja do mesmo tipo
 
 ```ts twoslash
 type PropEventSource<Type> = {
@@ -164,24 +163,24 @@ person.on("ageChanged", newAge => {
 })
 ```
 
-Here we made `on` into a generic method.
+Aqui transformamos `on` em um método genérico.
 
-When a user calls with the string `"firstNameChanged"`, TypeScript will try to infer the right type for `Key`.
-To do that, it will match `Key` against the content before `"Changed"` and infer the string `"firstName"`.
-Once TypeScript figures that out, the `on` method can fetch the type of `firstName` on the original object, which is `string` in this case.
-Similarly, when called with `"ageChanged"`, TypeScript finds the type for the property `age` which is `number`.
+Quando o usuário chama com a string `"firstNameChanged"`, o TypeScript tenta inferir o tipo certo para `Key`.
+Para isso, ele compara `Key` com o conteúdo antes de `"Changed"` e infere a string `"firstName"`.
+Depois que o TypeScript descobre isso, o método `on` pode buscar o tipo de `firstName` no objeto original, que neste caso é `string`.
+Da mesma forma, quando chamado com `"ageChanged"`, o TypeScript encontra o tipo da propriedade `age`, que é `number`.
 
-Inference can be combined in different ways, often to deconstruct strings, and reconstruct them in different ways.
+A inferência pode ser combinada de diferentes maneiras, muitas vezes para desconstruir strings e reconstruí-las de outras formas.
 
-## Intrinsic String Manipulation Types
+## Tipos intrínsecos de manipulação de strings {#intrinsic-string-manipulation-types}
 
-To help with string manipulation, TypeScript includes a set of types which can be used in string manipulation. These types come built-in to the compiler for performance and can't be found in the `.d.ts` files included with TypeScript.
+Para ajudar na manipulação de strings, o TypeScript inclui um conjunto de tipos que podem ser usados nessa tarefa. Esses tipos vêm integrados ao compilador por questão de desempenho e não podem ser encontrados nos arquivos `.d.ts` incluídos com o TypeScript.
 
 ### `Uppercase<StringType>`
 
-Converts each character in the string to the uppercase version.
+Converte cada caractere da string para sua versão em maiúsculas.
 
-#### Example
+#### Exemplo {#example}
 
 ```ts twoslash
 type Greeting = "Hello, world"
@@ -195,9 +194,9 @@ type MainID = ASCIICacheKey<"my_app">
 
 ### `Lowercase<StringType>`
 
-Converts each character in the string to the lowercase equivalent.
+Converte cada caractere da string para o equivalente em minúsculas.
 
-#### Example
+#### Exemplo {#example-1}
 
 ```ts twoslash
 type Greeting = "Hello, world"
@@ -211,9 +210,9 @@ type MainID = ASCIICacheKey<"MY_APP">
 
 ### `Capitalize<StringType>`
 
-Converts the first character in the string to an uppercase equivalent.
+Converte o primeiro caractere da string para o equivalente em maiúsculas.
 
-#### Example
+#### Exemplo {#example-2}
 
 ```ts twoslash
 type LowercaseGreeting = "hello, world";
@@ -223,9 +222,9 @@ type Greeting = Capitalize<LowercaseGreeting>;
 
 ### `Uncapitalize<StringType>`
 
-Converts the first character in the string to a lowercase equivalent.
+Converte o primeiro caractere da string para o equivalente em minúsculas.
 
-#### Example
+#### Exemplo {#example-3}
 
 ```ts twoslash
 type UppercaseGreeting = "HELLO WORLD";
@@ -234,8 +233,8 @@ type UncomfortableGreeting = Uncapitalize<UppercaseGreeting>;
 ```
 
 <details>
-    <summary>Technical details on the intrinsic string manipulation types</summary>
-    <p>The code, as of TypeScript 4.1, for these intrinsic functions uses the JavaScript string runtime functions directly for manipulation and are not locale aware.</p>
+    <summary>Detalhes técnicos sobre os tipos intrínsecos de manipulação de strings</summary>
+    <p>O código, a partir do TypeScript 4.1, dessas funções intrínsecas usa diretamente as funções de string do runtime JavaScript para a manipulação e não é sensível à localidade (locale).</p>
     <code><pre>
 function applyStringMapping(symbol: Symbol, str: string) {
     switch (intrinsicTypeKinds.get(symbol.escapedName as string)) {

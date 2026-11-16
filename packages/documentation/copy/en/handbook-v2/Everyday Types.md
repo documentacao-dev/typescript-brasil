@@ -1,44 +1,45 @@
 ---
-title: Everyday Types
+title: Tipos do dia a dia
 layout: docs
 permalink: /docs/handbook/2/everyday-types.html
-oneline: "The language primitives."
+oneline: "Os primitivos da linguagem."
+ia-translate: true
 ---
 
-In this chapter, we'll cover some of the most common types of values you'll find in JavaScript code, and explain the corresponding ways to describe those types in TypeScript.
-This isn't an exhaustive list, and future chapters will describe more ways to name and use other types.
+Neste capítulo, vamos cobrir alguns dos tipos de valores mais comuns que você vai encontrar em código JavaScript, e explicar as formas correspondentes de descrever esses tipos em TypeScript.
+Esta não é uma lista exaustiva, e os próximos capítulos vão descrever mais formas de nomear e usar outros tipos.
 
-Types can also appear in many more _places_ than just type annotations.
-As we learn about the types themselves, we'll also learn about the places where we can refer to these types to form new constructs.
+Os tipos também podem aparecer em muitos outros _lugares_ além das anotações de tipo.
+À medida que aprendemos sobre os próprios tipos, também aprenderemos sobre os lugares onde podemos referenciar esses tipos para formar novas construções.
 
-We'll start by reviewing the most basic and common types you might encounter when writing JavaScript or TypeScript code.
-These will later form the core building blocks of more complex types.
+Começaremos revisando os tipos mais básicos e comuns que você pode encontrar ao escrever código JavaScript ou TypeScript.
+Eles depois formarão os blocos de construção centrais dos tipos mais complexos.
 
-## The primitives: `string`, `number`, and `boolean`
+## Os primitivos: `string`, `number` e `boolean` {#the-primitives-string-number-and-boolean}
 
-JavaScript has three very commonly used [primitives](https://developer.mozilla.org/en-US/docs/Glossary/Primitive): `string`, `number`, and `boolean`.
-Each has a corresponding type in TypeScript.
-As you might expect, these are the same names you'd see if you used the JavaScript `typeof` operator on a value of those types:
+O JavaScript tem três [primitivos](https://developer.mozilla.org/en-US/docs/Glossary/Primitive) muito usados: `string`, `number` e `boolean`.
+Cada um tem um tipo correspondente em TypeScript.
+Como você deve esperar, esses são os mesmos nomes que você veria se usasse o operador `typeof` do JavaScript em um valor desses tipos:
 
-- `string` represents string values like `"Hello, world"`
-- `number` is for numbers like `42`. JavaScript does not have a special runtime value for integers, so there's no equivalent to `int` or `float` - everything is simply `number`
-- `boolean` is for the two values `true` and `false`
+- `string` representa valores de texto como `"Hello, world"`
+- `number` é para números como `42`. O JavaScript não tem um valor especial em tempo de execução para inteiros, então não existe equivalente a `int` ou `float` - tudo é simplesmente `number`
+- `boolean` é para os dois valores `true` e `false`
 
-> The type names `String`, `Number`, and `Boolean` (starting with capital letters) are legal, but refer to some special built-in types that will very rarely appear in your code. _Always_ use `string`, `number`, or `boolean` for types.
+> Os nomes de tipo `String`, `Number` e `Boolean` (com letra maiúscula) são válidos, mas se referem a alguns tipos especiais embutidos que raramente vão aparecer no seu código. _Sempre_ use `string`, `number` ou `boolean` para tipos.
 
 ## Arrays
 
-To specify the type of an array like `[1, 2, 3]`, you can use the syntax `number[]`; this syntax works for any type (e.g. `string[]` is an array of strings, and so on).
-You may also see this written as `Array<number>`, which means the same thing.
-We'll learn more about the syntax `T<U>` when we cover _generics_.
+Para especificar o tipo de um array como `[1, 2, 3]`, você pode usar a sintaxe `number[]`; essa sintaxe funciona para qualquer tipo (por exemplo, `string[]` é um array de strings, e assim por diante).
+Você também pode ver isso escrito como `Array<number>`, que significa a mesma coisa.
+Vamos aprender mais sobre a sintaxe `T<U>` quando falarmos de _generics_.
 
-> Note that `[number]` is a different thing; refer to the section on [Tuples](/docs/handbook/2/objects.html#tuple-types).
+> Observe que `[number]` é outra coisa; consulte a seção sobre [Tuplas](/docs/handbook/2/objects.html#tuple-types).
 
 ## `any`
 
-TypeScript also has a special type, `any`, that you can use whenever you don't want a particular value to cause typechecking errors.
+O TypeScript também tem um tipo especial, `any`, que você pode usar sempre que não quiser que um valor específico cause erros de verificação de tipos.
 
-When a value is of type `any`, you can access any properties of it (which will in turn be of type `any`), call it like a function, assign it to (or from) a value of any type, or pretty much anything else that's syntactically legal:
+Quando um valor é do tipo `any`, você pode acessar qualquer propriedade dele (que, por sua vez, será do tipo `any`), chamá-lo como função, atribuí-lo a (ou a partir de) um valor de qualquer tipo, ou praticamente qualquer outra coisa que seja sintaticamente válida:
 
 ```ts twoslash
 let obj: any = { x: 0 };
@@ -52,48 +53,48 @@ obj = "hello";
 const n: number = obj;
 ```
 
-The `any` type is useful when you don't want to write out a long type just to convince TypeScript that a particular line of code is okay.
+O tipo `any` é útil quando você não quer escrever um tipo longo só para convencer o TypeScript de que uma determinada linha de código está correta.
 
 ### `noImplicitAny`
 
-When you don't specify a type, and TypeScript can't infer it from context, the compiler will typically default to `any`.
+Quando você não especifica um tipo, e o TypeScript não consegue inferi-lo a partir do contexto, o compilador normalmente assume `any` por padrão.
 
-You usually want to avoid this, though, because `any` isn't type-checked.
-Use the compiler flag [`noImplicitAny`](/tsconfig#noImplicitAny) to flag any implicit `any` as an error.
+Você geralmente quer evitar isso, porque `any` não passa pela verificação de tipos.
+Use a flag do compilador [`noImplicitAny`](/tsconfig#noImplicitAny) para marcar qualquer `any` implícito como erro.
 
-## Type Annotations on Variables
+## Anotações de tipo em variáveis {#type-annotations-on-variables}
 
-When you declare a variable using `const`, `var`, or `let`, you can optionally add a type annotation to explicitly specify the type of the variable:
+Quando você declara uma variável usando `const`, `var` ou `let`, pode opcionalmente adicionar uma anotação de tipo para especificar explicitamente o tipo da variável:
 
 ```ts twoslash
 let myName: string = "Alice";
 //        ^^^^^^^^ Type annotation
 ```
 
-> TypeScript doesn't use "types on the left"-style declarations like `int x = 0;`
-> Type annotations will always go _after_ the thing being typed.
+> O TypeScript não usa declarações com tipo "à esquerda" como `int x = 0;`
+> Anotações de tipo sempre vêm _depois_ da coisa que está sendo tipada.
 
-In most cases, though, this isn't needed.
-Wherever possible, TypeScript tries to automatically _infer_ the types in your code.
-For example, the type of a variable is inferred based on the type of its initializer:
+Na maioria dos casos, porém, isso não é necessário.
+Sempre que possível, o TypeScript tenta _inferir_ automaticamente os tipos no seu código.
+Por exemplo, o tipo de uma variável é inferido com base no tipo do seu valor inicial:
 
 ```ts twoslash
 // No type annotation needed -- 'myName' inferred as type 'string'
 let myName = "Alice";
 ```
 
-For the most part you don't need to explicitly learn the rules of inference.
-If you're starting out, try using fewer type annotations than you think - you might be surprised how few you need for TypeScript to fully understand what's going on.
+Na maior parte do tempo, você não precisa aprender explicitamente as regras de inferência.
+Se você está começando, tente usar menos anotações de tipo do que imagina - você pode se surpreender com quão poucas são necessárias para o TypeScript entender completamente o que está acontecendo.
 
-## Functions
+## Funções {#functions}
 
-Functions are the primary means of passing data around in JavaScript.
-TypeScript allows you to specify the types of both the input and output values of functions.
+Funções são o principal meio de passar dados pelo JavaScript.
+O TypeScript permite que você especifique os tipos tanto dos valores de entrada quanto dos de saída das funções.
 
-### Parameter Type Annotations
+### Anotações de tipo de parâmetros {#parameter-type-annotations}
 
-When you declare a function, you can add type annotations after each parameter to declare what types of parameters the function accepts.
-Parameter type annotations go after the parameter name:
+Quando você declara uma função, pode adicionar anotações de tipo depois de cada parâmetro para declarar quais tipos de parâmetros a função aceita.
+As anotações de tipo dos parâmetros vêm depois do nome do parâmetro:
 
 ```ts twoslash
 // Parameter type annotation
@@ -103,7 +104,7 @@ function greet(name: string) {
 }
 ```
 
-When a parameter has a type annotation, arguments to that function will be checked:
+Quando um parâmetro tem uma anotação de tipo, os argumentos passados para essa função serão verificados:
 
 ```ts twoslash
 // @errors: 2345
@@ -113,12 +114,12 @@ declare function greet(name: string): void;
 greet(42);
 ```
 
-> Even if you don't have type annotations on your parameters, TypeScript will still check that you passed the right number of arguments.
+> Mesmo que você não tenha anotações de tipo nos seus parâmetros, o TypeScript ainda vai verificar se você passou o número certo de argumentos.
 
-### Return Type Annotations
+### Anotações de tipo de retorno {#return-type-annotations}
 
-You can also add return type annotations.
-Return type annotations appear after the parameter list:
+Você também pode adicionar anotações de tipo de retorno.
+As anotações de tipo de retorno aparecem depois da lista de parâmetros:
 
 ```ts twoslash
 function getFavoriteNumber(): number {
@@ -127,13 +128,13 @@ function getFavoriteNumber(): number {
 }
 ```
 
-Much like variable type annotations, you usually don't need a return type annotation because TypeScript will infer the function's return type based on its `return` statements.
-The type annotation in the above example doesn't change anything.
-Some codebases will explicitly specify a return type for documentation purposes, to prevent accidental changes, or just for personal preference.
+Assim como as anotações de tipo de variáveis, você normalmente não precisa de uma anotação de tipo de retorno, porque o TypeScript vai inferir o tipo de retorno da função com base nas suas instruções `return`.
+A anotação de tipo no exemplo acima não muda nada.
+Algumas bases de código especificam explicitamente um tipo de retorno para fins de documentação, para evitar mudanças acidentais, ou simplesmente por preferência pessoal.
 
-#### Functions Which Return Promises
+#### Funções que retornam Promises {#functions-which-return-promises}
 
-If you want to annotate the return type of a function which returns a promise, you should use the `Promise` type:
+Se você quiser anotar o tipo de retorno de uma função que retorna uma promise, deve usar o tipo `Promise`:
 
 ```ts twoslash
 async function getFavoriteNumber(): Promise<number> {
@@ -141,12 +142,12 @@ async function getFavoriteNumber(): Promise<number> {
 }
 ```
 
-### Anonymous Functions
+### Funções anônimas {#anonymous-functions}
 
-Anonymous functions are a little bit different from function declarations.
-When a function appears in a place where TypeScript can determine how it's going to be called, the parameters of that function are automatically given types.
+Funções anônimas são um pouco diferentes das declarações de função.
+Quando uma função aparece em um lugar onde o TypeScript consegue determinar como ela será chamada, os parâmetros dessa função recebem tipos automaticamente.
 
-Here's an example:
+Aqui está um exemplo:
 
 ```ts twoslash
 // @errors: 2551
@@ -163,20 +164,20 @@ names.forEach((s) => {
 });
 ```
 
-Even though the parameter `s` didn't have a type annotation, TypeScript used the types of the `forEach` function, along with the inferred type of the array, to determine the type `s` will have.
+Mesmo que o parâmetro `s` não tenha anotação de tipo, o TypeScript usou os tipos da função `forEach`, junto com o tipo inferido do array, para determinar o tipo que `s` terá.
 
-This process is called _contextual typing_ because the _context_ that the function occurred within informs what type it should have.
+Esse processo é chamado de _contextual typing_ (tipagem contextual), porque o _contexto_ em que a função aparece informa qual tipo ela deve ter.
 
-Similar to the inference rules, you don't need to explicitly learn how this happens, but understanding that it _does_ happen can help you notice when type annotations aren't needed.
-Later, we'll see more examples of how the context that a value occurs in can affect its type.
+Assim como as regras de inferência, você não precisa aprender explicitamente como isso acontece, mas entender que isso _acontece_ pode ajudar você a perceber quando anotações de tipo não são necessárias.
+Mais adiante, veremos mais exemplos de como o contexto em que um valor aparece pode afetar o seu tipo.
 
-## Object Types
+## Tipos de objeto {#object-types}
 
-Apart from primitives, the most common sort of type you'll encounter is an _object type_.
-This refers to any JavaScript value with properties, which is almost all of them!
-To define an object type, we simply list its properties and their types.
+Além dos primitivos, o tipo mais comum que você vai encontrar é um _tipo de objeto_.
+Isso se refere a qualquer valor do JavaScript com propriedades, o que é quase todos eles!
+Para definir um tipo de objeto, basta listar suas propriedades e os tipos delas.
 
-For example, here's a function that takes a point-like object:
+Por exemplo, aqui está uma função que recebe um objeto no formato de um ponto:
 
 ```ts twoslash
 // The parameter's type annotation is an object type
@@ -188,16 +189,16 @@ function printCoord(pt: { x: number; y: number }) {
 printCoord({ x: 3, y: 7 });
 ```
 
-Here, we annotated the parameter with a type with two properties - `x` and `y` - which are both of type `number`.
-You can use `,` or `;` to separate the properties, and the last separator is optional either way.
+Aqui, anotamos o parâmetro com um tipo que tem duas propriedades - `x` e `y` - ambas do tipo `number`.
+Você pode usar `,` ou `;` para separar as propriedades, e o último separador é opcional em qualquer um dos casos.
 
-The type part of each property is also optional.
-If you don't specify a type, it will be assumed to be `any`.
+A parte do tipo de cada propriedade também é opcional.
+Se você não especificar um tipo, ele será considerado como `any`.
 
-### Optional Properties
+### Propriedades opcionais {#optional-properties}
 
-Object types can also specify that some or all of their properties are _optional_.
-To do this, add a `?` after the property name:
+Tipos de objeto também podem especificar que algumas ou todas as suas propriedades são _opcionais_.
+Para isso, adicione um `?` depois do nome da propriedade:
 
 ```ts twoslash
 function printName(obj: { first: string; last?: string }) {
@@ -208,8 +209,8 @@ printName({ first: "Bob" });
 printName({ first: "Alice", last: "Alisson" });
 ```
 
-In JavaScript, if you access a property that doesn't exist, you'll get the value `undefined` rather than a runtime error.
-Because of this, when you _read_ from an optional property, you'll have to check for `undefined` before using it.
+No JavaScript, se você acessar uma propriedade que não existe, você recebe o valor `undefined` em vez de um erro em tempo de execução.
+Por causa disso, ao _ler_ uma propriedade opcional, você precisa verificar se é `undefined` antes de usá-la.
 
 ```ts twoslash
 // @errors: 18048
@@ -226,18 +227,18 @@ function printName(obj: { first: string; last?: string }) {
 }
 ```
 
-## Union Types
+## Tipos union {#union-types}
 
-TypeScript's type system allows you to build new types out of existing ones using a large variety of operators.
-Now that we know how to write a few types, it's time to start _combining_ them in interesting ways.
+O sistema de tipos do TypeScript permite construir novos tipos a partir de tipos existentes usando uma grande variedade de operadores.
+Agora que sabemos escrever alguns tipos, é hora de começar a _combiná-los_ de formas interessantes.
 
-### Defining a Union Type
+### Definindo um tipo union {#defining-a-union-type}
 
-The first way to combine types you might see is a _union_ type.
-A union type is a type formed from two or more other types, representing values that may be _any one_ of those types.
-We refer to each of these types as the union's _members_.
+A primeira forma de combinar tipos que você pode ver é um tipo _union_.
+Um tipo union é um tipo formado a partir de dois ou mais outros tipos, representando valores que podem ser _um qualquer_ desses tipos.
+Chamamos cada um desses tipos de _membros_ da union.
 
-Let's write a function that can operate on strings or numbers:
+Vamos escrever uma função que pode operar sobre strings ou números:
 
 ```ts twoslash
 // @errors: 2345
@@ -252,7 +253,7 @@ printId("202");
 printId({ myID: 22342 });
 ```
 
-> The separator of the union members is allowed before the first element, so you could also write this:
+> O separador dos membros da union é permitido antes do primeiro elemento, então você também pode escrever assim:
 > ```ts twoslash
 > function printTextOrNumberOrBool(
 >   textOrNumberOrBool:
@@ -264,13 +265,13 @@ printId({ myID: 22342 });
 > }
 > ```
 
-### Working with Union Types
+### Trabalhando com tipos union {#working-with-union-types}
 
-It's easy to _provide_ a value matching a union type - simply provide a type matching any of the union's members.
-If you _have_ a value of a union type, how do you work with it?
+É fácil _fornecer_ um valor que corresponda a um tipo union - basta fornecer um tipo que corresponda a qualquer um dos membros da union.
+Se você _tem_ um valor de tipo union, como trabalhar com ele?
 
-TypeScript will only allow an operation if it is valid for _every_ member of the union.
-For example, if you have the union `string | number`, you can't use methods that are only available on `string`:
+O TypeScript só vai permitir uma operação se ela for válida para _todos_ os membros da union.
+Por exemplo, se você tem a union `string | number`, não pode usar métodos que existem apenas em `string`:
 
 ```ts twoslash
 // @errors: 2339
@@ -279,10 +280,10 @@ function printId(id: number | string) {
 }
 ```
 
-The solution is to _narrow_ the union with code, the same as you would in JavaScript without type annotations.
-_Narrowing_ occurs when TypeScript can deduce a more specific type for a value based on the structure of the code.
+A solução é _restringir_ a union com código, da mesma forma que você faria em JavaScript sem anotações de tipo.
+O _narrowing_ acontece quando o TypeScript consegue deduzir um tipo mais específico para um valor com base na estrutura do código.
 
-For example, TypeScript knows that only a `string` value will have a `typeof` value `"string"`:
+Por exemplo, o TypeScript sabe que apenas um valor `string` terá o valor de `typeof` igual a `"string"`:
 
 ```ts twoslash
 function printId(id: number | string) {
@@ -296,7 +297,7 @@ function printId(id: number | string) {
 }
 ```
 
-Another example is to use a function like `Array.isArray`:
+Outro exemplo é usar uma função como `Array.isArray`:
 
 ```ts twoslash
 function welcomePeople(x: string[] | string) {
@@ -310,11 +311,11 @@ function welcomePeople(x: string[] | string) {
 }
 ```
 
-Notice that in the `else` branch, we don't need to do anything special - if `x` wasn't a `string[]`, then it must have been a `string`.
+Repare que, no ramo `else`, não precisamos fazer nada especial - se `x` não era um `string[]`, então ele precisa ter sido uma `string`.
 
-Sometimes you'll have a union where all the members have something in common.
-For example, both arrays and strings have a `slice` method.
-If every member in a union has a property in common, you can use that property without narrowing:
+Às vezes você terá uma union em que todos os membros têm algo em comum.
+Por exemplo, tanto arrays quanto strings têm um método `slice`.
+Se todo membro de uma union tem uma propriedade em comum, você pode usar essa propriedade sem fazer narrowing:
 
 ```ts twoslash
 // Return type is inferred as number[] | string
@@ -323,19 +324,19 @@ function getFirstThree(x: number[] | string) {
 }
 ```
 
-> It might be confusing that a _union_ of types appears to have the _intersection_ of those types' properties.
-> This is not an accident - the name _union_ comes from type theory.
-> The _union_ `number | string` is composed by taking the union _of the values_ from each type.
-> Notice that given two sets with corresponding facts about each set, only the _intersection_ of those facts applies to the _union_ of the sets themselves.
-> For example, if we had a room of tall people wearing hats, and another room of Spanish speakers wearing hats, after combining those rooms, the only thing we know about _every_ person is that they must be wearing a hat.
+> Pode parecer confuso que uma _union_ de tipos aparente ter a _interseção_ das propriedades desses tipos.
+> Isso não é acidente - o nome _union_ vem da teoria dos tipos.
+> A _union_ `number | string` é composta pegando a união _dos valores_ de cada tipo.
+> Repare que, dados dois conjuntos com fatos correspondentes sobre cada conjunto, apenas a _interseção_ desses fatos se aplica à _união_ dos próprios conjuntos.
+> Por exemplo, se tivéssemos uma sala de pessoas altas usando chapéu, e outra sala de falantes de espanhol usando chapéu, depois de juntar as salas, a única coisa que sabemos sobre _cada_ pessoa é que ela deve estar usando um chapéu.
 
-## Type Aliases
+## Aliases de tipo {#type-aliases}
 
-We've been using object types and union types by writing them directly in type annotations.
-This is convenient, but it's common to want to use the same type more than once and refer to it by a single name.
+Temos usado tipos de objeto e tipos union escrevendo-os diretamente nas anotações de tipo.
+Isso é conveniente, mas é comum querer usar o mesmo tipo mais de uma vez e referenciá-lo por um único nome.
 
-A _type alias_ is exactly that - a _name_ for any _type_.
-The syntax for a type alias is:
+Um _alias de tipo_ é exatamente isso - um _nome_ para qualquer _tipo_.
+A sintaxe de um alias de tipo é:
 
 ```ts twoslash
 type Point = {
@@ -352,16 +353,16 @@ function printCoord(pt: Point) {
 printCoord({ x: 100, y: 100 });
 ```
 
-You can actually use a type alias to give a name to any type at all, not just an object type.
-For example, a type alias can name a union type:
+Na verdade, você pode usar um alias de tipo para dar nome a qualquer tipo, não apenas a tipos de objeto.
+Por exemplo, um alias de tipo pode nomear um tipo union:
 
 ```ts twoslash
 type ID = number | string;
 ```
 
-Note that aliases are _only_ aliases - you cannot use type aliases to create different/distinct "versions" of the same type.
-When you use the alias, it's exactly as if you had written the aliased type.
-In other words, this code might _look_ illegal, but is OK according to TypeScript because both types are aliases for the same type:
+Observe que aliases são _apenas_ aliases - você não pode usar aliases de tipo para criar "versões" diferentes e distintas do mesmo tipo.
+Quando você usa o alias, é exatamente como se você tivesse escrito o tipo apelidado.
+Em outras palavras, este código _parece_ ilegal, mas é aceito pelo TypeScript porque ambos os tipos são aliases para o mesmo tipo:
 
 ```ts twoslash
 declare function getInput(): string;
@@ -382,7 +383,7 @@ userInput = "new input";
 
 ## Interfaces
 
-An _interface declaration_ is another way to name an object type:
+Uma _declaração de interface_ é outra forma de dar nome a um tipo de objeto:
 
 ```ts twoslash
 interface Point {
@@ -398,14 +399,13 @@ function printCoord(pt: Point) {
 printCoord({ x: 100, y: 100 });
 ```
 
-Just like when we used a type alias above, the example works just as if we had used an anonymous object type.
-TypeScript is only concerned with the _structure_ of the value we passed to `printCoord` - it only cares that it has the expected properties.
-Being concerned only with the structure and capabilities of types is why we call TypeScript a _structurally typed_ type system.
+Assim como quando usamos um alias de tipo acima, o exemplo funciona como se tivéssemos usado um tipo de objeto anônimo.
+O TypeScript só se preocupa com a _estrutura_ do valor que passamos para `printCoord` - ele só se importa que o valor tenha as propriedades esperadas.
+Ser concernido apenas com a estrutura e as capacidades dos tipos é o motivo pelo qual chamamos o TypeScript de um sistema de tipos _estruturalmente tipado_.
 
-### Differences Between Type Aliases and Interfaces
+### Diferenças entre aliases de tipo e interfaces {#differences-between-type-aliases-and-interfaces}
 
-Type aliases and interfaces are very similar, and in many cases you can choose between them freely.
-Almost all features of an `interface` are available in `type`, the key distinction is that a type cannot be re-opened to add new properties vs an interface which is always extendable.
+Aliases de tipo e interfaces são muito parecidos, e em muitos casos você pode escolher entre eles livremente. Quase todos os recursos de uma `interface` estão disponíveis em `type`; a principal diferença é que um tipo não pode ser reaberto para adicionar novas propriedades, enquanto uma interface sempre pode ser estendida.
 
 <div class='table-container'>
 <table class='full-width-table'>
@@ -416,7 +416,7 @@ Almost all features of an `interface` are available in `type`, the key distincti
     </tr>
     <tr>
       <td>
-        <p>Extending an interface</p>
+        <p>Estendendo uma interface</p>
         <code><pre>
 interface Animal {
   name: string;
@@ -430,7 +430,7 @@ bear.honey;
         </pre></code>
       </td>
       <td>
-        <p>Extending a type via intersections</p>
+        <p>Estendendo um tipo via interseções</p>
         <code><pre>
 type Animal = {
   name: string;
@@ -446,7 +446,7 @@ bear.honey;
     </tr>
     <tr>
       <td>
-        <p>Adding new fields to an existing interface</p>
+        <p>Adicionando novos campos a uma interface existente</p>
         <code><pre>
 interface Window {
   title: string;
@@ -459,7 +459,7 @@ window.ts.transpileModule(src, {});
         </pre></code>
       </td>
       <td>
-        <p>A type cannot be changed after being created</p>
+        <p>Um tipo não pode ser alterado depois de criado</p>
         <code><pre>
 type Window = {
   title: string;
@@ -475,49 +475,49 @@ type Window = {
 </table>
 </div>
 
-You'll learn more about these concepts in later chapters, so don't worry if you don't understand all of these right away.
+Você vai aprender mais sobre esses conceitos em capítulos posteriores, então não se preocupe se não entender tudo isso de imediato.
 
-- Prior to TypeScript version 4.2, type alias names [_may_ appear in error messages](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWZWhfYAjABMAMwALA+gbsVjoADqgjKESytQPxCHghAByXigYgBfr8LAsYj8aQMUASbDQcRSExCeCwFiIQh+AKfAYyBiQFgOPyIaikSGLQo0Zj-aazaY+dSaXjLDgAGXgAC9CKhDqAALxJaw2Ib2RzOISuDycLw+ImBYKQflCkWRRD2LXCw6JCxS1JCdJZHJ5RAFIbFJU8ADKC3WzEcnVZaGYE1ABpFnFOmsFhsil2uoHuzwArO9SmAAEIsSFrZB-GgAjjA5gtVN8VCEc1o1C4Q4AGlR2AwO1EsBQoAAbvB-gJ4HhPgB5aDwem-Ph1TCV3AEEirTp4ELtRbTPD4vwKjOfAuioSQHuDXBcnmgACC+eCONFEs73YAPGGZVT5cRyyhiHh7AAON7lsG3vBggB8XGV3l8-nVISOgghxoLq9i7io-AHsayRWGaFrlFauq2rg9qaIGQHwCBqChtKdgRo8TxRjeyB3o+7xAA), sometimes in place of the equivalent anonymous type (which may or may not be desirable). Interfaces will always be named in error messages.
-- Type aliases may not participate [in declaration merging, but interfaces can](/play?#code/PTAEEEDtQS0gXApgJwGYEMDGjSfdAIx2UQFoB7AB0UkQBMAoEUfO0Wgd1ADd0AbAK6IAzizp16ALgYM4SNFhwBZdAFtV-UAG8GoPaADmNAcMmhh8ZHAMMAvjLkoM2UCvWad+0ARL0A-GYWVpA29gyY5JAWLJAwGnxmbvGgALzauvpGkCZmAEQAjABMAMwALLkANBl6zABi6DB8okR4Jjg+iPSgABboovDk3jjo5pbW1d6+dGb5djLwAJ7UoABKiJTwjThpnpnGpqPBoTLMAJrkArj4kOTwYmycPOhW6AR8IrDQ8N04wmo4HHQCwYi2Waw2W1S6S8HX8gTGITsQA).
-- Interfaces may only be used to [declare the shapes of objects, not rename primitives](/play?#code/PTAEAkFMCdIcgM6gC4HcD2pIA8CGBbABwBtIl0AzUAKBFAFcEBLAOwHMUBPQs0XFgCahWyGBVwBjMrTDJMAshOhMARpD4tQ6FQCtIE5DWoixk9QEEWAeV37kARlABvaqDegAbrmL1IALlAEZGV2agBfampkbgtrWwMAJlAAXmdXdy8ff0Dg1jZwyLoAVWZ2Lh5QVHUJflAlSFxROsY5fFAWAmk6CnRoLGwmILzQQmV8JmQmDzI-SOiKgGV+CaYAL0gBBdyy1KCQ-Pn1AFFplgA5enw1PtSWS+vCsAAVAAtB4QQWOEMKBuYVUiVCYvYQsUTQcRSBDGMGmKSgAAa-VEgiQe2GLgKQA).
-- Interface names will [_always_ appear in their original form](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWY2Q-YAjABMAMwALA+gbsVjNXW8yxySoAADaAA0CCaZbPh1XYqXgOIY0ZgmcK0AA0nyaLFhhGY8F4AHJmEJILCWsgZId4NNfIgGFdcIcUTVfgBlZTOWC8T7kAJ42G4eT+GS42QyRaYbCgXAEEguTzeXyCjDBSAAQSE8Ai0Xsl0K9kcziExDeiQs1lAqSE6SyOTy0AKQ2KHk4p1V6s1OuuoHuzwArMagA) in error messages, but _only_ when they are used by name.
-- Using interfaces with `extends` [can often be more performant for the compiler](https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections) than type aliases with intersections
+- Antes da versão 4.2 do TypeScript, os nomes de aliases de tipo [_podiam_ aparecer nas mensagens de erro](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWZWhfYAjABMAMwALA+gbsVjoADqgjKESytQPxCHghAByXigYgBfr8LAsYj8aQMUASbDQcRSExCeCwFiIQh+AKfAYyBiQFgOPyIaikSGLQo0Zj-aazaY+dSaXjLDgAGXgAC9CKhDqAALxJaw2Ib2RzOISuDycLw+ImBYKQflCkWRRD2LXCw6JCxS1JCdJZHJ5RAFIbFJU8ADKC3WzEcnVZaGYE1ABpFnFOmsFhsil2uoHuzwArO9SmAAEIsSFrZB-GgAjjA5gtVN8VCEc1o1C4Q4AGlR2AwO1EsBQoAAbvB-gJ4HhPgB5aDwem-Ph1TCV3AEEirTp4ELtRbTPD4vwKjOfAuioSQHuDXBcnmgACC+eCONFEs73YAPGGZVT5cRyyhiHh7AAON7lsG3vBggB8XGV3l8-nVISOgghxoLq9i7io-AHsayRWGaFrlFauq2rg9qaIGQHwCBqChtKdgRo8TxRjeyB3o+7xAA), às vezes no lugar do tipo anônimo equivalente (o que pode ou não ser desejável). Interfaces sempre aparecerão com o nome nas mensagens de erro.
+- Aliases de tipo não podem participar [de declaration merging, mas interfaces podem](/play?#code/PTAEEEDtQS0gXApgJwGYEMDGjSfdAIx2UQFoB7AB0UkQBMAoEUfO0Wgd1ADd0AbAK6IAzizp16ALgYM4SNFhwBZdAFtV-UAG8GoPaADmNAcMmhh8ZHAMMAvjLkoM2UCvWad+0ARL0A-GYWVpA29gyY5JAWLJAwGnxmbvGgALzauvpGkCZmAEQAjABMAMwALLkANBl6zABi6DB8okR4Jjg+iPSgABboovDk3jjo5pbW1d6+dGb5djLwAJ7UoABKiJTwjThpnpnGpqPBoTLMAJrkArj4kOTwYmycPOhW6AR8IrDQ8N04wmo4HHQCwYi2Waw2W1S6S8HX8gTGITsQA).
+- Interfaces só podem ser usadas para [declarar o formato de objetos, não para renomear primitivos](/play?#code/PTAEAkFMCdIcgM6gC4HcD2pIA8CGBbABwBtIl0AzUAKBFAFcEBLAOwHMUBPQs0XFgCahWyGBVwBjMrTDJMAshOhMARpD4tQ6FQCtIE5DWoixk9QEEWAeV37kARlABvaqDegAbrmL1IALlAEZGV2agBfampkbgtrWwMAJlAAXmdXdy8ff0Dg1jZwyLoAVWZ2Lh5QVHUJflAlSFxROsY5fFAWAmk6CnRoLGwmILzQQmV8JmQmDzI-SOiKgGV+CaYAL0gBBdyy1KCQ-Pn1AFFplgA5enw1PtSWS+vCsAAVAAtB4QQWOEMKBuYVUiVCYvYQsUTQcRSBDGMGmKSgAAa-VEgiQe2GLgKQA).
+- Nomes de interfaces [_sempre_ aparecem na forma original](/play?#code/PTAEGEHsFsAcEsA2BTATqNrLusgzngIYDm+oA7koqIYuYQJ56gCueyoAUCKAC4AWHAHaFcoSADMaQ0PCG80EwgGNkALk6c5C1EtWgAsqOi1QAb06groEbjWg8vVHOKcAvpokshy3vEgyyMr8kEbQJogAFND2YREAlOaW1soBeJAoAHSIkMTRmbbI8e6aPMiZxJmgACqCGKhY6ABGyDnkFFQ0dIzMbBwCwqIccabcYLyQoKjIEmh8kwN8DLAc5PzwwbLMyAAeK77IACYaQSEjUWY2Q-YAjABMAMwALA+gbsVjNXW8yxySoAADaAA0CCaZbPh1XYqXgOIY0ZgmcK0AA0nyaLFhhGY8F4AHJmEJILCWsgZId4NNfIgGFdcIcUTVfgBlZTOWC8T7kAJ42G4eT+GS42QyRaYbCgXAEEguTzeXyCjDBSAAQSE8Ai0Xsl0K9kcziExDeiQs1lAqSE6SyOTy0AKQ2KHk4p1V6s1OuuoHuzwArMagA) nas mensagens de erro, mas _só_ quando são usados pelo nome.
+- Usar interfaces com `extends` [pode ser, muitas vezes, mais performático para o compilador](https://github.com/microsoft/TypeScript/wiki/Performance#preferring-interfaces-over-intersections) do que aliases de tipo com interseções
 
-For the most part, you can choose based on personal preference, and TypeScript will tell you if it needs something to be the other kind of declaration. If you would like a heuristic, use `interface` until you need to use features from `type`.
+Na maior parte das vezes, você pode escolher com base na preferência pessoal, e o TypeScript vai avisar se precisar que algo seja do outro tipo de declaração. Se quiser uma heurística, use `interface` até precisar de recursos de `type`.
 
-## Type Assertions
+## Asserções de tipo {#type-assertions}
 
-Sometimes you will have information about the type of a value that TypeScript can't know about.
+Às vezes você terá informações sobre o tipo de um valor que o TypeScript não consegue saber.
 
-For example, if you're using `document.getElementById`, TypeScript only knows that this will return _some_ kind of `HTMLElement`, but you might know that your page will always have an `HTMLCanvasElement` with a given ID.
+Por exemplo, se você está usando `document.getElementById`, o TypeScript só sabe que isso vai retornar _algum_ tipo de `HTMLElement`, mas você pode saber que sua página sempre terá um `HTMLCanvasElement` com um determinado ID.
 
-In this situation, you can use a _type assertion_ to specify a more specific type:
+Nessa situação, você pode usar uma _asserção de tipo_ para especificar um tipo mais específico:
 
 ```ts twoslash
 const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement;
 ```
 
-Like a type annotation, type assertions are removed by the compiler and won't affect the runtime behavior of your code.
+Assim como uma anotação de tipo, asserções de tipo são removidas pelo compilador e não afetam o comportamento em tempo de execução do seu código.
 
-You can also use the angle-bracket syntax (except if the code is in a `.tsx` file), which is equivalent:
+Você também pode usar a sintaxe com colchetes angulares (exceto se o código estiver em um arquivo `.tsx`), que é equivalente:
 
 ```ts twoslash
 const myCanvas = <HTMLCanvasElement>document.getElementById("main_canvas");
 ```
 
-> Reminder: Because type assertions are removed at compile-time, there is no runtime checking associated with a type assertion.
-> There won't be an exception or `null` generated if the type assertion is wrong.
+> Lembrete: como asserções de tipo são removidas em tempo de compilação, não há nenhuma verificação em tempo de execução associada a uma asserção de tipo.
+> Não haverá uma exceção nem um `null` gerado se a asserção de tipo estiver errada.
 
-TypeScript only allows type assertions which convert to a _more specific_ or _less specific_ version of a type.
-This rule prevents "impossible" coercions like:
+O TypeScript só permite asserções de tipo que convertem para uma versão _mais específica_ ou _menos específica_ de um tipo.
+Essa regra evita coerções "impossíveis" como:
 
 ```ts twoslash
 // @errors: 2352
 const x = "hello" as number;
 ```
 
-Sometimes this rule can be too conservative and will disallow more complex coercions that might be valid.
-If this happens, you can use two assertions, first to `any` (or `unknown`, which we'll introduce later), then to the desired type:
+Às vezes essa regra pode ser conservadora demais e vai proibir coerções mais complexas que poderiam ser válidas.
+Se isso acontecer, você pode usar duas asserções: primeiro para `any` (ou `unknown`, que vamos apresentar mais adiante), e depois para o tipo desejado:
 
 ```ts twoslash
 declare const expr: any;
@@ -526,11 +526,11 @@ type T = { a: 1; b: 2; c: 3 };
 const a = expr as any as T;
 ```
 
-## Literal Types
+## Tipos literais {#literal-types}
 
-In addition to the general types `string` and `number`, we can refer to _specific_ strings and numbers in type positions.
+Além dos tipos gerais `string` e `number`, podemos nos referir a strings e números _específicos_ em posições de tipo.
 
-One way to think about this is to consider how JavaScript comes with different ways to declare a variable. Both `var` and `let` allow for changing what is held inside the variable, and `const` does not. This is reflected in how TypeScript creates types for literals.
+Uma forma de pensar nisso é considerar como o JavaScript oferece diferentes formas de declarar uma variável. Tanto `var` quanto `let` permitem mudar o que está guardado dentro da variável, e `const` não. Isso se reflete em como o TypeScript cria tipos para literais.
 
 ```ts twoslash
 let changingString = "Hello World";
@@ -547,7 +547,7 @@ constantString;
 // ^?
 ```
 
-By themselves, literal types aren't very valuable:
+Por si só, tipos literais não são muito valiosos:
 
 ```ts twoslash
 // @errors: 2322
@@ -558,9 +558,9 @@ x = "hello";
 x = "howdy";
 ```
 
-It's not much use to have a variable that can only have one value!
+Não adianta muito ter uma variável que só pode ter um valor!
 
-But by _combining_ literals into unions, you can express a much more useful concept - for example, functions that only accept a certain set of known values:
+Mas, ao _combinar_ literais em unions, você pode expressar um conceito muito mais útil - por exemplo, funções que só aceitam um certo conjunto de valores conhecidos:
 
 ```ts twoslash
 // @errors: 2345
@@ -571,7 +571,7 @@ printText("Hello, world", "left");
 printText("G'day, mate", "centre");
 ```
 
-Numeric literal types work the same way:
+Tipos literais numéricos funcionam da mesma forma:
 
 ```ts twoslash
 function compare(a: string, b: string): -1 | 0 | 1 {
@@ -579,7 +579,7 @@ function compare(a: string, b: string): -1 | 0 | 1 {
 }
 ```
 
-Of course, you can combine these with non-literal types:
+É claro que você pode combinar esses tipos com tipos não literais:
 
 ```ts twoslash
 // @errors: 2345
@@ -594,14 +594,14 @@ configure("auto");
 configure("automatic");
 ```
 
-There's one more kind of literal type: boolean literals.
-There are only two boolean literal types, and as you might guess, they are the types `true` and `false`.
-The type `boolean` itself is actually just an alias for the union `true | false`.
+Existe mais um tipo de literal: literais booleanos.
+Há apenas dois tipos literais booleanos e, como você deve imaginar, eles são os tipos `true` e `false`.
+O tipo `boolean` em si é, na verdade, apenas um alias para a union `true | false`.
 
-### Literal Inference
+### Inferência de literais {#literal-inference}
 
-When you initialize a variable with an object, TypeScript assumes that the properties of that object might change values later.
-For example, if you wrote code like this:
+Quando você inicializa uma variável com um objeto, o TypeScript assume que as propriedades desse objeto podem mudar de valor depois.
+Por exemplo, se você escrevesse código assim:
 
 ```ts twoslash
 declare const someCondition: boolean;
@@ -612,10 +612,10 @@ if (someCondition) {
 }
 ```
 
-TypeScript doesn't assume the assignment of `1` to a field which previously had `0` is an error.
-Another way of saying this is that `obj.counter` must have the type `number`, not `0`, because types are used to determine both _reading_ and _writing_ behavior.
+O TypeScript não assume que atribuir `1` a um campo que antes tinha `0` seja um erro.
+Dizendo de outra forma, `obj.counter` precisa ter o tipo `number`, e não `0`, porque os tipos são usados para determinar tanto o comportamento de _leitura_ quanto o de _escrita_.
 
-The same applies to strings:
+O mesmo vale para strings:
 
 ```ts twoslash
 // @errors: 2345
@@ -625,11 +625,11 @@ const req = { url: "https://example.com", method: "GET" };
 handleRequest(req.url, req.method);
 ```
 
-In the above example `req.method` is inferred to be `string`, not `"GET"`. Because code can be evaluated between the creation of `req` and the call of `handleRequest` which could assign a new string like `"GUESS"` to `req.method`, TypeScript considers this code to have an error.
+No exemplo acima, `req.method` é inferido como `string`, e não como `"GET"`. Como pode haver código executado entre a criação de `req` e a chamada de `handleRequest`, que poderia atribuir uma nova string como `"GUESS"` a `req.method`, o TypeScript considera que esse código tem um erro.
 
-There are two ways to work around this.
+Há duas formas de contornar isso.
 
-1. You can change the inference by adding a type assertion in either location:
+1. Você pode mudar a inferência adicionando uma asserção de tipo em qualquer um dos dois lugares:
 
    ```ts twoslash
    declare function handleRequest(url: string, method: "GET" | "POST"): void;
@@ -640,10 +640,10 @@ There are two ways to work around this.
    handleRequest(req.url, req.method as "GET");
    ```
 
-   Change 1 means "I intend for `req.method` to always have the _literal type_ `"GET"`", preventing the possible assignment of `"GUESS"` to that field after.
-   Change 2 means "I know for other reasons that `req.method` has the value `"GET"`".
+   A mudança 1 significa "pretendo que `req.method` sempre tenha o _tipo literal_ `"GET"`", impedindo a possível atribuição de `"GUESS"` a esse campo depois.
+   A mudança 2 significa "sei, por outros motivos, que `req.method` tem o valor `"GET"`".
 
-2. You can use `as const` to convert the entire object to be type literals:
+2. Você pode usar `as const` para converter o objeto inteiro em literais de tipo:
 
    ```ts twoslash
    declare function handleRequest(url: string, method: "GET" | "POST"): void;
@@ -652,24 +652,24 @@ There are two ways to work around this.
    handleRequest(req.url, req.method);
    ```
 
-The `as const` suffix acts like `const` but for the type system, ensuring that all properties are assigned the literal type instead of a more general version like `string` or `number`.
+O sufixo `as const` age como `const`, mas para o sistema de tipos, garantindo que todas as propriedades recebam o tipo literal em vez de uma versão mais geral como `string` ou `number`.
 
-## `null` and `undefined`
+## `null` e `undefined` {#null-and-undefined}
 
-JavaScript has two primitive values used to signal absent or uninitialized value: `null` and `undefined`.
+O JavaScript tem dois valores primitivos usados para sinalizar um valor ausente ou não inicializado: `null` e `undefined`.
 
-TypeScript has two corresponding _types_ by the same names. How these types behave depends on whether you have the [`strictNullChecks`](/tsconfig#strictNullChecks) option on.
+O TypeScript tem dois _tipos_ correspondentes com os mesmos nomes. Como esses tipos se comportam depende de a opção [`strictNullChecks`](/tsconfig#strictNullChecks) estar ativada ou não.
 
-### `strictNullChecks` off
+### `strictNullChecks` desativada {#strictnullchecks-off}
 
-With [`strictNullChecks`](/tsconfig#strictNullChecks) _off_, values that might be `null` or `undefined` can still be accessed normally, and the values `null` and `undefined` can be assigned to a property of any type.
-This is similar to how languages without null checks (e.g. C#, Java) behave.
-The lack of checking for these values tends to be a major source of bugs; we always recommend people turn [`strictNullChecks`](/tsconfig#strictNullChecks) on if it's practical to do so in their codebase.
+Com [`strictNullChecks`](/tsconfig#strictNullChecks) _desativada_, valores que podem ser `null` ou `undefined` ainda podem ser acessados normalmente, e os valores `null` e `undefined` podem ser atribuídos a uma propriedade de qualquer tipo.
+Isso é parecido com o comportamento de linguagens sem verificação de null (por exemplo, C# e Java).
+A falta de verificação desses valores tende a ser uma grande fonte de bugs; sempre recomendamos ativar a [`strictNullChecks`](/tsconfig#strictNullChecks) se for viável na sua base de código.
 
-### `strictNullChecks` on
+### `strictNullChecks` ativada {#strictnullchecks-on}
 
-With [`strictNullChecks`](/tsconfig#strictNullChecks) _on_, when a value is `null` or `undefined`, you will need to test for those values before using methods or properties on that value.
-Just like checking for `undefined` before using an optional property, we can use _narrowing_ to check for values that might be `null`:
+Com [`strictNullChecks`](/tsconfig#strictNullChecks) _ativada_, quando um valor é `null` ou `undefined`, você precisará testar esses valores antes de usar métodos ou propriedades desse valor.
+Assim como verificar `undefined` antes de usar uma propriedade opcional, podemos usar _narrowing_ para verificar valores que podem ser `null`:
 
 ```ts twoslash
 function doSomething(x: string | null) {
@@ -681,10 +681,10 @@ function doSomething(x: string | null) {
 }
 ```
 
-### Non-null Assertion Operator (Postfix `!`)
+### Operador de asserção de não nulo (`!` pós-fixo) {#non-null-assertion-operator-postfix-}
 
-TypeScript also has a special syntax for removing `null` and `undefined` from a type without doing any explicit checking.
-Writing `!` after any expression is effectively a type assertion that the value isn't `null` or `undefined`:
+O TypeScript também tem uma sintaxe especial para remover `null` e `undefined` de um tipo sem fazer nenhuma verificação explícita.
+Escrever `!` depois de qualquer expressão é, na prática, uma asserção de tipo de que o valor não é `null` nem `undefined`:
 
 ```ts twoslash
 function liveDangerously(x?: number | null) {
@@ -693,20 +693,20 @@ function liveDangerously(x?: number | null) {
 }
 ```
 
-Just like other type assertions, this doesn't change the runtime behavior of your code, so it's important to only use `!` when you know that the value _can't_ be `null` or `undefined`.
+Assim como outras asserções de tipo, isso não muda o comportamento em tempo de execução do seu código, então é importante usar `!` apenas quando você sabe que o valor _não pode_ ser `null` ou `undefined`.
 
 ## Enums
 
-Enums are a feature added to JavaScript by TypeScript which allows for describing a value which could be one of a set of possible named constants. Unlike most TypeScript features, this is _not_ a type-level addition to JavaScript but something added to the language and runtime. Because of this, it's a feature which you should know exists, but maybe hold off on using unless you are sure. You can read more about enums in the [Enum reference page](/docs/handbook/enums.html).
+Enums são um recurso adicionado ao JavaScript pelo TypeScript que permite descrever um valor que pode ser um de um conjunto de constantes nomeadas possíveis. Diferentemente da maioria dos recursos do TypeScript, isso _não_ é uma adição de nível de tipo ao JavaScript, mas algo adicionado à linguagem e ao runtime. Por causa disso, é um recurso que você deve saber que existe, mas talvez deva evitar usar a menos que tenha certeza. Você pode ler mais sobre enums na [página de referência de Enums](/docs/handbook/enums.html).
 
-## Less Common Primitives
+## Primitivos menos comuns {#less-common-primitives}
 
-It's worth mentioning the rest of the primitives in JavaScript which are represented in the type system.
-Though we will not go into depth here.
+Vale mencionar os demais primitivos do JavaScript que são representados no sistema de tipos.
+Ainda que não vamos entrar em detalhes aqui.
 
 ### `bigint`
 
-From ES2020 onwards, there is a primitive in JavaScript used for very large integers, `BigInt`:
+A partir do ES2020, existe um primitivo no JavaScript usado para inteiros muito grandes, `BigInt`:
 
 ```ts twoslash
 // @target: es2020
@@ -718,11 +718,11 @@ const oneHundred: bigint = BigInt(100);
 const anotherHundred: bigint = 100n;
 ```
 
-You can learn more about BigInt in [the TypeScript 3.2 release notes](/docs/handbook/release-notes/typescript-3-2.html#bigint).
+Você pode saber mais sobre BigInt nas [notas de versão do TypeScript 3.2](/docs/handbook/release-notes/typescript-3-2.html#bigint).
 
 ### `symbol`
 
-There is a primitive in JavaScript used to create a globally unique reference via the function `Symbol()`:
+Existe um primitivo no JavaScript usado para criar uma referência globalmente única através da função `Symbol()`:
 
 ```ts twoslash
 // @errors: 2367
@@ -734,4 +734,4 @@ if (firstName === secondName) {
 }
 ```
 
-You can learn more about them in [Symbols reference page](/docs/handbook/symbols.html).
+Você pode saber mais sobre eles na [página de referência de Symbols](/docs/handbook/symbols.html).

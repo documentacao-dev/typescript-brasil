@@ -1,61 +1,62 @@
 ---
-title: Modules
+title: Módulos
 layout: docs
 permalink: /docs/handbook/2/modules.html
-oneline: "How JavaScript handles communicating across file boundaries."
+oneline: "Como o JavaScript faz a comunicação entre os limites de arquivos."
+ia-translate: true
 ---
 
-JavaScript has a long history of different ways to handle modularizing code.
-Having been around since 2012, TypeScript has implemented support for a lot of these formats, but over time the community and the JavaScript specification has converged on a format called ES Modules (or ES6 modules). You might know it as the `import`/`export` syntax.
+O JavaScript tem um longo histórico de formas diferentes de modularizar código.
+O TypeScript existe desde 2012 e implementou suporte a muitos desses formatos, mas, com o tempo, a comunidade e a especificação do JavaScript convergiram para um formato chamado ES Modules (ou módulos ES6). Você pode conhecê-lo pela sintaxe `import`/`export`.
 
-ES Modules was added to the JavaScript spec in 2015, and by 2020 had broad support in most web browsers and JavaScript runtimes.
+ES Modules foi adicionado à especificação do JavaScript em 2015, e, em 2020, já tinha amplo suporte na maioria dos navegadores e runtimes JavaScript.
 
-For focus, the handbook will cover both ES Modules and its popular pre-cursor CommonJS `module.exports =` syntax, and you can find information about the other module patterns in the reference section under [Modules](/docs/handbook/modules.html).
+Para manter o foco, o handbook vai cobrir tanto ES Modules quanto a sintaxe `module.exports =` do seu antecessor CommonJS, popular até hoje. Você pode encontrar informações sobre os outros padrões de módulo na seção de referência, em [Módulos](/docs/handbook/modules.html).
 
-## How JavaScript Modules are Defined
+## Como os módulos JavaScript são definidos {#how-javascript-modules-are-defined}
 
-In TypeScript, just as in ECMAScript 2015, any file containing a top-level `import` or `export` is considered a module.
+No TypeScript, assim como no ECMAScript 2015, qualquer arquivo que contenha um `import` ou `export` no nível superior é considerado um módulo.
 
-Conversely, a file without any top-level import or export declarations is treated as a script whose contents are available in the global scope (and therefore to modules as well).
+Por outro lado, um arquivo sem nenhuma declaração `import` ou `export` no nível superior é tratado como um script, cujo conteúdo fica disponível no escopo global (e, portanto, também para os módulos).
 
-Modules are executed within their own scope, not in the global scope.
-This means that variables, functions, classes, etc. declared in a module are not visible outside the module unless they are explicitly exported using one of the export forms.
-Conversely, to consume a variable, function, class, interface, etc. exported from a different module, it has to be imported using one of the import forms.
+Os módulos são executados dentro do próprio escopo, e não no escopo global.
+Isso significa que variáveis, funções, classes etc. declaradas em um módulo não são visíveis fora dele, a menos que sejam explicitamente exportadas por uma das formas de `export`.
+Da mesma forma, para consumir uma variável, função, classe, interface etc. exportada por outro módulo, ela precisa ser importada por uma das formas de `import`.
 
-## Non-modules
+## Não módulos {#non-modules}
 
-Before we start, it's important to understand what TypeScript considers a module.
-The JavaScript specification declares that any JavaScript files without an `import` declaration, `export`, or top-level `await` should be considered a script and not a module.
+Antes de começar, é importante entender o que o TypeScript considera um módulo.
+A especificação do JavaScript determina que qualquer arquivo JavaScript sem uma declaração `import`, `export` ou `await` de nível superior deve ser considerado um script, e não um módulo.
 
 
-Inside a script file variables and types are declared to be in the shared global scope, and it's assumed that you'll either use the [`outFile`](/tsconfig#outFile) compiler option to join multiple input files into one output file, or use multiple `<script>` tags in your HTML to load these files (in the correct order!).
+Dentro de um arquivo de script, variáveis e tipos são declarados no escopo global compartilhado, e presume-se que você vai usar a opção de compilador [`outFile`](/tsconfig#outFile) para juntar vários arquivos de entrada em um único arquivo de saída, ou usar várias tags `<script>` no seu HTML para carregar esses arquivos (na ordem correta!).
 
-If you have a file that doesn't currently have any `import`s or `export`s, but you want to be treated as a module, add the line:
+Se você tem um arquivo que não tem nenhum `import` ou `export` no momento, mas quer que ele seja tratado como módulo, adicione a linha:
 
 ```ts twoslash
 export {};
 ```
 
-which will change the file to be a module exporting nothing. This syntax works regardless of your module target.
+que transforma o arquivo em um módulo que não exporta nada. Essa sintaxe funciona independentemente do seu alvo de módulo.
 
-## Modules in TypeScript
+## Módulos no TypeScript {#modules-in-typescript}
 
 <blockquote class='bg-reading'>
-   <p>Additional Reading:<br />
+   <p>Leitura complementar:<br />
    <a href='https://exploringjs.com/impatient-js/ch_modules.html#overview-syntax-of-ecmascript-modules'>Impatient JS (Modules)</a><br/>
    <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Modules'>MDN: JavaScript Modules</a><br/>
    </p>
 </blockquote>
 
-There are three main things to consider when writing module-based code in TypeScript:
+Há três pontos principais a considerar ao escrever código baseado em módulos no TypeScript:
 
-- **Syntax**: What syntax do I want to use to import and export things?
-- **Module Resolution**: What is the relationship between module names (or paths) and files on disk?
-- **Module Output Target**: What should my emitted JavaScript module look like?
+- **Sintaxe**: Qual sintaxe quero usar para importar e exportar coisas?
+- **Resolução de módulos**: Qual é a relação entre os nomes (ou caminhos) dos módulos e os arquivos no disco?
+- **Alvo de saída do módulo**: Como deve ser o módulo JavaScript emitido?
 
-### ES Module Syntax
+### Sintaxe de ES Module {#es-module-syntax}
 
-A file can declare a main export via `export default`:
+Um arquivo pode declarar uma exportação principal via `export default`:
 
 ```ts twoslash
 // @filename: hello.ts
@@ -64,7 +65,7 @@ export default function helloWorld() {
 }
 ```
 
-This is then imported via:
+Ela é então importada com:
 
 ```ts twoslash
 // @filename: hello.ts
@@ -77,7 +78,7 @@ import helloWorld from "./hello.js";
 helloWorld();
 ```
 
-In addition to the default export, you can have more than one export of variables and functions via the `export` by omitting `default`:
+Além da exportação padrão, você pode ter mais de uma exportação de variáveis e funções usando `export` sem o `default`:
 
 ```ts twoslash
 // @filename: maths.ts
@@ -93,7 +94,7 @@ export function absolute(num: number) {
 }
 ```
 
-These can be used in another file via the `import` syntax:
+Elas podem ser usadas em outro arquivo pela sintaxe `import`:
 
 ```ts twoslash
 // @filename: maths.ts
@@ -114,9 +115,9 @@ const absPhi = absolute(phi);
 //    ^?
 ```
 
-### Additional Import Syntax
+### Sintaxe de import adicional {#additional-import-syntax}
 
-An import can be renamed using a format like `import {old as new}`:
+Um import pode ser renomeado usando um formato como `import {antigo as novo}`:
 
 ```ts twoslash
 // @filename: maths.ts
@@ -129,7 +130,7 @@ console.log(π);
 //          ^?
 ```
 
-You can mix and match the above syntax into a single `import`:
+Você pode misturar a sintaxe acima em um único `import`:
 
 ```ts twoslash
 // @filename: maths.ts
@@ -146,7 +147,7 @@ console.log(π);
 //          ^?
 ```
 
-You can take all of the exported objects and put them into a single namespace using `* as name`:
+Você pode pegar todos os objetos exportados e colocá-los em um único namespace usando `* as nome`:
 
 ```ts twoslash
 // @filename: maths.ts
@@ -167,7 +168,7 @@ const positivePhi = math.absolute(math.phi);
 //    ^?
 ```
 
-You can import a file and _not_ include any variables into your current module via `import "./file"`:
+Você pode importar um arquivo e _não_ incluir nenhuma variável no módulo atual usando `import "./file"`:
 
 ```ts twoslash
 // @filename: maths.ts
@@ -179,11 +180,11 @@ import "./maths.js";
 console.log("3.14");
 ```
 
-In this case, the `import` does nothing. However, all of the code in `maths.ts` was evaluated, which could trigger side-effects which affect other objects.
+Nesse caso, o `import` não faz nada. No entanto, todo o código de `maths.ts` foi avaliado, o que pode disparar efeitos colaterais que afetam outros objetos.
 
-#### TypeScript Specific ES Module Syntax
+#### Sintaxe de ES Module específica do TypeScript {#typescript-specific-es-module-syntax}
 
-Types can be exported and imported using the same syntax as JavaScript values:
+Tipos podem ser exportados e importados com a mesma sintaxe usada para valores JavaScript:
 
 ```ts twoslash
 // @filename: animal.ts
@@ -199,11 +200,11 @@ import { Cat, Dog } from "./animal.js";
 type Animals = Cat | Dog;
 ```
 
-TypeScript has extended the `import` syntax with two concepts for declaring an import of a type:
+O TypeScript estendeu a sintaxe de `import` com dois conceitos para declarar a importação de um tipo:
 
 ##### `import type`
 
-Which is an import statement which can _only_ import types:
+É uma instrução de import que só pode importar tipos:
 
 ```ts twoslash
 // @filename: animal.ts
@@ -221,9 +222,9 @@ import type { createCatName } from "./animal.js";
 const name = createCatName();
 ```
 
-##### Inline `type` imports
+##### Imports `type` em linha {#inline-type-imports}
 
-TypeScript 4.5 also allows for individual imports to be prefixed with `type` to indicate that the imported reference is a type:
+A partir do TypeScript 4.5, também é possível prefixar imports individuais com `type`, para indicar que a referência importada é um tipo:
 
 ```ts twoslash
 // @filename: animal.ts
@@ -238,11 +239,11 @@ export type Animals = Cat | Dog;
 const name = createCatName();
 ```
 
-Together these allow a non-TypeScript transpiler like Babel, swc or esbuild to know what imports can be safely removed.
+Juntas, essas formas permitem que um transpilador que não é do TypeScript, como Babel, swc ou esbuild, saiba quais imports podem ser removidos com segurança.
 
-#### ES Module Syntax with CommonJS Behavior
+#### Sintaxe de ES Module com comportamento CommonJS {#es-module-syntax-with-commonjs-behavior}
 
-TypeScript has ES Module syntax which _directly_ correlates to a CommonJS and AMD `require`. Imports using ES Module are _for most cases_ the same as the `require` from those environments, but this syntax ensures you have a 1 to 1 match in your TypeScript file with the CommonJS output:
+O TypeScript tem uma sintaxe de ES Module que se relaciona _diretamente_ com o `require` do CommonJS e do AMD. Os imports com ES Module são, _na maioria dos casos_, iguais ao `require` desses ambientes, mas essa sintaxe garante uma correspondência 1 para 1, no seu arquivo TypeScript, com a saída CommonJS:
 
 ```ts twoslash
 /// <reference types="node" />
@@ -252,15 +253,15 @@ import fs = require("fs");
 const code = fs.readFileSync("hello.ts", "utf8");
 ```
 
-You can learn more about this syntax in the [modules reference page](/docs/handbook/modules.html#export--and-import--require).
+Você pode saber mais sobre essa sintaxe na [página de referência de módulos](/docs/handbook/modules.html#export--and-import--require).
 
-## CommonJS Syntax
+## Sintaxe CommonJS {#commonjs-syntax}
 
-CommonJS is the format which most modules on npm are delivered in. Even if you are writing using the ES Modules syntax above, having a brief understanding of how CommonJS syntax works will help you debug easier.
+CommonJS é o formato em que a maioria dos módulos do npm é distribuída. Mesmo que você escreva usando a sintaxe de ES Modules acima, ter uma noção básica de como funciona a sintaxe CommonJS vai ajudar você a depurar com mais facilidade.
 
-### Exporting
+### Exportando {#exporting}
 
-Identifiers are exported via setting the `exports` property on a global called `module`.
+Identificadores são exportados definindo a propriedade `exports` de uma variável global chamada `module`.
 
 ```ts twoslash
 /// <reference types="node" />
@@ -278,7 +279,7 @@ module.exports = {
 };
 ```
 
-Then these files can be imported via a `require` statement:
+Depois, esses arquivos podem ser importados por uma instrução `require`:
 
 ```ts twoslash
 // @module: commonjs
@@ -302,7 +303,7 @@ maths.pi;
 //    ^?
 ```
 
-Or you can simplify a bit using the destructuring feature in JavaScript:
+Ou você pode simplificar um pouco usando o recurso de desestruturação do JavaScript:
 
 ```ts twoslash
 // @module: commonjs
@@ -326,34 +327,34 @@ squareTwo;
 // ^?
 ```
 
-### CommonJS and ES Modules interop
+### Interoperabilidade entre CommonJS e ES Modules {#commonjs-and-es-modules-interop}
 
-There is a mis-match in features between CommonJS and ES Modules regarding the distinction between a default import and a module namespace object import. TypeScript has a compiler flag to reduce the friction between the two different sets of constraints with [`esModuleInterop`](/tsconfig#esModuleInterop).
+Há uma incompatibilidade de recursos entre CommonJS e ES Modules quanto à distinção entre um import padrão (default) e um import do objeto de namespace do módulo. O TypeScript tem uma flag do compilador para reduzir o atrito entre os dois conjuntos diferentes de restrições: [`esModuleInterop`](/tsconfig#esModuleInterop).
 
-## TypeScript's Module Resolution Options
+## Opções de resolução de módulos do TypeScript {#typescripts-module-resolution-options}
 
-Module resolution is the process of taking a string from the `import` or `require` statement, and determining what file that string refers to.
+Resolução de módulos é o processo de pegar uma string da instrução `import` ou `require` e determinar a qual arquivo essa string se refere.
 
-TypeScript includes two resolution strategies: Classic and Node. Classic, the default when the compiler option [`module`](/tsconfig#module) is not `commonjs`, is included for backwards compatibility.
-The Node strategy replicates how Node.js works in CommonJS mode, with additional checks for `.ts` and `.d.ts`.
+O TypeScript inclui duas estratégias de resolução: Classic e Node. A Classic, que é o padrão quando a opção do compilador [`module`](/tsconfig#module) não é `commonjs`, é incluída por compatibilidade com versões anteriores.
+A estratégia Node replica o funcionamento do Node.js no modo CommonJS, com verificações adicionais para `.ts` e `.d.ts`.
 
-There are many TSConfig flags which influence the module strategy within TypeScript: [`moduleResolution`](/tsconfig#moduleResolution), [`baseUrl`](/tsconfig#baseUrl), [`paths`](/tsconfig#paths), [`rootDirs`](/tsconfig#rootDirs).
+Há muitas flags do TSConfig que influenciam a estratégia de módulos no TypeScript: [`moduleResolution`](/tsconfig#moduleResolution), [`baseUrl`](/tsconfig#baseUrl), [`paths`](/tsconfig#paths), [`rootDirs`](/tsconfig#rootDirs).
 
-For the full details on how these strategies work, you can consult the [Module Resolution](/docs/handbook/modules/reference.html#the-moduleresolution-compiler-option) reference page.
+Para todos os detalhes sobre como essas estratégias funcionam, consulte a página de referência [Resolução de módulos](/docs/handbook/modules/reference.html#the-moduleresolution-compiler-option).
 
-## TypeScript's Module Output Options
+## Opções de saída de módulos do TypeScript {#typescripts-module-output-options}
 
-There are two options which affect the emitted JavaScript output:
+Há duas opções que afetam a saída JavaScript emitida:
 
-- [`target`](/tsconfig#target) which determines which JS features are downleveled (converted to run in older JavaScript runtimes) and which are left intact
-- [`module`](/tsconfig#module) which determines what code is used for modules to interact with each other
+- [`target`](/tsconfig#target), que determina quais recursos do JS são rebaixados (convertidos para rodar em runtimes JavaScript mais antigos) e quais são mantidos intactos
+- [`module`](/tsconfig#module), que determina qual código é usado para que os módulos interajam entre si
 
-Which [`target`](/tsconfig#target) you use is determined by the features available in the JavaScript runtime you expect to run the TypeScript code in. That could be: the oldest web browser you support, the lowest version of Node.js you expect to run on or could come from unique constraints from your runtime - like Electron for example.
+O [`target`](/tsconfig#target) que você usa é determinado pelos recursos disponíveis no runtime JavaScript em que você espera executar o código TypeScript. Pode ser: o navegador web mais antigo que você suporta, a versão mais baixa do Node.js em que você espera rodar ou restrições específicas do seu runtime, como o Electron, por exemplo.
 
-All communication between modules happens via a module loader, the compiler option [`module`](/tsconfig#module) determines which one is used.
-At runtime the module loader is responsible for locating and executing all dependencies of a module before executing it.
+Toda comunicação entre módulos acontece por meio de um carregador de módulos; a opção do compilador [`module`](/tsconfig#module) determina qual deles é usado.
+Em tempo de execução, o carregador de módulos é responsável por localizar e executar todas as dependências de um módulo antes de executá-lo.
 
-For example, here is a TypeScript file using ES Modules syntax, showcasing a few different options for [`module`](/tsconfig#module):
+Por exemplo, aqui está um arquivo TypeScript que usa a sintaxe de ES Modules, mostrando algumas opções diferentes para [`module`](/tsconfig#module):
 
 ```ts twoslash
 // @filename: constants.ts
@@ -398,10 +399,10 @@ import { valueOfPi } from "./constants.js";
 export const twoPi = valueOfPi * 2;
 ```
 
-> Note that ES2020 is effectively the same as the original `index.ts`.
+> Observe que ES2020 é, na prática, o mesmo que o `index.ts` original.
 
-You can see all of the available options and what their emitted JavaScript code looks like in the [TSConfig Reference for `module`](/tsconfig#module).
+Você pode ver todas as opções disponíveis e como fica o código JavaScript emitido para cada uma na [Referência do TSConfig para `module`](/tsconfig#module).
 
-## TypeScript namespaces
+## Namespaces do TypeScript {#typescript-namespaces}
 
-TypeScript has its own module format called `namespaces` which pre-dates the ES Modules standard. This syntax has a lot of useful features for creating complex definition files, and still sees active use [in DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). While not deprecated, the majority of the features in namespaces exist in ES Modules and we recommend you use that to align with JavaScript's direction. You can learn more about namespaces in [the namespaces reference page](/docs/handbook/namespaces.html).
+O TypeScript tem seu próprio formato de módulo chamado `namespaces`, que é anterior ao padrão ES Modules. Essa sintaxe tem muitos recursos úteis para criar arquivos de definição complexos, e ainda é bastante usada [no DefinitelyTyped](https://github.com/DefinitelyTyped/DefinitelyTyped). Embora não esteja descontinuada, a maioria dos recursos de namespaces existe em ES Modules, e recomendamos usar ES Modules para se alinhar à direção do JavaScript. Você pode saber mais sobre namespaces na [página de referência de namespaces](/docs/handbook/namespaces.html).

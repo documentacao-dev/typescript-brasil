@@ -2,30 +2,31 @@
 title: Classes
 layout: docs
 permalink: /docs/handbook/2/classes.html
-oneline: "How classes work in TypeScript"
+oneline: "Como as classes funcionam no TypeScript"
+ia-translate: true
 ---
 
 <blockquote class='bg-reading'>
-  <p>Background Reading:<br /><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes'>Classes (MDN)</a></p>
+  <p>Leitura de apoio:<br /><a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes'>Classes (MDN)</a></p>
 </blockquote>
 
-TypeScript offers full support for the `class` keyword introduced in ES2015.
+O TypeScript oferece suporte completo à palavra-chave `class`, introduzida no ES2015.
 
-As with other JavaScript language features, TypeScript adds type annotations and other syntax to allow you to express relationships between classes and other types.
+Assim como outros recursos da linguagem JavaScript, o TypeScript acrescenta anotações de tipo e outras sintaxes para que você possa expressar relações entre classes e outros tipos.
 
-## Class Members
+## Membros de classe {#class-members}
 
-Here's the most basic class - an empty one:
+Aqui está a classe mais básica possível, uma vazia:
 
 ```ts twoslash
 class Point {}
 ```
 
-This class isn't very useful yet, so let's start adding some members.
+Essa classe ainda não é muito útil, então vamos começar a adicionar alguns membros.
 
-### Fields
+### Campos {#fields}
 
-A field declaration creates a public writeable property on a class:
+Uma declaração de campo cria uma propriedade pública e gravável na classe:
 
 ```ts twoslash
 // @strictPropertyInitialization: false
@@ -39,9 +40,9 @@ pt.x = 0;
 pt.y = 0;
 ```
 
-As with other locations, the type annotation is optional, but will be an implicit `any` if not specified.
+Assim como em outros lugares, a anotação de tipo é opcional, mas, se não for especificada, será um `any` implícito.
 
-Fields can also have _initializers_; these will run automatically when the class is instantiated:
+Os campos também podem ter _inicializadores_; eles serão executados automaticamente quando a classe for instanciada:
 
 ```ts twoslash
 class Point {
@@ -54,7 +55,7 @@ const pt = new Point();
 console.log(`${pt.x}, ${pt.y}`);
 ```
 
-Just like with `const`, `let`, and `var`, the initializer of a class property will be used to infer its type:
+Assim como acontece com `const`, `let` e `var`, o inicializador de uma propriedade de classe será usado para inferir o seu tipo:
 
 ```ts twoslash
 // @errors: 2322
@@ -69,7 +70,7 @@ pt.x = "0";
 
 #### `--strictPropertyInitialization`
 
-The [`strictPropertyInitialization`](/tsconfig#strictPropertyInitialization) setting controls whether class fields need to be initialized in the constructor.
+A configuração [`strictPropertyInitialization`](/tsconfig#strictPropertyInitialization) controla se os campos da classe precisam ser inicializados no construtor.
 
 ```ts twoslash
 // @errors: 2564
@@ -88,10 +89,10 @@ class GoodGreeter {
 }
 ```
 
-Note that the field needs to be initialized _in the constructor itself_.
-TypeScript does not analyze methods you invoke from the constructor to detect initializations, because a derived class might override those methods and fail to initialize the members.
+Observe que o campo precisa ser inicializado _dentro do próprio construtor_.
+O TypeScript não analisa os métodos que você invoca a partir do construtor para detectar inicializações, porque uma classe derivada pode sobrescrever esses métodos e deixar de inicializar os membros.
 
-If you intend to definitely initialize a field through means other than the constructor (for example, maybe an external library is filling in part of your class for you), you can use the _definite assignment assertion operator_, `!`:
+Se você pretende inicializar um campo de forma definitiva por outro meio que não o construtor (por exemplo, uma biblioteca externa que preenche parte da classe para você), pode usar o _operador de asserção de atribuição definida_, `!`:
 
 ```ts twoslash
 class OKGreeter {
@@ -102,8 +103,8 @@ class OKGreeter {
 
 ### `readonly`
 
-Fields may be prefixed with the `readonly` modifier.
-This prevents assignments to the field outside of the constructor.
+Campos podem ter o modificador `readonly` como prefixo.
+Isso impede atribuições ao campo fora do construtor.
 
 ```ts twoslash
 // @errors: 2540 2540
@@ -127,13 +128,13 @@ g.name = "also not ok";
 ### Constructors
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor'>Constructor (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/constructor'>Construtor (MDN)</a><br/>
    </p>
 </blockquote>
 
-Class constructors are very similar to functions.
-You can add parameters with type annotations, default values, and overloads:
+Os construtores de classe são muito parecidos com funções.
+Você pode adicionar parâmetros com anotações de tipo, valores padrão e overloads:
 
 ```ts twoslash
 class Point {
@@ -162,14 +163,14 @@ class Point {
 }
 ```
 
-There are just a few differences between class constructor signatures and function signatures:
+Há apenas algumas diferenças entre as assinaturas de construtores de classe e as assinaturas de funções:
 
-- Constructors can't have type parameters - these belong on the outer class declaration, which we'll learn about later
-- Constructors can't have return type annotations - the class instance type is always what's returned
+- Construtores não podem ter parâmetros de tipo - estes pertencem à declaração da classe externa, que veremos mais adiante
+- Construtores não podem ter anotações de tipo de retorno - o tipo da instância da classe é sempre o que é retornado
 
-#### Super Calls
+#### Chamadas a `super` {#super-calls}
 
-Just as in JavaScript, if you have a base class, you'll need to call `super();` in your constructor body before using any `this.` members:
+Assim como no JavaScript, se você tiver uma classe base, precisará chamar `super();` no corpo do construtor antes de usar qualquer membro `this.`:
 
 ```ts twoslash
 // @errors: 17009
@@ -186,18 +187,18 @@ class Derived extends Base {
 }
 ```
 
-Forgetting to call `super` is an easy mistake to make in JavaScript, but TypeScript will tell you when it's necessary.
+Esquecer de chamar `super` é um erro fácil de cometer em JavaScript, mas o TypeScript avisa quando essa chamada é necessária.
 
-### Methods
+### Métodos {#methods}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions'>Method definitions</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Method_definitions'>Definições de métodos (MDN)</a><br/>
    </p>
 </blockquote>
 
-A function property on a class is called a _method_.
-Methods can use all the same type annotations as functions and constructors:
+Uma propriedade de função em uma classe é chamada de _método_.
+Métodos podem usar todas as mesmas anotações de tipo que funções e construtores:
 
 ```ts twoslash
 class Point {
@@ -211,10 +212,10 @@ class Point {
 }
 ```
 
-Other than the standard type annotations, TypeScript doesn't add anything else new to methods.
+Além das anotações de tipo habituais, o TypeScript não acrescenta nada de novo aos métodos.
 
-Note that inside a method body, it is still mandatory to access fields and other methods via `this.`.
-An unqualified name in a method body will always refer to something in the enclosing scope:
+Observe que, dentro do corpo de um método, ainda é obrigatório acessar campos e outros métodos por meio de `this.`.
+Um nome sem qualificação no corpo de um método sempre se refere a algo do escopo externo:
 
 ```ts twoslash
 // @errors: 2322
@@ -232,7 +233,7 @@ class C {
 
 ### Getters / Setters
 
-Classes can also have _accessors_:
+Classes também podem ter _acessadores_:
 
 ```ts twoslash
 class C {
@@ -246,15 +247,15 @@ class C {
 }
 ```
 
-> Note that a field-backed get/set pair with no extra logic is very rarely useful in JavaScript.
-> It's fine to expose public fields if you don't need to add additional logic during the get/set operations.
+> Observe que um par get/set apoiado em um campo, sem lógica extra, raramente é útil em JavaScript.
+> Não há problema em expor campos públicos se você não precisar adicionar lógica extra nas operações de get/set.
 
-TypeScript has some special inference rules for accessors:
+O TypeScript tem algumas regras especiais de inferência para acessadores:
 
-- If `get` exists but no `set`, the property is automatically `readonly`
-- If the type of the setter parameter is not specified, it is inferred from the return type of the getter
+- Se existir `get` mas não `set`, a propriedade será automaticamente `readonly`
+- Se o tipo do parâmetro do setter não for especificado, ele é inferido a partir do tipo de retorno do getter
 
-Since [TypeScript 4.3](https://devblogs.microsoft.com/typescript/announcing-typescript-4-3/), it is possible to have accessors with different types for getting and setting.
+Desde o [TypeScript 4.3](https://devblogs.microsoft.com/typescript/announcing-typescript-4-3/), é possível ter acessadores com tipos diferentes para leitura e escrita.
 
 ```ts twoslash
 class Thing {
@@ -279,9 +280,9 @@ class Thing {
 }
 ```
 
-### Index Signatures
+### Assinaturas de índice {#index-signatures}
 
-Classes can declare index signatures; these work the same as [Index Signatures for other object types](/docs/handbook/2/objects.html#index-signatures):
+Classes podem declarar assinaturas de índice; elas funcionam da mesma forma que as [assinaturas de índice de outros tipos de objeto](/docs/handbook/2/objects.html#index-signatures):
 
 ```ts twoslash
 class MyClass {
@@ -293,17 +294,17 @@ class MyClass {
 }
 ```
 
-Because the index signature type needs to also capture the types of methods, it's not easy to usefully use these types.
-Generally it's better to store indexed data in another place instead of on the class instance itself.
+Como o tipo da assinatura de índice também precisa capturar os tipos dos métodos, não é fácil usar esses tipos de forma útil.
+Em geral, é melhor guardar dados indexados em outro lugar, em vez de na própria instância da classe.
 
-## Class Heritage
+## Herança de classes {#class-heritage}
 
-Like other languages with object-oriented features, classes in JavaScript can inherit from base classes.
+Assim como em outras linguagens com recursos orientados a objetos, classes em JavaScript podem herdar de classes base.
 
-### `implements` Clauses
+### Cláusulas `implements` {#implements-clauses}
 
-You can use an `implements` clause to check that a class satisfies a particular `interface`.
-An error will be issued if a class fails to correctly implement it:
+Você pode usar uma cláusula `implements` para verificar se uma classe satisfaz uma determinada `interface`.
+Um erro será emitido se a classe não implementar corretamente a interface:
 
 ```ts twoslash
 // @errors: 2420
@@ -324,13 +325,13 @@ class Ball implements Pingable {
 }
 ```
 
-Classes may also implement multiple interfaces, e.g. `class C implements A, B {`.
+Classes também podem implementar várias interfaces, por exemplo, `class C implements A, B {`.
 
-#### Cautions
+#### Cuidados {#cautions}
 
-It's important to understand that an `implements` clause is only a check that the class can be treated as the interface type.
-It doesn't change the type of the class or its methods _at all_.
-A common source of error is to assume that an `implements` clause will change the class type - it doesn't!
+É importante entender que uma cláusula `implements` é apenas uma verificação de que a classe pode ser tratada como o tipo da interface.
+Ela _não_ altera de forma alguma o tipo da classe nem dos seus métodos.
+Uma fonte comum de erros é supor que uma cláusula `implements` mudará o tipo da classe - ela não muda!
 
 ```ts twoslash
 // @errors: 7006
@@ -347,10 +348,10 @@ class NameChecker implements Checkable {
 }
 ```
 
-In this example, we perhaps expected that `s`'s type would be influenced by the `name: string` parameter of `check`.
-It is not - `implements` clauses don't change how the class body is checked or its type inferred.
+Neste exemplo, talvez esperássemos que o tipo de `s` fosse influenciado pelo parâmetro `name: string` de `check`.
+Não é: cláusulas `implements` não mudam a forma como o corpo da classe é verificado nem como o seu tipo é inferido.
 
-Similarly, implementing an interface with an optional property doesn't create that property:
+Da mesma forma, implementar uma interface com uma propriedade opcional não cria essa propriedade:
 
 ```ts twoslash
 // @errors: 2339
@@ -365,16 +366,16 @@ const c = new C();
 c.y = 10;
 ```
 
-### `extends` Clauses
+### Cláusulas `extends` {#extends-clauses}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends'>extends keyword (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/extends'>Palavra-chave extends (MDN)</a><br/>
    </p>
 </blockquote>
 
-Classes may `extend` from a base class.
-A derived class has all the properties and methods of its base class, and can also define additional members.
+Classes podem usar `extends` para herdar de uma classe base.
+Uma classe derivada tem todas as propriedades e métodos da sua classe base e também pode definir membros adicionais.
 
 ```ts twoslash
 class Animal {
@@ -398,21 +399,21 @@ d.move();
 d.woof(3);
 ```
 
-#### Overriding Methods
+#### Sobrescrevendo métodos {#overriding-methods}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super'>super keyword (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/super'>Palavra-chave super (MDN)</a><br/>
    </p>
 </blockquote>
 
-A derived class can also override a base class field or property.
-You can use the `super.` syntax to access base class methods.
-Note that because JavaScript classes are a simple lookup object, there is no notion of a "super field".
+Uma classe derivada também pode sobrescrever um campo ou propriedade da classe base.
+Você pode usar a sintaxe `super.` para acessar métodos da classe base.
+Observe que, como classes em JavaScript são um simples objeto de busca, não existe o conceito de "campo super".
 
-TypeScript enforces that a derived class is always a subtype of its base class.
+O TypeScript garante que uma classe derivada seja sempre um subtipo da sua classe base.
 
-For example, here's a legal way to override a method:
+Por exemplo, esta é uma forma válida de sobrescrever um método:
 
 ```ts twoslash
 class Base {
@@ -436,8 +437,8 @@ d.greet();
 d.greet("reader");
 ```
 
-It's important that a derived class follow its base class contract.
-Remember that it's very common (and always legal!) to refer to a derived class instance through a base class reference:
+É importante que uma classe derivada respeite o contrato da sua classe base.
+Lembre-se de que é muito comum (e sempre válido!) referenciar uma instância de classe derivada por meio de uma referência de classe base:
 
 ```ts twoslash
 class Base {
@@ -454,7 +455,7 @@ const b: Base = d;
 b.greet();
 ```
 
-What if `Derived` didn't follow `Base`'s contract?
+E se `Derived` não seguisse o contrato de `Base`?
 
 ```ts twoslash
 // @errors: 2416
@@ -472,7 +473,7 @@ class Derived extends Base {
 }
 ```
 
-If we compiled this code despite the error, this sample would then crash:
+Se compilássemos esse código apesar do erro, este exemplo acabaria falhando:
 
 ```ts twoslash
 declare class Base {
@@ -485,9 +486,9 @@ const b: Base = new Derived();
 b.greet();
 ```
 
-#### Type-only Field Declarations
+#### Declarações de campo somente de tipo {#type-only-field-declarations}
 
-When `target >= ES2022` or [`useDefineForClassFields`](/tsconfig#useDefineForClassFields) is `true`, class fields are initialized after the parent class constructor completes, overwriting any value set by the parent class. This can be a problem when you only want to re-declare a more accurate type for an inherited field. To handle these cases, you can write `declare` to indicate to TypeScript that there should be no runtime effect for this field declaration.
+Quando `target >= ES2022` ou [`useDefineForClassFields`](/tsconfig#useDefineForClassFields) é `true`, os campos da classe são inicializados depois que o construtor da classe pai termina, sobrescrevendo qualquer valor definido pela classe pai. Isso pode ser um problema quando você só quer declarar novamente um tipo mais preciso para um campo herdado. Para esses casos, você pode escrever `declare` para indicar ao TypeScript que essa declaração de campo não deve ter efeito em tempo de execução.
 
 ```ts twoslash
 interface Animal {
@@ -515,10 +516,10 @@ class DogHouse extends AnimalHouse {
 }
 ```
 
-#### Initialization Order
+#### Ordem de inicialização {#initialization-order}
 
-The order that JavaScript classes initialize can be surprising in some cases.
-Let's consider this code:
+A ordem em que as classes JavaScript são inicializadas pode ser surpreendente em alguns casos.
+Vamos considerar este código:
 
 ```ts twoslash
 class Base {
@@ -536,30 +537,30 @@ class Derived extends Base {
 const d = new Derived();
 ```
 
-What happened here?
+O que aconteceu aqui?
 
-The order of class initialization, as defined by JavaScript, is:
+A ordem de inicialização de classes, como definida pelo JavaScript, é:
 
-- The base class fields are initialized
-- The base class constructor runs
-- The derived class fields are initialized
-- The derived class constructor runs
+- Os campos da classe base são inicializados
+- O construtor da classe base é executado
+- Os campos da classe derivada são inicializados
+- O construtor da classe derivada é executado
 
-This means that the base class constructor saw its own value for `name` during its own constructor, because the derived class field initializations hadn't run yet.
+Isso significa que o construtor da classe base viu o seu próprio valor de `name` durante o seu construtor, porque as inicializações dos campos da classe derivada ainda não tinham sido executadas.
 
-#### Inheriting Built-in Types
+#### Herdando tipos integrados {#inheriting-built-in-types}
 
-> Note: If you don't plan to inherit from built-in types like `Array`, `Error`, `Map`, etc. or your compilation target is explicitly set to `ES6`/`ES2015` or above, you may skip this section
+> Observação: se você não pretende herdar de tipos integrados como `Array`, `Error`, `Map`, etc., ou se o seu alvo de compilação for explicitamente `ES6`/`ES2015` ou superior, você pode pular esta seção
 
-In ES2015, constructors which return an object implicitly substitute the value of `this` for any callers of `super(...)`.
-It is necessary for generated constructor code to capture any potential return value of `super(...)` and replace it with `this`.
+No ES2015, construtores que retornam um objeto substituem implicitamente o valor de `this` para qualquer chamador de `super(...)`.
+É necessário que o código de construtor gerado capture qualquer possível valor de retorno de `super(...)` e o substitua por `this`.
 
-As a result, subclassing `Error`, `Array`, and others may no longer work as expected.
-This is due to the fact that constructor functions for `Error`, `Array`, and the like use ECMAScript 6's `new.target` to adjust the prototype chain;
-however, there is no way to ensure a value for `new.target` when invoking a constructor in ECMAScript 5.
-Other downlevel compilers generally have the same limitation by default.
+Como consequência, a subclasse de `Error`, `Array` e outros pode deixar de funcionar como esperado.
+Isso acontece porque as funções construtoras de `Error`, `Array` e similares usam o `new.target` do ECMAScript 6 para ajustar a cadeia de protótipos;
+porém, não há como garantir um valor para `new.target` ao invocar um construtor no ECMAScript 5.
+Outros compiladores de downleveling geralmente têm a mesma limitação por padrão.
 
-For a subclass like the following:
+Para uma subclasse como a seguinte:
 
 ```ts twoslash
 class MsgError extends Error {
@@ -572,12 +573,12 @@ class MsgError extends Error {
 }
 ```
 
-you may find that:
+você pode descobrir que:
 
-- methods may be `undefined` on objects returned by constructing these subclasses, so calling `sayHello` will result in an error.
-- `instanceof` will be broken between instances of the subclass and their instances, so `(new MsgError()) instanceof MsgError` will return `false`.
+- métodos podem estar `undefined` em objetos retornados ao instanciar essas subclasses, então chamar `sayHello` resultará em erro.
+- `instanceof` deixará de funcionar entre instâncias da subclasse e as suas instâncias, então `(new MsgError()) instanceof MsgError` retornará `false`.
 
-As a recommendation, you can manually adjust the prototype immediately after any `super(...)` calls.
+Como recomendação, você pode ajustar manualmente o protótipo imediatamente após qualquer chamada a `super(...)`.
 
 ```ts twoslash
 class MsgError extends Error {
@@ -594,20 +595,20 @@ class MsgError extends Error {
 }
 ```
 
-However, any subclass of `MsgError` will have to manually set the prototype as well.
-For runtimes that don't support [`Object.setPrototypeOf`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf), you may instead be able to use [`__proto__`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto).
+No entanto, qualquer subclasse de `MsgError` também terá que definir o protótipo manualmente.
+Para ambientes de execução que não suportam [`Object.setPrototypeOf`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/setPrototypeOf), talvez você consiga usar [`__proto__`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/proto).
 
-Unfortunately, [these workarounds will not work on Internet Explorer 10 and prior](<https://msdn.microsoft.com/en-us/library/s4esdbwz(v=vs.94).aspx>).
-One can manually copy methods from the prototype onto the instance itself (i.e. `MsgError.prototype` onto `this`), but the prototype chain itself cannot be fixed.
+Infelizmente, [essas soluções alternativas não funcionam no Internet Explorer 10 e versões anteriores](<https://msdn.microsoft.com/en-us/library/s4esdbwz(v=vs.94).aspx>).
+É possível copiar manualmente os métodos do protótipo para a própria instância (ou seja, de `MsgError.prototype` para `this`), mas a cadeia de protótipos em si não pode ser corrigida.
 
-## Member Visibility
+## Visibilidade de membros {#member-visibility}
 
-You can use TypeScript to control whether certain methods or properties are visible to code outside the class.
+Você pode usar o TypeScript para controlar se determinados métodos ou propriedades ficam visíveis para código fora da classe.
 
 ### `public`
 
-The default visibility of class members is `public`.
-A `public` member can be accessed anywhere:
+A visibilidade padrão dos membros de classe é `public`.
+Um membro `public` pode ser acessado em qualquer lugar:
 
 ```ts twoslash
 class Greeter {
@@ -619,11 +620,11 @@ const g = new Greeter();
 g.greet();
 ```
 
-Because `public` is already the default visibility modifier, you don't ever _need_ to write it on a class member, but might choose to do so for style/readability reasons.
+Como `public` já é o modificador de visibilidade padrão, você nunca _precisa_ escrevê-lo em um membro de classe, mas pode optar por fazê-lo por questões de estilo ou legibilidade.
 
 ### `protected`
 
-`protected` members are only visible to subclasses of the class they're declared in.
+Membros `protected` só são visíveis para subclasses da classe em que foram declarados.
 
 ```ts twoslash
 // @errors: 2445
@@ -648,10 +649,10 @@ g.greet(); // OK
 g.getName();
 ```
 
-#### Exposure of `protected` members
+#### Exposição de membros `protected` {#exposure-of-protected-members}
 
-Derived classes need to follow their base class contracts, but may choose to expose a subtype of base class with more capabilities.
-This includes making `protected` members `public`:
+Classes derivadas precisam respeitar o contrato de suas classes base, mas podem optar por expor um subtipo da classe base com mais capacidades.
+Isso inclui tornar `public` os membros `protected`:
 
 ```ts twoslash
 class Base {
@@ -665,12 +666,12 @@ const d = new Derived();
 console.log(d.m); // OK
 ```
 
-Note that `Derived` was already able to freely read and write `m`, so this doesn't meaningfully alter the "security" of this situation.
-The main thing to note here is that in the derived class, we need to be careful to repeat the `protected` modifier if this exposure isn't intentional.
+Observe que `Derived` já conseguia ler e escrever `m` livremente, então isso não altera de forma significativa a "segurança" da situação.
+O ponto principal a notar aqui é que, na classe derivada, devemos ter cuidado para repetir o modificador `protected` se essa exposição não for intencional.
 
-#### Cross-hierarchy `protected` access
+#### Acesso `protected` entre hierarquias {#cross-hierarchy-protected-access}
 
-TypeScript doesn't allow accessing `protected` members of a sibling class in a class hierarchy:
+O TypeScript não permite acessar membros `protected` de uma classe irmã dentro de uma hierarquia de classes:
 
 ```ts twoslash
 // @errors: 2446
@@ -690,14 +691,14 @@ class Derived2 extends Base {
 }
 ```
 
-This is because accessing `x` in `Derived2` should only be legal from `Derived2`'s subclasses, and `Derived1` isn't one of them.
-Moreover, if accessing `x` through a `Derived1` reference is illegal (which it certainly should be!), then accessing it through a base class reference should never improve the situation.
+Isso acontece porque acessar `x` em `Derived2` deveria ser legal apenas a partir das subclasses de `Derived2`, e `Derived1` não é uma delas.
+Além disso, se acessar `x` por uma referência de `Derived1` é ilegal (como de fato deveria ser!), então acessá-lo por uma referência de classe base nunca deveria melhorar a situação.
 
-See also [Why Can’t I Access A Protected Member From A Derived Class?](https://blogs.msdn.microsoft.com/ericlippert/2005/11/09/why-cant-i-access-a-protected-member-from-a-derived-class/) which explains more of C#'s reasoning on the same topic.
+Veja também [Por que não consigo acessar um membro protegido a partir de uma classe derivada?](https://blogs.msdn.microsoft.com/ericlippert/2005/11/09/why-cant-i-access-a-protected-member-from-a-derived-class/), que explica melhor o raciocínio do C# sobre o mesmo tema.
 
 ### `private`
 
-`private` is like `protected`, but doesn't allow access to the member even from subclasses:
+`private` é como `protected`, mas não permite acesso ao membro nem mesmo a partir de subclasses:
 
 ```ts twoslash
 // @errors: 2341
@@ -723,7 +724,7 @@ class Derived extends Base {
 }
 ```
 
-Because `private` members aren't visible to derived classes, a derived class can't increase their visibility:
+Como membros `private` não são visíveis para classes derivadas, uma classe derivada não pode aumentar a visibilidade deles:
 
 ```ts twoslash
 // @errors: 2415
@@ -735,12 +736,12 @@ class Derived extends Base {
 }
 ```
 
-#### Cross-instance `private` access
+#### Acesso `private` entre instâncias {#cross-instance-private-access}
 
-Different OOP languages disagree about whether different instances of the same class may access each others' `private` members.
-While languages like Java, C#, C++, Swift, and PHP allow this, Ruby does not.
+Diferentes linguagens orientadas a objetos discordam sobre se instâncias diferentes da mesma classe podem acessar os membros `private` umas das outras.
+Enquanto linguagens como Java, C#, C++, Swift e PHP permitem isso, Ruby não permite.
 
-TypeScript does allow cross-instance `private` access:
+O TypeScript permite o acesso `private` entre instâncias:
 
 ```ts twoslash
 class A {
@@ -753,11 +754,11 @@ class A {
 }
 ```
 
-#### Caveats
+#### Ressalvas {#caveats}
 
-Like other aspects of TypeScript's type system, `private` and `protected` [are only enforced during type checking](https://www.typescriptlang.org/play?removeComments=true&target=99&ts=4.3.4#code/PTAEGMBsEMGddAEQPYHNQBMCmVoCcsEAHPASwDdoAXLUAM1K0gwQFdZSA7dAKWkoDK4MkSoByBAGJQJLAwAeAWABQIUH0HDSoiTLKUaoUggAW+DHorUsAOlABJcQlhUy4KpACeoLJzrI8cCwMGxU1ABVPIiwhESpMZEJQTmR4lxFQaQxWMm4IZABbIlIYKlJkTlDlXHgkNFAAbxVQTIAjfABrAEEC5FZOeIBeUAAGAG5mmSw8WAroSFIqb2GAIjMiIk8VieVJ8Ar01ncAgAoASkaAXxVr3dUwGoQAYWpMHBgCYn1rekZmNg4eUi0Vi2icoBWJCsNBWoA6WE8AHcAiEwmBgTEtDovtDaMZQLM6PEoQZbA5wSk0q5SO4vD4-AEghZoJwLGYEIRwNBoqAzFRwCZCFUIlFMXECdSiAhId8YZgclx0PsiiVqOVOAAaUAFLAsxWgKiC35MFigfC0FKgSAVVDTSyk+W5dB4fplHVVR6gF7xJrKFotEk-HXIRE9PoDUDDcaTAPTWaceaLZYQlmoPBbHYx-KcQ7HPDnK43FQqfY5+IMDDISPJLCIuqoc47UsuUCofAME3Vzi1r3URvF5QV5A2STtPDdXqunZDgDaYlHnTDrrEAF0dm28B3mDZg6HJwN1+2-hg57ulwNV2NQGoZbjYfNrYiENBwEFaojFiZQK08C-4fFKTVCozWfTgfFgLkeT5AUqiAA).
+Como outros aspectos do sistema de tipos do TypeScript, `private` e `protected` [são aplicados apenas durante a verificação de tipos](https://www.typescriptlang.org/play?removeComments=true&target=99&ts=4.3.4#code/PTAEGMBsEMGddAEQPYHNQBMCmVoCcsEAHPASwDdoAXLUAM1K0gwQFdZSA7dAKWkoDK4MkSoByBAGJQJLAwAeAWABQIUH0HDSoiTLKUaoUggAW+DHorUsAOlABJcQlhUy4KpACeoLJzrI8cCwMGxU1ABVPIiwhESpMZEJQTmR4lxFQaQxWMm4IZABbIlIYKlJkTlDlXHgkNFAAbxVQTIAjfABrAEEC5FZOeIBeUAAGAG5mmSw8WAroSFIqb2GAIjMiIk8VieVJ8Ar01ncAgAoASkaAXxVr3dUwGoQAYWpMHBgCYn1rekZmNg4eUi0Vi2icoBWJCsNBWoA6WE8AHcAiEwmBgTEtDovtDaMZQLM6PEoQZbA5wSk0q5SO4vD4-AEghZoJwLGYEIRwNBoqAzFRwCZCFUIlFMXECdSiAhId8YZgclx0PsiiVqOVOAAaUAFLAsxWgKiC35MFigfC0FKgSAVVDTSyk+W5dB4fplHVVR6gF7xJrKFotEk-HXIRE9PoDUDDcaTAPTWaceaLZYQlmoPBbHYx-KcQ7HPDnK43FQqfY5+IMDDISPJLCIuqoc47UsuUCofAME3Vzi1r3URvF5QV5A2STtPDdXqunZDgDaYlHnTDrrEAF0dm28B3mDZg6HJwN1+2-hg57ulwNV2NQGoZbjYfNrYiENBwEFaojFiZQK08C-4fFKTVCozWfTgfFgLkeT5AUqiAA).
 
-This means that JavaScript runtime constructs like `in` or simple property lookup can still access a `private` or `protected` member:
+Isso significa que construções do ambiente de execução do JavaScript, como `in` ou a simples busca de propriedade, ainda podem acessar um membro `private` ou `protected`:
 
 ```ts twoslash
 class MySafe {
@@ -772,7 +773,7 @@ const s = new MySafe();
 console.log(s.secretKey);
 ```
 
-`private` also allows access using bracket notation during type checking. This makes `private`-declared fields potentially easier to access for things like unit tests, with the drawback that these fields are _soft private_ and don't strictly enforce privacy.
+`private` também permite acesso por notação de colchetes durante a verificação de tipos. Isso torna os campos declarados como `private` potencialmente mais fáceis de acessar para coisas como testes unitários, com a desvantagem de que esses campos são _privados flexíveis_ e não impõem privacidade de forma estrita.
 
 ```ts twoslash
 // @errors: 2341
@@ -789,7 +790,7 @@ console.log(s.secretKey);
 console.log(s["secretKey"]);
 ```
 
-Unlike TypeScripts's `private`, JavaScript's [private fields](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields) (`#`) remain private after compilation and do not provide the previously mentioned escape hatches like bracket notation access, making them _hard private_.
+Diferentemente do `private` do TypeScript, os [campos privados](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/Private_class_fields) do JavaScript (`#`) continuam privados após a compilação e não oferecem as saídas mencionadas anteriormente, como o acesso por notação de colchetes, por isso são _privados rígidos_.
 
 ```ts twoslash
 class Dog {
@@ -811,7 +812,7 @@ class Dog {
 }
 ```
 
-When compiling to ES2021 or less, TypeScript will use WeakMaps in place of `#`.
+Ao compilar para ES2021 ou inferior, o TypeScript usará WeakMaps no lugar de `#`.
 
 ```ts twoslash
 // @target: es2015
@@ -824,19 +825,19 @@ class Dog {
 }
 ```
 
-If you need to protect values in your class from malicious actors, you should use mechanisms that offer hard runtime privacy, such as closures, WeakMaps, or private fields. Note that these added privacy checks during runtime could affect performance.
+Se você precisar proteger valores da sua classe contra agentes mal-intencionados, deve usar mecanismos que ofereçam privacidade rígida em tempo de execução, como closures, WeakMaps ou campos privados. Observe que essas verificações de privacidade adicionais em tempo de execução podem afetar o desempenho.
 
-## Static Members
+## Membros estáticos {#static-members}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static'>Static Members (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Classes/static'>Membros estáticos (MDN)</a><br/>
    </p>
 </blockquote>
 
-Classes may have `static` members.
-These members aren't associated with a particular instance of the class.
-They can be accessed through the class constructor object itself:
+Classes podem ter membros `static`.
+Esses membros não estão associados a uma instância específica da classe.
+Eles podem ser acessados pelo próprio objeto construtor da classe:
 
 ```ts twoslash
 class MyClass {
@@ -849,7 +850,7 @@ console.log(MyClass.x);
 MyClass.printX();
 ```
 
-Static members can also use the same `public`, `protected`, and `private` visibility modifiers:
+Membros estáticos também podem usar os mesmos modificadores de visibilidade `public`, `protected` e `private`:
 
 ```ts twoslash
 // @errors: 2341
@@ -859,7 +860,7 @@ class MyClass {
 console.log(MyClass.x);
 ```
 
-Static members are also inherited:
+Membros estáticos também são herdados:
 
 ```ts twoslash
 class Base {
@@ -872,11 +873,11 @@ class Derived extends Base {
 }
 ```
 
-### Special Static Names
+### Nomes estáticos especiais {#special-static-names}
 
-It's generally not safe/possible to overwrite properties from the `Function` prototype.
-Because classes are themselves functions that can be invoked with `new`, certain `static` names can't be used.
-Function properties like `name`, `length`, and `call` aren't valid to define as `static` members:
+Em geral, não é seguro/possível sobrescrever propriedades do protótipo `Function`.
+Como as próprias classes são funções que podem ser invocadas com `new`, certos nomes `static` não podem ser usados.
+Propriedades de função como `name`, `length` e `call` não são válidas para definir como membros `static`:
 
 ```ts twoslash
 // @errors: 2699
@@ -885,14 +886,14 @@ class S {
 }
 ```
 
-### Why No Static Classes?
+### Por que não existem classes estáticas? {#why-no-static-classes}
 
-TypeScript (and JavaScript) don't have a construct called `static class` the same way as, for example, C# does.
+O TypeScript (e o JavaScript) não têm um construto chamado `static class`, como o que existe em C#, por exemplo.
 
-Those constructs _only_ exist because those languages force all data and functions to be inside a class; because that restriction doesn't exist in TypeScript, there's no need for them.
-A class with only a single instance is typically just represented as a normal _object_ in JavaScript/TypeScript.
+Esses construtos _só_ existem porque essas linguagens obrigam todos os dados e funções a ficarem dentro de uma classe; como essa restrição não existe no TypeScript, não há necessidade deles.
+Uma classe com apenas uma instância normalmente é representada simplesmente como um _objeto_ normal em JavaScript/TypeScript.
 
-For example, we don't need a "static class" syntax in TypeScript because a regular object (or even top-level function) will do the job just as well:
+Por exemplo, não precisamos de uma sintaxe de "classe estática" no TypeScript, porque um objeto comum (ou até mesmo uma função de nível superior) faz o mesmo trabalho tão bem:
 
 ```ts twoslash
 // Unnecessary "static" class
@@ -909,9 +910,9 @@ const MyHelperObject = {
 };
 ```
 
-## `static` Blocks in Classes
+## Blocos `static` em classes {#static-blocks-in-classes}
 
-Static blocks allow you to write a sequence of statements with their own scope that can access private fields within the containing class. This means that we can write initialization code with all the capabilities of writing statements, no leakage of variables, and full access to our class's internals.
+Blocos estáticos permitem escrever uma sequência de instruções com escopo próprio, que pode acessar campos privados da classe que os contém. Isso significa que podemos escrever código de inicialização com todos os recursos de instruções, sem vazamento de variáveis e com acesso total aos internos da nossa classe.
 
 ```ts twoslash
 declare function loadLastInstances(): any[]
@@ -933,10 +934,10 @@ class Foo {
 }
 ```
 
-## Generic Classes
+## Classes genéricas {#generic-classes}
 
-Classes, much like interfaces, can be generic.
-When a generic class is instantiated with `new`, its type parameters are inferred the same way as in a function call:
+Classes, assim como interfaces, podem ser genéricas.
+Quando uma classe genérica é instanciada com `new`, seus parâmetros de tipo são inferidos da mesma forma que em uma chamada de função:
 
 ```ts twoslash
 class Box<Type> {
@@ -950,11 +951,11 @@ const b = new Box("hello!");
 //    ^?
 ```
 
-Classes can use generic constraints and defaults the same way as interfaces.
+Classes podem usar restrições e valores padrão de genéricos da mesma forma que interfaces.
 
-### Type Parameters in Static Members
+### Parâmetros de tipo em membros estáticos {#type-parameters-in-static-members}
 
-This code isn't legal, and it may not be obvious why:
+Este código não é válido, e pode não ser óbvio o motivo:
 
 ```ts twoslash
 // @errors: 2302
@@ -963,22 +964,22 @@ class Box<Type> {
 }
 ```
 
-Remember that types are always fully erased!
-At runtime, there's only _one_ `Box.defaultValue` property slot.
-This means that setting `Box<string>.defaultValue` (if that were possible) would _also_ change `Box<number>.defaultValue` - not good.
-The `static` members of a generic class can never refer to the class's type parameters.
+Lembre-se de que tipos são sempre totalmente apagados!
+Em tempo de execução, existe apenas _um_ espaço de propriedade `Box.defaultValue`.
+Isso significa que definir `Box<string>.defaultValue` (se isso fosse possível) _também_ alteraria `Box<number>.defaultValue` - não é bom.
+Os membros `static` de uma classe genérica nunca podem se referir aos parâmetros de tipo da classe.
 
-## `this` at Runtime in Classes
+## `this` em tempo de execução nas classes {#this-at-runtime-in-classes}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this'>this keyword (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/this'>Palavra-chave this (MDN)</a><br/>
    </p>
 </blockquote>
 
-It's important to remember that TypeScript doesn't change the runtime behavior of JavaScript, and that JavaScript is somewhat famous for having some peculiar runtime behaviors.
+É importante lembrar que o TypeScript não altera o comportamento em tempo de execução do JavaScript, e que o JavaScript é conhecido por ter alguns comportamentos peculiares em tempo de execução.
 
-JavaScript's handling of `this` is indeed unusual:
+O tratamento de `this` no JavaScript é de fato incomum:
 
 ```ts twoslash
 class MyClass {
@@ -997,21 +998,21 @@ const obj = {
 console.log(obj.getName());
 ```
 
-Long story short, by default, the value of `this` inside a function depends on _how the function was called_.
-In this example, because the function was called through the `obj` reference, its value of `this` was `obj` rather than the class instance.
+Resumindo, por padrão, o valor de `this` dentro de uma função depende de _como a função foi chamada_.
+Neste exemplo, como a função foi chamada pela referência `obj`, seu valor de `this` foi `obj` em vez da instância da classe.
 
-This is rarely what you want to happen!
-TypeScript provides some ways to mitigate or prevent this kind of error.
+Isso raramente é o que se deseja!
+O TypeScript oferece algumas formas de mitigar ou prevenir esse tipo de erro.
 
-### Arrow Functions
+### Funções arrow {#arrow-functions}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions'>Arrow functions (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions'>Funções arrow (MDN)</a><br/>
    </p>
 </blockquote>
 
-If you have a function that will often be called in a way that loses its `this` context, it can make sense to use an arrow function property instead of a method definition:
+Se você tem uma função que frequentemente será chamada de um jeito que perde o seu contexto de `this`, pode fazer sentido usar uma propriedade de função arrow em vez de uma definição de método:
 
 ```ts twoslash
 class MyClass {
@@ -1026,16 +1027,16 @@ const g = c.getName;
 console.log(g());
 ```
 
-This has some trade-offs:
+Isso tem algumas compensações:
 
-- The `this` value is guaranteed to be correct at runtime, even for code not checked with TypeScript
-- This will use more memory, because each class instance will have its own copy of each function defined this way
-- You can't use `super.getName` in a derived class, because there's no entry in the prototype chain to fetch the base class method from
+- O valor de `this` é garantido como correto em tempo de execução, mesmo para código não verificado pelo TypeScript
+- Isso usará mais memória, porque cada instância da classe terá sua própria cópia de cada função definida dessa forma
+- Você não pode usar `super.getName` em uma classe derivada, porque não há entrada na cadeia de protótipos de onde buscar o método da classe base
 
-### `this` parameters
+### Parâmetros `this` {#this-parameters}
 
-In a method or function definition, an initial parameter named `this` has special meaning in TypeScript.
-These parameters are erased during compilation:
+Em uma definição de método ou função, um parâmetro inicial chamado `this` tem um significado especial no TypeScript.
+Esses parâmetros são apagados durante a compilação:
 
 ```ts twoslash
 type SomeType = any;
@@ -1053,8 +1054,8 @@ function fn(x) {
 }
 ```
 
-TypeScript checks that calling a function with a `this` parameter is done so with a correct context.
-Instead of using an arrow function, we can add a `this` parameter to method definitions to statically enforce that the method is called correctly:
+O TypeScript verifica se a chamada de uma função com parâmetro `this` é feita com o contexto correto.
+Em vez de usar uma função arrow, podemos adicionar um parâmetro `this` às definições de método para garantir estaticamente que o método é chamado corretamente:
 
 ```ts twoslash
 // @errors: 2684
@@ -1073,16 +1074,16 @@ const g = c.getName;
 console.log(g());
 ```
 
-This method makes the opposite trade-offs of the arrow function approach:
+Este método tem as compensações opostas à abordagem da função arrow:
 
-- JavaScript callers might still use the class method incorrectly without realizing it
-- Only one function per class definition gets allocated, rather than one per class instance
-- Base method definitions can still be called via `super`.
+- Chamadores JavaScript ainda podem usar o método da classe de forma incorreta sem perceber
+- Apenas uma função por definição de classe é alocada, em vez de uma por instância da classe
+- Definições de métodos da base ainda podem ser chamadas via `super`.
 
-## `this` Types
+## Tipos `this` {#this-types}
 
-In classes, a special type called `this` refers _dynamically_ to the type of the current class.
-Let's see how this is useful:
+Em classes, um tipo especial chamado `this` se refere _dinamicamente_ ao tipo da classe atual.
+Vamos ver como isso é útil:
 
 <!-- prettier-ignore -->
 ```ts twoslash
@@ -1096,8 +1097,8 @@ class Box {
 }
 ```
 
-Here, TypeScript inferred the return type of `set` to be `this`, rather than `Box`.
-Now let's make a subclass of `Box`:
+Aqui, o TypeScript inferiu o tipo de retorno de `set` como `this`, em vez de `Box`.
+Agora vamos criar uma subclasse de `Box`:
 
 ```ts twoslash
 class Box {
@@ -1119,7 +1120,7 @@ const b = a.set("hello");
 //    ^?
 ```
 
-You can also use `this` in a parameter type annotation:
+Você também pode usar `this` em uma anotação de tipo de parâmetro:
 
 ```ts twoslash
 class Box {
@@ -1130,7 +1131,7 @@ class Box {
 }
 ```
 
-This is different from writing `other: Box` -- if you have a derived class, its `sameAs` method will now only accept other instances of that same derived class:
+Isso é diferente de escrever `other: Box` -- se você tiver uma classe derivada, seu método `sameAs` passará a aceitar apenas outras instâncias dessa mesma classe derivada:
 
 ```ts twoslash
 // @errors: 2345
@@ -1150,10 +1151,10 @@ const derived = new DerivedBox();
 derived.sameAs(base);
 ```
 
-### `this`-based type guards
+### Type guards baseados em `this` {#this-based-type-guards}
 
-You can use `this is Type` in the return position for methods in classes and interfaces.
-When mixed with a type narrowing (e.g. `if` statements) the type of the target object would be narrowed to the specified `Type`.
+Você pode usar `this is Type` na posição de retorno de métodos em classes e interfaces.
+Quando combinado com um estreitamento de tipo (por exemplo, instruções `if`), o tipo do objeto alvo será estreitado para o `Type` especificado.
 
 <!-- prettier-ignore -->
 ```ts twoslash
@@ -1199,7 +1200,7 @@ if (fso.isFile()) {
 }
 ```
 
-A common use-case for a this-based type guard is to allow for lazy validation of a particular field. For example, this case removes an `undefined` from the value held inside box when `hasValue` has been verified to be true:
+Um caso de uso comum para um type guard baseado em `this` é permitir a validação preguiçosa de um campo específico. Por exemplo, este caso remove um `undefined` do valor guardado dentro de `box` quando `hasValue` foi verificado como verdadeiro:
 
 ```ts twoslash
 class Box<T> {
@@ -1222,11 +1223,11 @@ if (box.hasValue()) {
 }
 ```
 
-## Parameter Properties
+## Propriedades de parâmetro {#parameter-properties}
 
-TypeScript offers special syntax for turning a constructor parameter into a class property with the same name and value.
-These are called _parameter properties_ and are created by prefixing a constructor argument with one of the visibility modifiers `public`, `private`, `protected`, or `readonly`.
-The resulting field gets those modifier(s):
+O TypeScript oferece uma sintaxe especial para transformar um parâmetro do construtor em uma propriedade de classe com o mesmo nome e valor.
+Essas são chamadas de _propriedades de parâmetro_ e são criadas prefixando um argumento do construtor com um dos modificadores de visibilidade `public`, `private`, `protected` ou `readonly`.
+O campo resultante recebe esse(s) modificador(es):
 
 ```ts twoslash
 // @errors: 2341
@@ -1245,16 +1246,16 @@ console.log(a.x);
 console.log(a.z);
 ```
 
-## Class Expressions
+## Expressões de classe {#class-expressions}
 
 <blockquote class='bg-reading'>
-   <p>Background Reading:<br />
-   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class'>Class expressions (MDN)</a><br/>
+   <p>Leitura de apoio:<br />
+   <a href='https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/class'>Expressões de classe (MDN)</a><br/>
    </p>
 </blockquote>
 
-Class expressions are very similar to class declarations.
-The only real difference is that class expressions don't need a name, though we can refer to them via whatever identifier they ended up bound to:
+Expressões de classe são muito parecidas com declarações de classe.
+A única diferença real é que expressões de classe não precisam de nome, embora possamos nos referir a elas pelo identificador ao qual foram associadas:
 
 ```ts twoslash
 const someClass = class<Type> {
@@ -1268,9 +1269,9 @@ const m = new someClass("Hello, world");
 //    ^?
 ```
 
-## Constructor Signatures
+## Assinaturas de construtor {#constructor-signatures}
 
-JavaScript classes are instantiated with the `new` operator. Given the type of a class itself, the [InstanceType](/docs/handbook/utility-types.html#instancetypetype) utility type models this operation.
+Classes em JavaScript são instanciadas com o operador `new`. Dado o tipo da própria classe, o tipo utilitário [InstanceType](/docs/handbook/utility-types.html#instancetypetype) modela essa operação.
 
 ```ts twoslash
 class Point {
@@ -1294,17 +1295,17 @@ moveRight(point);
 point.x; // => 8
 ```
 
-## `abstract` Classes and Members
+## Classes e membros `abstract` {#abstract-classes-and-members}
 
-Classes, methods, and fields in TypeScript may be _abstract_.
+Classes, métodos e campos no TypeScript podem ser _abstract_.
 
-An _abstract method_ or _abstract field_ is one that hasn't had an implementation provided.
-These members must exist inside an _abstract class_, which cannot be directly instantiated.
+Um _método abstrato_ ou _campo abstrato_ é aquele que não teve uma implementação fornecida.
+Esses membros devem existir dentro de uma _classe abstrata_, que não pode ser instanciada diretamente.
 
-The role of abstract classes is to serve as a base class for subclasses which do implement all the abstract members.
-When a class doesn't have any abstract members, it is said to be _concrete_.
+O papel das classes abstratas é servir como classe base para subclasses que implementam todos os membros abstratos.
+Quando uma classe não tem membros abstratos, diz-se que ela é _concreta_.
 
-Let's look at an example:
+Vamos ver um exemplo:
 
 ```ts twoslash
 // @errors: 2511
@@ -1319,8 +1320,8 @@ abstract class Base {
 const b = new Base();
 ```
 
-We can't instantiate `Base` with `new` because it's abstract.
-Instead, we need to make a derived class and implement the abstract members:
+Não podemos instanciar `Base` com `new` porque ela é abstrata.
+Em vez disso, precisamos criar uma classe derivada e implementar os membros abstratos:
 
 ```ts twoslash
 abstract class Base {
@@ -1338,7 +1339,7 @@ const d = new Derived();
 d.printName();
 ```
 
-Notice that if we forget to implement the base class's abstract members, we'll get an error:
+Observe que, se esquecermos de implementar os membros abstratos da classe base, receberemos um erro:
 
 ```ts twoslash
 // @errors: 2515
@@ -1352,11 +1353,11 @@ class Derived extends Base {
 }
 ```
 
-### Abstract Construct Signatures
+### Assinaturas de construtor abstratas {#abstract-construct-signatures}
 
-Sometimes you want to accept some class constructor function that produces an instance of a class which derives from some abstract class.
+Às vezes você quer aceitar alguma função construtora de classe que produza uma instância de uma classe derivada de alguma classe abstrata.
 
-For example, you might want to write this code:
+Por exemplo, você pode querer escrever este código:
 
 ```ts twoslash
 // @errors: 2511
@@ -1376,8 +1377,8 @@ function greet(ctor: typeof Base) {
 }
 ```
 
-TypeScript is correctly telling you that you're trying to instantiate an abstract class.
-After all, given the definition of `greet`, it's perfectly legal to write this code, which would end up constructing an abstract class:
+O TypeScript está corretamente avisando que você está tentando instanciar uma classe abstrata.
+Afinal, dada a definição de `greet`, é perfeitamente válido escrever este código, que acabaria construindo uma classe abstrata:
 
 ```ts twoslash
 declare const greet: any, Base: any;
@@ -1386,7 +1387,7 @@ declare const greet: any, Base: any;
 greet(Base);
 ```
 
-Instead, you want to write a function that accepts something with a construct signature:
+Em vez disso, você quer escrever uma função que aceite algo com uma assinatura de construtor:
 
 ```ts twoslash
 // @errors: 2345
@@ -1408,13 +1409,13 @@ greet(Derived);
 greet(Base);
 ```
 
-Now TypeScript correctly tells you about which class constructor functions can be invoked - `Derived` can because it's concrete, but `Base` cannot.
+Agora o TypeScript informa corretamente quais funções construtoras de classe podem ser invocadas - `Derived` pode, porque é concreta, mas `Base` não pode.
 
-## Relationships Between Classes
+## Relações entre classes {#relationships-between-classes}
 
-In most cases, classes in TypeScript are compared structurally, the same as other types.
+Na maioria dos casos, classes no TypeScript são comparadas de forma estrutural, como qualquer outro tipo.
 
-For example, these two classes can be used in place of each other because they're identical:
+Por exemplo, estas duas classes podem ser usadas no lugar uma da outra porque são idênticas:
 
 ```ts twoslash
 class Point1 {
@@ -1431,7 +1432,7 @@ class Point2 {
 const p: Point1 = new Point2();
 ```
 
-Similarly, subtype relationships between classes exist even if there's no explicit inheritance:
+Da mesma forma, relações de subtipo entre classes existem mesmo sem herança explícita:
 
 ```ts twoslash
 // @strict: false
@@ -1450,11 +1451,11 @@ class Employee {
 const p: Person = new Employee();
 ```
 
-This sounds straightforward, but there are a few cases that seem stranger than others.
+Isso parece simples, mas há alguns casos que parecem mais estranhos do que outros.
 
-Empty classes have no members.
-In a structural type system, a type with no members is generally a supertype of anything else.
-So if you write an empty class (don't!), anything can be used in place of it:
+Classes vazias não têm membros.
+Em um sistema de tipos estrutural, um tipo sem membros é geralmente um supertipo de qualquer outro.
+Então, se você escrever uma classe vazia (não faça isso!), qualquer coisa pode ser usada no lugar dela:
 
 ```ts twoslash
 class Empty {}

@@ -1,13 +1,14 @@
 ---
-title: Mapped Types
+title: Tipos mapeados
 layout: docs
 permalink: /docs/handbook/2/mapped-types.html
-oneline: "Generating types by re-using an existing type."
+oneline: "Gerando tipos a partir da reutilização de um tipo existente."
+ia-translate: true
 ---
 
-When you don't want to repeat yourself, sometimes a type needs to be based on another type.
+Quando você não quer se repetir, às vezes um tipo precisa ser baseado em outro tipo.
 
-Mapped types build on the syntax for index signatures, which are used to declare the types of properties which have not been declared ahead of time:
+Tipos mapeados são construídos sobre a sintaxe de assinaturas de índice, que servem para declarar os tipos de propriedades que não foram declaradas antecipadamente:
 
 ```ts twoslash
 type Horse = {};
@@ -22,7 +23,7 @@ const conforms: OnlyBoolsAndHorses = {
 };
 ```
 
-A mapped type is a generic type which uses a union of `PropertyKey`s (frequently created [via a `keyof`](/docs/handbook/2/indexed-access-types.html)) to iterate through keys to create a type:
+Um tipo mapeado é um tipo genérico que usa uma união de `PropertyKey`s (geralmente criada [via `keyof`](/docs/handbook/2/indexed-access-types.html)) para percorrer as chaves e criar um tipo:
 
 ```ts twoslash
 type OptionsFlags<Type> = {
@@ -30,7 +31,7 @@ type OptionsFlags<Type> = {
 };
 ```
 
-In this example, `OptionsFlags` will take all the properties from the type `Type` and change their values to be a boolean.
+Neste exemplo, `OptionsFlags` pega todas as propriedades do tipo `Type` e muda os valores delas para booleano.
 
 ```ts twoslash
 type OptionsFlags<Type> = {
@@ -46,11 +47,11 @@ type FeatureOptions = OptionsFlags<Features>;
 //   ^?
 ```
 
-## Mapping Modifiers
+## Modificadores de mapeamento {#mapping-modifiers}
 
-There are two additional modifiers which can be applied during mapping: `readonly` and `?` which affect mutability and optionality respectively.
+Existem dois modificadores adicionais que podem ser aplicados durante o mapeamento: `readonly` e `?`, que afetam, respectivamente, a mutabilidade e a opcionalidade.
 
-You can remove or add these modifiers by prefixing with `-` or `+`. If you don't add a prefix, then `+` is assumed.
+Você pode remover ou adicionar esses modificadores com o prefixo `-` ou `+`. Se você não colocar um prefixo, o `+` é assumido.
 
 ```ts twoslash
 // Removes 'readonly' attributes from a type's properties
@@ -83,9 +84,9 @@ type User = Concrete<MaybeUser>;
 //   ^?
 ```
 
-## Key Remapping via `as`
+## Remapeamento de chaves via `as` {#key-remapping-via-as}
 
-In TypeScript 4.1 and onwards, you can re-map keys in mapped types with an `as` clause in a mapped type:
+A partir do TypeScript 4.1, você pode remapear chaves em tipos mapeados com uma cláusula `as` dentro do tipo mapeado:
 
 ```ts
 type MappedTypeWithNewProperties<Type> = {
@@ -93,7 +94,7 @@ type MappedTypeWithNewProperties<Type> = {
 }
 ```
 
-You can leverage features like [template literal types](/docs/handbook/2/template-literal-types.html) to create new property names from prior ones:
+Você pode usar recursos como [tipos de template literal](/docs/handbook/2/template-literal-types.html) para criar novos nomes de propriedade a partir dos anteriores:
 
 ```ts twoslash
 type Getters<Type> = {
@@ -110,7 +111,7 @@ type LazyPerson = Getters<Person>;
 //   ^?
 ```
 
-You can filter out keys by producing `never` via a conditional type:
+Você pode filtrar chaves produzindo `never` por meio de um tipo condicional:
 
 ```ts twoslash
 // Remove the 'kind' property
@@ -127,7 +128,7 @@ type KindlessCircle = RemoveKindField<Circle>;
 //   ^?
 ```
 
-You can map over arbitrary unions, not just unions of `string | number | symbol`, but unions of any type:
+Você pode mapear sobre uniões arbitrárias, não apenas uniões de `string | number | symbol`, mas uniões de qualquer tipo:
 
 ```ts twoslash
 type EventConfig<Events extends { kind: string }> = {
@@ -141,9 +142,9 @@ type Config = EventConfig<SquareEvent | CircleEvent>
 //   ^?
 ```
 
-### Further Exploration
+### Exploração adicional {#further-exploration}
 
-Mapped types work well with other features in this type manipulation section, for example here is [a mapped type using a conditional type](/docs/handbook/2/conditional-types.html) which returns either a `true` or `false` depending on whether an object has the property `pii` set to the literal `true`:
+Tipos mapeados funcionam bem com outros recursos desta seção de manipulação de tipos. Por exemplo, aqui está [um tipo mapeado que usa um tipo condicional](/docs/handbook/2/conditional-types.html), que retorna `true` ou `false` dependendo de o objeto ter a propriedade `pii` definida com o literal `true`:
 
 ```ts twoslash
 type ExtractPII<Type> = {

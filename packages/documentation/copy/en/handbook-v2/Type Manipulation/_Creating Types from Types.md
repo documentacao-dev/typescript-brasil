@@ -1,22 +1,23 @@
 ---
-title: Creating Types from Types
+title: Criando tipos a partir de tipos
 layout: docs
 permalink: /docs/handbook/2/types-from-types.html
-oneline: "An overview of the ways in which you can create more types from existing types."
+oneline: "Uma visão geral das formas de criar novos tipos a partir de tipos existentes."
+ia-translate: true
 ---
 
-TypeScript's type system is very powerful because it allows expressing types _in terms of other types_.
+O sistema de tipos do TypeScript é muito poderoso porque permite expressar tipos _em termos de outros tipos_.
 
-The simplest form of this idea is generics. Additionally, we have a wide variety of _type operators_ available to use.
-It's also possible to express types in terms of _values_ that we already have.
+A forma mais simples dessa ideia são os genéricos. Além disso, temos uma grande variedade de _operadores de tipo_ disponíveis.
+Também é possível expressar tipos em termos de _valores_ que já temos.
 
-By combining various type operators, we can express complex operations and values in a succinct, maintainable way.
-In this section we'll cover ways to express a new type in terms of an existing type or value.
+Combinando diversos operadores de tipo, podemos expressar operações e valores complexos de forma sucinta e fácil de manter.
+Nesta seção veremos como expressar um novo tipo em termos de um tipo ou valor existente.
 
-- [Generics](/docs/handbook/2/generics.html) - Types which take parameters
-- [Keyof Type Operator](/docs/handbook/2/keyof-types.html) - Using the `keyof` operator to create new types
-- [Typeof Type Operator](/docs/handbook/2/typeof-types.html) - Using the `typeof` operator to create new types
-- [Indexed Access Types](/docs/handbook/2/indexed-access-types.html) - Using `Type['a']` syntax to access a subset of a type
-- [Conditional Types](/docs/handbook/2/conditional-types.html) - Types which act like if statements in the type system
-- [Mapped Types](/docs/handbook/2/mapped-types.html) - Creating types by mapping each property in an existing type
-- [Template Literal Types](/docs/handbook/2/template-literal-types.html) - Mapped types which change properties via template literal strings
+- [Genéricos](/docs/handbook/2/generics.html) - Tipos que recebem parâmetros
+- [Operador de tipo Keyof](/docs/handbook/2/keyof-types.html) - Usando o operador `keyof` para criar novos tipos
+- [Operador de tipo Typeof](/docs/handbook/2/typeof-types.html) - Usando o operador `typeof` para criar novos tipos
+- [Tipos de acesso indexado](/docs/handbook/2/indexed-access-types.html) - Usando a sintaxe `Type['a']` para acessar um subconjunto de um tipo
+- [Tipos condicionais](/docs/handbook/2/conditional-types.html) - Tipos que se comportam como instruções if no sistema de tipos
+- [Tipos mapeados](/docs/handbook/2/mapped-types.html) - Criando tipos ao mapear cada propriedade de um tipo existente
+- [Tipos de template literal](/docs/handbook/2/template-literal-types.html) - Tipos mapeados que alteram propriedades por meio de strings template literal

@@ -1,23 +1,24 @@
 ---
-title: Generics
+title: Genéricos
 layout: docs
 permalink: /docs/handbook/2/generics.html
-oneline: Types which take parameters
+oneline: Tipos que recebem parâmetros
+ia-translate: true
 ---
 
-A major part of software engineering is building components that not only have well-defined and consistent APIs, but are also reusable.
-Components that are capable of working on the data of today as well as the data of tomorrow will give you the most flexible capabilities for building up large software systems.
+Uma grande parte da engenharia de software é construir componentes que não só têm APIs bem definidas e consistentes, mas também são reutilizáveis.
+Componentes capazes de trabalhar com os dados de hoje e com os dados de amanhã vão lhe dar as capacidades mais flexíveis para construir grandes sistemas de software.
 
-In languages like C# and Java, one of the main tools in the toolbox for creating reusable components is _generics_, that is, being able to create a component that can work over a variety of types rather than a single one.
-This allows users to consume these components and use their own types.
+Em linguagens como C# e Java, uma das principais ferramentas para criar componentes reutilizáveis são os _genéricos_, ou seja, a capacidade de criar um componente que funciona com uma variedade de tipos, em vez de um único tipo.
+Isso permite que quem usa esses componentes utilize os próprios tipos.
 
-## Hello World of Generics
+## O "Hello World" dos Genéricos {#hello-world-of-generics}
 
-To start off, let's do the "hello world" of generics: the identity function.
-The identity function is a function that will return back whatever is passed in.
-You can think of this in a similar way to the `echo` command.
+Para começar, vamos fazer o "hello world" dos genéricos: a função identidade.
+A função identidade é uma função que devolve de volta qualquer coisa que for passada para ela.
+Você pode pensar nela de forma parecida com o comando `echo`.
 
-Without generics, we would either have to give the identity function a specific type:
+Sem genéricos, teríamos que dar à função identidade um tipo específico:
 
 ```ts twoslash
 function identity(arg: number): number {
@@ -25,7 +26,7 @@ function identity(arg: number): number {
 }
 ```
 
-Or, we could describe the identity function using the `any` type:
+Ou poderíamos descrever a função identidade usando o tipo `any`:
 
 ```ts twoslash
 function identity(arg: any): any {
@@ -33,11 +34,11 @@ function identity(arg: any): any {
 }
 ```
 
-While using `any` is certainly generic in that it will cause the function to accept any and all types for the type of `arg`, we actually are losing the information about what that type was when the function returns.
-If we passed in a number, the only information we have is that any type could be returned.
+Embora o uso de `any` seja certamente genérico, no sentido de que faz a função aceitar todos os tipos possíveis para `arg`, na prática perdemos a informação sobre qual era esse tipo quando a função retorna.
+Se passarmos um número, a única informação que temos é que qualquer tipo poderia ser retornado.
 
-Instead, we need a way of capturing the type of the argument in such a way that we can also use it to denote what is being returned.
-Here, we will use a _type variable_, a special kind of variable that works on types rather than values.
+Em vez disso, precisamos de uma forma de capturar o tipo do argumento de modo que também possamos usá-lo para indicar o que está sendo retornado.
+Aqui, vamos usar uma _variável de tipo_, uma variável especial que trabalha com tipos em vez de valores.
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -45,16 +46,16 @@ function identity<Type>(arg: Type): Type {
 }
 ```
 
-We've now added a type variable `Type` to the identity function.
-This `Type` allows us to capture the type the user provides (e.g. `number`), so that we can use that information later.
-Here, we use `Type` again as the return type. On inspection, we can now see the same type is used for the argument and the return type.
-This allows us to traffic that type information in one side of the function and out the other.
+Agora adicionamos uma variável de tipo `Type` à função identidade.
+Esse `Type` nos permite capturar o tipo que o usuário fornece (por exemplo, `number`), para que possamos usar essa informação depois.
+Aqui, usamos `Type` novamente como tipo de retorno. Ao analisar, podemos ver que o mesmo tipo é usado para o argumento e para o tipo de retorno.
+Isso nos permite transportar a informação de tipo de um lado da função até o outro.
 
-We say that this version of the `identity` function is generic, as it works over a range of types.
-Unlike using `any`, it's also just as precise (i.e., it doesn't lose any information) as the first `identity` function that used numbers for the argument and return type.
+Dizemos que esta versão da função `identity` é genérica, pois funciona com uma faixa de tipos.
+Diferentemente do uso de `any`, ela também é tão precisa (ou seja, não perde nenhuma informação) quanto a primeira função `identity`, que usava números para o argumento e para o retorno.
 
-Once we've written the generic identity function, we can call it in one of two ways.
-The first way is to pass all of the arguments, including the type argument, to the function:
+Depois de escrever a função identidade genérica, podemos chamá-la de duas formas.
+A primeira é passar todos os argumentos, incluindo o argumento de tipo, para a função:
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -65,9 +66,9 @@ let output = identity<string>("myString");
 //       ^?
 ```
 
-Here we explicitly set `Type` to be `string` as one of the arguments to the function call, denoted using the `<>` around the arguments rather than `()`.
+Aqui definimos explicitamente `Type` como `string` como um dos argumentos da chamada da função, indicado pelo uso de `<>` em volta dos argumentos, em vez de `()`.
 
-The second way is also perhaps the most common. Here we use _type argument inference_ -- that is, we want the compiler to set the value of `Type` for us automatically based on the type of the argument we pass in:
+A segunda forma também é talvez a mais comum. Aqui usamos _inferência de argumento de tipo_, ou seja, queremos que o compilador defina o valor de `Type` para nós automaticamente, com base no tipo do argumento que passamos:
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -78,15 +79,15 @@ let output = identity("myString");
 //       ^?
 ```
 
-Notice that we didn't have to explicitly pass the type in the angle brackets (`<>`); the compiler just looked at the value `"myString"`, and set `Type` to its type.
-While type argument inference can be a helpful tool to keep code shorter and more readable, you may need to explicitly pass in the type arguments as we did in the previous example when the compiler fails to infer the type, as may happen in more complex examples.
+Observe que não precisamos passar o tipo explicitamente entre os colchetes angulares (`<>`); o compilador apenas olhou para o valor `"myString"` e definiu `Type` como o tipo dele.
+Embora a inferência de argumento de tipo possa ser uma ferramenta útil para deixar o código mais curto e legível, talvez seja necessário passar explicitamente os argumentos de tipo, como fizemos no exemplo anterior, quando o compilador não consegue inferir o tipo, o que pode acontecer em exemplos mais complexos.
 
-## Working with Generic Type Variables
+## Trabalhando com Variáveis de Tipo Genéricas {#working-with-generic-type-variables}
 
-When you begin to use generics, you'll notice that when you create generic functions like `identity`, the compiler will enforce that you use any generically typed parameters in the body of the function correctly.
-That is, that you actually treat these parameters as if they could be any and all types.
+Ao começar a usar genéricos, você vai perceber que, ao criar funções genéricas como `identity`, o compilador vai exigir que você use os parâmetros tipados genericamente corretamente no corpo da função.
+Ou seja, que você de fato trate esses parâmetros como se pudessem ser qualquer tipo.
 
-Let's take our `identity` function from earlier:
+Vamos pegar a nossa função `identity` de antes:
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -94,8 +95,8 @@ function identity<Type>(arg: Type): Type {
 }
 ```
 
-What if we want to also log the length of the argument `arg` to the console with each call?
-We might be tempted to write this:
+E se quisermos também registrar no console o tamanho do argumento `arg` a cada chamada?
+Podemos ser tentados a escrever isto:
 
 ```ts twoslash
 // @errors: 2339
@@ -105,11 +106,11 @@ function loggingIdentity<Type>(arg: Type): Type {
 }
 ```
 
-When we do, the compiler will give us an error that we're using the `.length` member of `arg`, but nowhere have we said that `arg` has this member.
-Remember, we said earlier that these type variables stand in for any and all types, so someone using this function could have passed in a `number` instead, which does not have a `.length` member.
+Ao fazer isso, o compilador vai nos dar um erro dizendo que estamos usando o membro `.length` de `arg`, mas em lugar nenhum dissemos que `arg` tem esse membro.
+Lembre-se: dissemos antes que essas variáveis de tipo representam qualquer tipo, então quem usar essa função poderia ter passado um `number`, que não tem um membro `.length`.
 
-Let's say that we've actually intended this function to work on arrays of `Type` rather than `Type` directly. Since we're working with arrays, the `.length` member should be available.
-We can describe this just like we would create arrays of other types:
+Digamos que a nossa intenção era que esta função funcionasse com arrays de `Type`, e não com `Type` diretamente. Como estamos trabalhando com arrays, o membro `.length` deveria estar disponível.
+Podemos descrever isso da mesma forma que criaríamos arrays de outros tipos:
 
 ```ts twoslash {1}
 function loggingIdentity<Type>(arg: Type[]): Type[] {
@@ -118,11 +119,11 @@ function loggingIdentity<Type>(arg: Type[]): Type[] {
 }
 ```
 
-You can read the type of `loggingIdentity` as "the generic function `loggingIdentity` takes a type parameter `Type`, and an argument `arg` which is an array of `Type`s, and returns an array of `Type`s."
-If we passed in an array of numbers, we'd get an array of numbers back out, as `Type` would bind to `number`.
-This allows us to use our generic type variable `Type` as part of the types we're working with, rather than the whole type, giving us greater flexibility.
+Você pode ler o tipo de `loggingIdentity` como "a função genérica `loggingIdentity` recebe um parâmetro de tipo `Type` e um argumento `arg` que é um array de `Type`, e retorna um array de `Type`."
+Se passarmos um array de números, receberemos de volta um array de números, já que `Type` será vinculado a `number`.
+Isso nos permite usar a nossa variável de tipo genérica `Type` como parte dos tipos com que estamos trabalhando, em vez do tipo inteiro, o que nos dá mais flexibilidade.
 
-We can alternatively write the sample example this way:
+Também podemos escrever o exemplo anterior desta forma:
 
 ```ts twoslash {1}
 function loggingIdentity<Type>(arg: Array<Type>): Array<Type> {
@@ -131,15 +132,15 @@ function loggingIdentity<Type>(arg: Array<Type>): Array<Type> {
 }
 ```
 
-You may already be familiar with this style of type from other languages.
-In the next section, we'll cover how you can create your own generic types like `Array<Type>`.
+Você pode já estar familiarizado com esse estilo de tipo de outras linguagens.
+Na próxima seção, vamos ver como criar os seus próprios tipos genéricos, como `Array<Type>`.
 
-## Generic Types
+## Tipos Genéricos {#generic-types}
 
-In previous sections, we created generic identity functions that worked over a range of types.
-In this section, we'll explore the type of the functions themselves and how to create generic interfaces.
+Nas seções anteriores, criamos funções identidade genéricas que funcionavam com uma faixa de tipos.
+Nesta seção, vamos explorar o tipo das próprias funções e como criar interfaces genéricas.
 
-The type of generic functions is just like those of non-generic functions, with the type parameters listed first, similarly to function declarations:
+O tipo de funções genéricas é igual ao de funções não genéricas, com os parâmetros de tipo listados primeiro, de forma semelhante às declarações de função:
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -149,7 +150,7 @@ function identity<Type>(arg: Type): Type {
 let myIdentity: <Type>(arg: Type) => Type = identity;
 ```
 
-We could also have used a different name for the generic type parameter in the type, so long as the number of type variables and how the type variables are used line up.
+Também poderíamos ter usado um nome diferente para o parâmetro de tipo genérico no tipo, desde que a quantidade de variáveis de tipo e a forma como elas são usadas se correspondam.
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -159,7 +160,7 @@ function identity<Type>(arg: Type): Type {
 let myIdentity: <Input>(arg: Input) => Input = identity;
 ```
 
-We can also write the generic type as a call signature of an object literal type:
+Também podemos escrever o tipo genérico como uma assinatura de chamada de um tipo objeto literal:
 
 ```ts twoslash
 function identity<Type>(arg: Type): Type {
@@ -169,8 +170,8 @@ function identity<Type>(arg: Type): Type {
 let myIdentity: { <Type>(arg: Type): Type } = identity;
 ```
 
-Which leads us to writing our first generic interface.
-Let's take the object literal from the previous example and move it to an interface:
+O que nos leva a escrever a nossa primeira interface genérica.
+Vamos pegar o objeto literal do exemplo anterior e movê-lo para uma interface:
 
 ```ts twoslash
 interface GenericIdentityFn {
@@ -184,9 +185,9 @@ function identity<Type>(arg: Type): Type {
 let myIdentity: GenericIdentityFn = identity;
 ```
 
-In a similar example, we may want to move the generic parameter to be a parameter of the whole interface.
-This lets us see what type(s) we're generic over (e.g. `Dictionary<string>` rather than just `Dictionary`).
-This makes the type parameter visible to all the other members of the interface.
+Em um exemplo parecido, podemos querer mover o parâmetro genérico para ser um parâmetro da interface inteira.
+Isso nos permite ver sobre qual(is) tipo(s) somos genéricos (por exemplo, `Dictionary<string>` em vez de apenas `Dictionary`).
+Assim, o parâmetro de tipo fica visível para todos os outros membros da interface.
 
 ```ts twoslash
 interface GenericIdentityFn<Type> {
@@ -200,18 +201,18 @@ function identity<Type>(arg: Type): Type {
 let myIdentity: GenericIdentityFn<number> = identity;
 ```
 
-Notice that our example has changed to be something slightly different.
-Instead of describing a generic function, we now have a non-generic function signature that is a part of a generic type.
-When we use `GenericIdentityFn`, we now will also need to specify the corresponding type argument (here: `number`), effectively locking in what the underlying call signature will use.
-Understanding when to put the type parameter directly on the call signature and when to put it on the interface itself will be helpful in describing what aspects of a type are generic.
+Observe que o nosso exemplo mudou para algo um pouco diferente.
+Em vez de descrever uma função genérica, agora temos uma assinatura de função não genérica que faz parte de um tipo genérico.
+Ao usar `GenericIdentityFn`, agora também precisamos especificar o argumento de tipo correspondente (aqui: `number`), o que efetivamente fixa o tipo que a assinatura de chamada subjacente vai usar.
+Entender quando colocar o parâmetro de tipo diretamente na assinatura de chamada e quando colocá-lo na própria interface vai ajudar a descrever quais aspectos de um tipo são genéricos.
 
-In addition to generic interfaces, we can also create generic classes.
-Note that it is not possible to create generic enums and namespaces.
+Além de interfaces genéricas, também podemos criar classes genéricas.
+Observe que não é possível criar enums e namespaces genéricos.
 
-## Generic Classes
+## Classes Genéricas {#generic-classes}
 
-A generic class has a similar shape to a generic interface.
-Generic classes have a generic type parameter list in angle brackets (`<>`) following the name of the class.
+Uma classe genérica tem uma forma semelhante a uma interface genérica.
+Classes genéricas têm uma lista de parâmetros de tipo entre colchetes angulares (`<>`) logo após o nome da classe.
 
 ```ts twoslash
 // @strict: false
@@ -227,8 +228,8 @@ myGenericNumber.add = function (x, y) {
 };
 ```
 
-This is a pretty literal use of the `GenericNumber` class, but you may have noticed that nothing is restricting it to only use the `number` type.
-We could have instead used `string` or even more complex objects.
+Este é um uso bem literal da classe `GenericNumber`, mas talvez você tenha notado que nada a impede de usar apenas o tipo `number`.
+Poderíamos ter usado `string` ou até objetos mais complexos.
 
 ```ts twoslash
 // @strict: false
@@ -246,15 +247,15 @@ stringNumeric.add = function (x, y) {
 console.log(stringNumeric.add(stringNumeric.zeroValue, "test"));
 ```
 
-Just as with interface, putting the type parameter on the class itself lets us make sure all of the properties of the class are working with the same type.
+Assim como com interfaces, colocar o parâmetro de tipo na própria classe nos permite garantir que todas as propriedades da classe estão trabalhando com o mesmo tipo.
 
-As we cover in [our section on classes](/docs/handbook/2/classes.html), a class has two sides to its type: the static side and the instance side.
-Generic classes are only generic over their instance side rather than their static side, so when working with classes, static members can not use the class's type parameter.
+Como vemos em [nossa seção sobre classes](/docs/handbook/2/classes.html), uma classe tem dois lados em seu tipo: o lado estático e o lado da instância.
+Classes genéricas são genéricas apenas em seu lado de instância, e não em seu lado estático; por isso, ao trabalhar com classes, membros estáticos não podem usar o parâmetro de tipo da classe.
 
-## Generic Constraints
+## Restrições Genéricas {#generic-constraints}
 
-If you remember from an earlier example, you may sometimes want to write a generic function that works on a set of types where you have _some_ knowledge about what capabilities that set of types will have.
-In our `loggingIdentity` example, we wanted to be able to access the `.length` property of `arg`, but the compiler could not prove that every type had a `.length` property, so it warns us that we can't make this assumption.
+Se você se lembra de um exemplo anterior, às vezes você pode querer escrever uma função genérica que funciona com um conjunto de tipos sobre os quais você tem _algum_ conhecimento das capacidades que esse conjunto terá.
+No nosso exemplo `loggingIdentity`, queríamos poder acessar a propriedade `.length` de `arg`, mas o compilador não conseguia provar que todos os tipos têm a propriedade `.length`, então ele nos avisa que não podemos fazer essa suposição.
 
 ```ts twoslash
 // @errors: 2339
@@ -264,12 +265,12 @@ function loggingIdentity<Type>(arg: Type): Type {
 }
 ```
 
-Instead of working with any and all types, we'd like to constrain this function to work with any and all types that *also*  have the `.length` property.
-As long as the type has this member, we'll allow it, but it's required to have at least this member.
-To do so, we must list our requirement as a constraint on what `Type` can be.
+Em vez de trabalhar com qualquer tipo, queremos restringir esta função para trabalhar apenas com os tipos que _também_ têm a propriedade `.length`.
+Desde que o tipo tenha esse membro, nós o aceitamos, mas ele é obrigatório ter pelo menos esse membro.
+Para isso, precisamos declarar nosso requisito como uma restrição sobre o que `Type` pode ser.
 
-To do so, we'll create an interface that describes our constraint.
-Here, we'll create an interface that has a single `.length` property and then we'll use this interface and the `extends` keyword to denote our constraint:
+Para isso, vamos criar uma interface que descreve a nossa restrição.
+Aqui, criaremos uma interface que tem uma única propriedade `.length` e depois usaremos essa interface com a palavra-chave `extends` para indicar a nossa restrição:
 
 ```ts twoslash
 interface Lengthwise {
@@ -282,7 +283,7 @@ function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
 }
 ```
 
-Because the generic function is now constrained, it will no longer work over any and all types:
+Como a função genérica agora está restrita, ela não vai mais funcionar com qualquer tipo:
 
 ```ts twoslash
 // @errors: 2345
@@ -298,7 +299,7 @@ function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
 loggingIdentity(3);
 ```
 
-Instead, we need to pass in values whose type has all the required properties:
+Em vez disso, precisamos passar valores cujo tipo tenha todas as propriedades exigidas:
 
 ```ts twoslash
 interface Lengthwise {
@@ -313,11 +314,11 @@ function loggingIdentity<Type extends Lengthwise>(arg: Type): Type {
 loggingIdentity({ length: 10, value: 3 });
 ```
 
-## Using Type Parameters in Generic Constraints
+## Usando Parâmetros de Tipo em Restrições Genéricas {#using-type-parameters-in-generic-constraints}
 
-You can declare a type parameter that is constrained by another type parameter.
-For example, here we'd like to get a property from an object given its name.
-We'd like to ensure that we're not accidentally grabbing a property that does not exist on the `obj`, so we'll place a constraint between the two types:
+Você pode declarar um parâmetro de tipo que é restrito por outro parâmetro de tipo.
+Por exemplo, aqui queremos obter uma propriedade de um objeto a partir do seu nome.
+Queremos garantir que não estamos pegando por acidente uma propriedade que não existe em `obj`, então vamos colocar uma restrição entre os dois tipos:
 
 ```ts twoslash
 // @errors: 2345
@@ -331,9 +332,9 @@ getProperty(x, "a");
 getProperty(x, "m");
 ```
 
-## Using Class Types in Generics
+## Usando Tipos de Classe em Genéricos {#using-class-types-in-generics}
 
-When creating factories in TypeScript using generics, it is necessary to refer to class types by their constructor functions. For example,
+Ao criar fábricas no TypeScript usando genéricos, é necessário referenciar tipos de classe pelas suas funções construtoras. Por exemplo,
 
 ```ts twoslash
 function create<Type>(c: { new (): Type }): Type {
@@ -341,7 +342,7 @@ function create<Type>(c: { new (): Type }): Type {
 }
 ```
 
-A more advanced example uses the prototype property to infer and constrain relationships between the constructor function and the instance side of class types.
+Um exemplo mais avançado usa a propriedade `prototype` para inferir e restringir relações entre a função construtora e o lado da instância dos tipos de classe.
 
 ```ts twoslash
 // @strict: false
@@ -374,11 +375,11 @@ createInstance(Lion).keeper.nametag;
 createInstance(Bee).keeper.hasMask;
 ```
 
-This pattern is used to power the [mixins](/docs/handbook/mixins.html) design pattern.
+Este padrão é usado para sustentar o padrão de design de [mixins](/docs/handbook/mixins.html).
 
-## Generic Parameter Defaults
+## Padrões de Parâmetros Genéricos {#generic-parameter-defaults}
 
-By declaring a default for a generic type parameter, you make it optional to specify the corresponding type argument. For example, a function which creates a new `HTMLElement`. Calling the function with no arguments generates a `HTMLDivElement`; calling the function with an element as the first argument generates an element of the argument's type. You can optionally pass a list of children as well. Previously you would have to define the function as:
+Ao declarar um padrão para um parâmetro de tipo genérico, você torna opcional informar o argumento de tipo correspondente. Por exemplo, uma função que cria um novo `HTMLElement`. Chamar a função sem argumentos gera um `HTMLDivElement`; chamar a função com um elemento como primeiro argumento gera um elemento do tipo do argumento. Você também pode, opcionalmente, passar uma lista de filhos. Antes, você precisaria definir a função assim:
 
 
 ```ts twoslash
@@ -396,7 +397,7 @@ declare function create<T extends HTMLElement, U extends HTMLElement>(
 ): Container<T, U[]>;
 ```
 
-With generic parameter defaults we can reduce it to:
+Com padrões de parâmetros genéricos, podemos reduzir isso para:
 
 ```ts twoslash
 type Container<T, U> = {
@@ -417,44 +418,44 @@ const p = create(new HTMLParagraphElement());
 //    ^?
 ```
 
-A generic parameter default follows the following rules:
+Um padrão de parâmetro genérico segue as seguintes regras:
 
-- A type parameter is deemed optional if it has a default.
-- Required type parameters must not follow optional type parameters.
-- Default types for a type parameter must satisfy the constraint for the type parameter, if it exists.
-- When specifying type arguments, you are only required to specify type arguments for the required type parameters. Unspecified type parameters will resolve to their default types.
-- If a default type is specified and inference cannot choose a candidate, the default type is inferred.
-- A class or interface declaration that merges with an existing class or interface declaration may introduce a default for an existing type parameter.
-- A class or interface declaration that merges with an existing class or interface declaration may introduce a new type parameter as long as it specifies a default.
+- Um parâmetro de tipo é considerado opcional se tiver um padrão.
+- Parâmetros de tipo obrigatórios não podem vir depois de parâmetros de tipo opcionais.
+- Os tipos padrão de um parâmetro de tipo devem satisfazer a restrição do parâmetro de tipo, se ela existir.
+- Ao especificar argumentos de tipo, você só precisa informar os argumentos dos parâmetros de tipo obrigatórios. Os parâmetros de tipo não informados vão resolver para os seus tipos padrão.
+- Se um tipo padrão for especificado e a inferência não conseguir escolher um candidato, o tipo padrão é inferido.
+- Uma declaração de classe ou interface que se mescla com uma classe ou interface já existente pode introduzir um padrão para um parâmetro de tipo existente.
+- Uma declaração de classe ou interface que se mescla com uma classe ou interface já existente pode introduzir um novo parâmetro de tipo, desde que especifique um padrão.
 
-## Variance Annotations
+## Anotações de Variância {#variance-annotations}
 
-> This is an advanced feature for solving a very specific problem, and should only be used in situations where you've identified a reason to use it
+> Este é um recurso avançado para resolver um problema muito específico, e deve ser usado apenas em situações em que você tenha identificado um motivo para usá-lo
 
-[Covariance and contravariance](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) are type theory terms that describe what the relationship between two generic types is.
-Here's a brief primer on the concept.
+[Covariância e contravariância](https://en.wikipedia.org/wiki/Covariance_and_contravariance_(computer_science)) são termos da teoria de tipos que descrevem qual é a relação entre dois tipos genéricos.
+Aqui vai uma breve introdução ao conceito.
 
-For example, if you have an interface representing an object that can `make` a certain type:
+Por exemplo, se você tem uma interface que representa um objeto que pode `make` (fabricar) um certo tipo:
 ```ts
 interface Producer<T> {
   make(): T;
 }
 ```
-We can use a `Producer<Cat>` where a `Producer<Animal>` is expected, because a `Cat` is an `Animal`.
-This relationship is called *covariance*: the relationship from `Producer<T>` to `Producer<U>` is the same as the relationship from `T` to `U`.
+Podemos usar um `Producer<Cat>` onde um `Producer<Animal>` é esperado, porque um `Cat` é um `Animal`.
+Essa relação se chama *covariância*: a relação de `Producer<T>` para `Producer<U>` é a mesma relação de `T` para `U`.
 
-Conversely, if you have an interface that can `consume` a certain type:
+Por outro lado, se você tem uma interface que pode `consume` (consumir) um certo tipo:
 ```ts
 interface Consumer<T> {
   consume: (arg: T) => void;
 }
 ```
-Then we can use a `Consumer<Animal>` where a `Consumer<Cat>` is expected, because any function that is capable of accepting an `Animal` must also be capable of accepting a `Cat`.
-This relationship is called *contravariance*: the relationship from `Consumer<T>` to `Consumer<U>` is the same as the relationship from `U` to `T`.
-Note the reversal of direction as compared to covariance! This is why contravariance "cancels itself out" but covariance doesn't.
+Então podemos usar um `Consumer<Animal>` onde um `Consumer<Cat>` é esperado, porque qualquer função capaz de aceitar um `Animal` também precisa ser capaz de aceitar um `Cat`.
+Essa relação se chama *contravariância*: a relação de `Consumer<T>` para `Consumer<U>` é a mesma relação de `U` para `T`.
+Observe a inversão de direção em comparação com a covariância! É por isso que a contravariância "se anula" e a covariância não.
 
-In a structural type system like TypeScript's, covariance and contravariance are naturally emergent behaviors that follow from the definition of types.
-Even in the absence of generics, we would see covariant (and contravariant) relationships:
+Em um sistema de tipos estrutural, como o do TypeScript, covariância e contravariância são comportamentos que surgem naturalmente das definições dos tipos.
+Mesmo sem genéricos, veríamos relações covariantes (e contravariantes):
 ```ts
 interface AnimalProducer {
   make(): Animal;
@@ -467,15 +468,15 @@ interface CatProducer {
 }
 ```
 
-TypeScript has a structural type system, so when comparing two types, e.g. to see if a `Producer<Cat>` can be used where a `Producer<Animal>` is expected, the usual algorithm would be structurally expand both of those definitions, and compare their structures.
-However, variance allows for an extremely useful optimization: if `Producer<T>` is covariant on `T`, then we can simply check `Cat` and `Animal` instead, as we know they'll have the same relationship as `Producer<Cat>` and `Producer<Animal>`.
+O TypeScript tem um sistema de tipos estrutural, então, ao comparar dois tipos, por exemplo para verificar se um `Producer<Cat>` pode ser usado onde um `Producer<Animal>` é esperado, o algoritmo usual expandiria estruturalmente as duas definições e compararia as suas estruturas.
+No entanto, a variância permite uma otimização extremamente útil: se `Producer<T>` é covariante em `T`, podemos simplesmente verificar `Cat` e `Animal`, já que sabemos que eles terão a mesma relação que `Producer<Cat>` e `Producer<Animal>`.
 
-Note that this logic can only be used when we're examining two instantiations of the same type.
-If we have a `Producer<T>` and a `FastProducer<U>`, there's no guarantee that `T` and `U` necessarily refer to the same positions in these types, so this check will always be performed structurally.
+Observe que essa lógica só pode ser usada quando estamos examinando duas instanciações do mesmo tipo.
+Se temos um `Producer<T>` e um `FastProducer<U>`, não há garantia de que `T` e `U` se referem necessariamente às mesmas posições nesses tipos, então essa verificação sempre será feita de forma estrutural.
 
-Because variance is a naturally emergent property of structural types, TypeScript automatically *infers* the variance of every generic type.
-**In extremely rare cases** involving certain kinds of circular types, this measurement can be inaccurate.
-If this happens, you can add a variance annotation to a type parameter to force a particular variance:
+Como a variância é uma propriedade que surge naturalmente dos tipos estruturais, o TypeScript *infere* automaticamente a variância de todo tipo genérico.
+**Em casos extremamente raros**, envolvendo certos tipos circulares, essa medição pode ser imprecisa.
+Se isso acontecer, você pode adicionar uma anotação de variância a um parâmetro de tipo para forçar uma variância específica:
 ```ts
 // Contravariant annotation
 interface Consumer<in T> {
@@ -493,13 +494,13 @@ interface ProducerConsumer<in out T> {
   make(): T;
 }
 ```
-Only do this if you are writing the same variance that *should* occur structurally.
+Faça isso apenas se você estiver escrevendo a mesma variância que *deveria* ocorrer estruturalmente.
 
-> Never write a variance annotation that doesn't match the structural variance!
+> Nunca escreva uma anotação de variância que não corresponda à variância estrutural!
 
-It's critical to reinforce that variance annotations are only in effect during an instantiation-based comparison.
-They have no effect during a structural comparison.
-For example, you can't use variance annotations to "force" a type to be actually invariant:
+É fundamental reforçar que as anotações de variância só têm efeito durante uma comparação baseada em instanciação.
+Elas não têm efeito durante uma comparação estrutural.
+Por exemplo, você não pode usar anotações de variância para "forçar" um tipo a ser de fato invariante:
 ```ts
 // DON'T DO THIS - variance annotation
 // does not match structural behavior
@@ -516,36 +517,36 @@ const p: Producer<string | number> = {
     }
 }
 ```
-Here, the object literal's `make` function returns `number`, which we might expect to cause an error because `number` isn't `string | number`.
-However, this isn't an instantiation-based comparison, because the object literal is an anonymous type, not a `Producer<string | number>`.
+Aqui, a função `make` do objeto literal retorna `number`, o que poderíamos esperar que causasse um erro, porque `number` não é `string | number`.
+No entanto, isso não é uma comparação baseada em instanciação, porque o objeto literal é um tipo anônimo, não um `Producer<string | number>`.
 
-> Variance annotations don't change structural behavior and are only consulted in specific situations
+> Anotações de variância não mudam o comportamento estrutural e só são consideradas em situações específicas
 
-It's very important to only write variance annotations if you absolutely know why you're doing it, what their limitations are, and when they aren't in effect.
-Whether TypeScript uses an instantiation-based comparison or structural comparison is not a specified behavior and may change from version to version for correctness or performance reasons, so you should only ever write variance annotations when they match the structural behavior of a type.
-Don't use variance annotations to try to "force" a particular variance; this will cause unpredictable behavior in your code.
+É muito importante escrever anotações de variância apenas se você tiver certeza absoluta do motivo, de quais são as suas limitações e de quando elas não estão em vigor.
+Se o TypeScript usa uma comparação baseada em instanciação ou uma comparação estrutural não é um comportamento especificado e pode mudar de versão para versão por motivos de correção ou desempenho; por isso, você só deve escrever anotações de variância quando elas corresponderem ao comportamento estrutural de um tipo.
+Não use anotações de variância para tentar "forçar" uma variância particular; isso vai causar um comportamento imprevisível no seu código.
 
-> Do NOT write variance annotations unless they match the structural behavior of a type
+> NÃO escreva anotações de variância a menos que elas correspondam ao comportamento estrutural de um tipo
 
-Remember, TypeScript can automatically infer variance from your generic types.
-It's almost never necessary to write a variance annotation, and you should only do so when you've identified a specific need.
-Variance annotations *do not* change the structural behavior of a type, and depending on the situation, you might see a structural comparison made when you expected an instantiation-based comparison.
-Variance annotations can't be used to modify how types behave in these structural contexts, and shouldn't be written unless the annotation is the same as the structural definition.
-Because this is difficult to get right, and TypeScript can correctly infer variance in the vast majority of cases, you should not find yourself writing variance annotations in normal code.
+Lembre-se: o TypeScript consegue inferir automaticamente a variância a partir dos seus tipos genéricos.
+Quase nunca é necessário escrever uma anotação de variância, e você só deve fazê-lo quando tiver identificado uma necessidade específica.
+Anotações de variância *não* mudam o comportamento estrutural de um tipo e, dependendo da situação, você pode ver uma comparação estrutural sendo feita quando esperava uma comparação baseada em instanciação.
+Anotações de variância não podem ser usadas para modificar como os tipos se comportam nesses contextos estruturais e não devem ser escritas, a menos que a anotação seja igual à definição estrutural.
+Como isso é difícil de acertar, e como o TypeScript consegue inferir corretamente a variância na grande maioria dos casos, você não deveria se ver escrevendo anotações de variância em código comum.
 
-> Don't try to use variance annotations to change typechecking behavior; this is not what they are for
+> Não tente usar anotações de variância para mudar o comportamento de verificação de tipos; essa não é a finalidade delas
 
-You *may* find temporary variance annotations useful in a "type debugging" situation, because variance annotations are checked.
-TypeScript will issue an error if the annotated variance is identifiably wrong:
+Você *pode* achar úteis anotações de variância temporárias em uma situação de "depuração de tipos", porque as anotações de variância são verificadas.
+O TypeScript vai emitir um erro se a variância anotada estiver claramente errada:
 ```ts
 // Error, this interface is definitely contravariant on T
 interface Foo<out T> {
   consume: (arg: T) => void;
 }
 ```
-However, variance annotations are allowed to be stricter (e.g. `in out` is valid if the actual variance is covariant).
-Be sure to remove your variance annotations once you're done debugging.
+No entanto, anotações de variância podem ser mais restritivas do que o necessário (por exemplo, `in out` é válido se a variância real for covariante).
+Lembre-se de remover suas anotações de variância quando terminar a depuração.
 
-Lastly, if you're trying to maximize your typechecking performance, *and* have run a profiler, *and* have identified a specific type that's slow, *and* have identified variance inference specifically is slow, *and* have carefully validated the variance annotation you want to write, you *may* see a small performance benefit in extraordinarily complex types by adding variance annotations.
+Por fim, se você estiver tentando maximizar o desempenho da verificação de tipos, *e* já tiver rodado um profiler, *e* tiver identificado um tipo específico que é lento, *e* tiver identificado que a inferência de variância especificamente é lenta, *e* tiver validado cuidadosamente a anotação de variância que deseja escrever, você *pode* ver um pequeno ganho de desempenho em tipos extraordinariamente complexos ao adicionar anotações de variância.
 
-> Don't try to use variance annotations to change typechecking behavior; this is not what they are for
+> Não tente usar anotações de variância para mudar o comportamento de verificação de tipos; essa não é a finalidade delas

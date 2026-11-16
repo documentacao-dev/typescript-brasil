@@ -1,14 +1,15 @@
 ---
-title: Keyof Type Operator
+title: Operador de tipo keyof
 layout: docs
 permalink: /docs/handbook/2/keyof-types.html
-oneline: "Using the keyof operator in type contexts."
+oneline: "Usando o operador keyof em contextos de tipo."
+ia-translate: true
 ---
 
-## The `keyof` type operator
+## O operador de tipo `keyof` {#the-keyof-type-operator}
 
-The `keyof` operator takes an object type and produces a string or numeric literal union of its keys.
-The following type `P` is the same type as `type P = "x" | "y"`:
+O operador `keyof` recebe um tipo de objeto e produz uma união de literais de string ou numéricos com as chaves dele.
+O tipo `P` a seguir é o mesmo tipo que `type P = "x" | "y"`:
 
 ```ts twoslash
 type Point = { x: number; y: number };
@@ -16,7 +17,7 @@ type P = keyof Point;
 //   ^?
 ```
 
-If the type has a `string` or `number` index signature, `keyof` will return those types instead:
+Se o tipo tiver uma assinatura de índice `string` ou `number`, o `keyof` retorna esses tipos:
 
 ```ts twoslash
 type Arrayish = { [n: number]: unknown };
@@ -28,6 +29,6 @@ type M = keyof Mapish;
 //   ^?
 ```
 
-Note that in this example, `M` is `string | number` -- this is because JavaScript object keys are always coerced to a string, so `obj[0]` is always the same as `obj["0"]`.
+Repare que, neste exemplo, `M` é `string | number`. Isso acontece porque as chaves de objetos em JavaScript são sempre convertidas para string, então `obj[0]` é sempre igual a `obj["0"]`.
 
-`keyof` types become especially useful when combined with mapped types, which we'll learn more about later.
+Os tipos criados com `keyof` ficam especialmente úteis quando combinados com tipos mapeados, que veremos com mais detalhes adiante.
