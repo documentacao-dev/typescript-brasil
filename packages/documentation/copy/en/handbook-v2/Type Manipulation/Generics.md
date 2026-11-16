@@ -266,7 +266,7 @@ function loggingIdentity<Type>(arg: Type): Type {
 ```
 
 Em vez de trabalhar com qualquer tipo, queremos restringir esta função para trabalhar apenas com os tipos que _também_ têm a propriedade `.length`.
-Desde que o tipo tenha esse membro, nós o aceitamos, mas ele é obrigatório ter pelo menos esse membro.
+Desde que o tipo tenha esse membro, nós o aceitamos, mas é obrigatório que ele tenha pelo menos esse membro.
 Para isso, precisamos declarar nosso requisito como uma restrição sobre o que `Type` pode ser.
 
 Para isso, vamos criar uma interface que descreve a nossa restrição.

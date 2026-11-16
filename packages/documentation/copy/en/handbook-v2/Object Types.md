@@ -222,7 +222,7 @@ function evict(home: Home) {
 ```
 
 É importante alinhar as expectativas sobre o que `readonly` implica.
-Ele é útil para sinalizar, durante o desenvolvimento, como um objeto deve ser usado pelo TypeScript.
+Ele é útil para sinalizar a intenção, durante o desenvolvimento, de como o TypeScript deve tratar o uso de um objeto.
 O TypeScript não considera se as propriedades de dois tipos são `readonly` ao verificar se esses tipos são compatíveis, então propriedades `readonly` também podem mudar por meio de aliases.
 
 ```ts twoslash
