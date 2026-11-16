@@ -91,3 +91,6 @@ packages/typescriptlang-org/static/v2/
 !**/.vscode/extensions.json
 
 *.tsbuildinfo
+
+# Firebase
+.firebase/

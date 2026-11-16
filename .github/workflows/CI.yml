@@ -15,6 +15,7 @@ defaults:
 
 jobs:
   tests:
+    if: github.repository == 'microsoft/TypeScript-Website'
     strategy:
       fail-fast: false
       matrix:
@@ -76,6 +77,7 @@ jobs:
   changesets:
     name: changesets
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript-Website'
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       with:
@@ -105,6 +107,7 @@ jobs:
   release-pipeline:
     name: release pipeline
     runs-on: ubuntu-latest
+    if: github.repository == 'microsoft/TypeScript-Website'
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
@@ -114,7 +117,7 @@ jobs:
 
   required:
     runs-on: ubuntu-latest
-    if: ${{ always() }}
+    if: ${{ always() && github.repository == 'microsoft/TypeScript-Website' }}
     needs:
       - tests
       - changesets
